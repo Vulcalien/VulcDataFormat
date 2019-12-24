@@ -109,6 +109,14 @@ public class ObjectTag extends Tag<ObjectTag> {
 		map.put(name, new DoubleTag(value));
 	}
 
+	public String getString(String name) {
+		return getTag(name, StringTag.class).get();
+	}
+
+	public void setString(String name, String value) {
+		map.put(name, new StringTag(value));
+	}
+
 	public ObjectTag getObject(String name) {
 		return getTag(name, ObjectTag.class);
 	}
@@ -183,6 +191,14 @@ public class ObjectTag extends Tag<ObjectTag> {
 		map.put(name, new DoubleArrayTag(value));
 	}
 
+	public String[] getStringArray(String name) {
+		return getTag(name, StringArrayTag.class).get();
+	}
+
+	public void setStringArray(String name, String[] value) {
+		map.put(name, new StringArrayTag(value));
+	}
+
 	public ObjectTag[] getObjectArray(String name) {
 		return getTag(name, ObjectArrayTag.class).get();
 	}
@@ -206,11 +222,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 			out.writeByte(TypeTable.getCode(tag.getClass()));
 
 			// write its name
-			for(int i = 0; i < name.length(); i++) {
-				out.writeChar(name.charAt(i));
-			}
-			// write null char
-			out.writeChar(0);
+			out.writeUTF(name);
 
 			// serialize its data
 			tag.serialize(out);
@@ -225,14 +237,8 @@ public class ObjectTag extends Tag<ObjectTag> {
 			// read tag's code
 			Tag<?> tag = TypeTable.getTag(in.readByte());
 
-			// read its name until null character is met
-			String name = "";
-			while(true) {
-				char c = in.readChar();
-
-				if(c == 0) break;
-				name += c;
-			}
+			// read its name
+			String name = in.readUTF();
 
 			// deserialize its data
 			tag.deserialize(in);

@@ -2,7 +2,7 @@ package vulc.vdf;
 
 abstract class TypeTable {
 
-	private static final int TAG_TYPES = 18;
+	private static final int TAG_TYPES = 20;
 
 	private static final Class<?>[] TYPES = new Class<?>[TAG_TYPES];
 	private static final byte[] CODES = new byte[TAG_TYPES];
@@ -18,6 +18,7 @@ abstract class TypeTable {
 		assign(LongTag.class, 5);
 		assign(FloatTag.class, 6);
 		assign(DoubleTag.class, 7);
+		assign(StringTag.class, 8);
 
 		assign(BooleanArrayTag.class, 20);
 		assign(CharArrayTag.class, 21);
@@ -27,6 +28,7 @@ abstract class TypeTable {
 		assign(LongArrayTag.class, 25);
 		assign(FloatArrayTag.class, 26);
 		assign(DoubleArrayTag.class, 27);
+		assign(StringArrayTag.class, 28);
 
 		assign(ObjectTag.class, 100);
 		assign(ObjectArrayTag.class, 101);
