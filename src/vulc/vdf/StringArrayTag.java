@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class StringArrayTag extends Tag<String[]> {
+class StringArrayTag extends Tag<String[]> {
 
 	private String[] value;
 
