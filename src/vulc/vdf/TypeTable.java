@@ -1,65 +1,56 @@
 package vulc.vdf;
 
+import java.util.HashMap;
+
 abstract class TypeTable {
 
-	private static final int TAG_TYPES = 20;
-
-	private static final Class<?>[] TYPES = new Class<?>[TAG_TYPES];
-	private static final byte[] CODES = new byte[TAG_TYPES];
+	private static final Class<?>[] TYPES = new Class<?>[20];
+	private static final HashMap<Class<?>, Byte> CODES = new HashMap<Class<?>, Byte>();
 
 	private static int assignIndex = 0;
 
 	static {
-		assign(BooleanTag.class, 0);
-		assign(CharTag.class, 1);
-		assign(ByteTag.class, 2);
-		assign(ShortTag.class, 3);
-		assign(IntTag.class, 4);
-		assign(LongTag.class, 5);
-		assign(FloatTag.class, 6);
-		assign(DoubleTag.class, 7);
-		assign(StringTag.class, 8);
+		assign(BooleanTag.class);
+		assign(CharTag.class);
+		assign(ByteTag.class);
+		assign(ShortTag.class);
+		assign(IntTag.class);
+		assign(LongTag.class);
+		assign(FloatTag.class);
+		assign(DoubleTag.class);
+		assign(StringTag.class);
 
-		assign(BooleanArrayTag.class, 20);
-		assign(CharArrayTag.class, 21);
-		assign(ByteArrayTag.class, 22);
-		assign(ShortArrayTag.class, 23);
-		assign(IntArrayTag.class, 24);
-		assign(LongArrayTag.class, 25);
-		assign(FloatArrayTag.class, 26);
-		assign(DoubleArrayTag.class, 27);
-		assign(StringArrayTag.class, 28);
+		assign(BooleanArrayTag.class);
+		assign(CharArrayTag.class);
+		assign(ByteArrayTag.class);
+		assign(ShortArrayTag.class);
+		assign(IntArrayTag.class);
+		assign(LongArrayTag.class);
+		assign(FloatArrayTag.class);
+		assign(DoubleArrayTag.class);
+		assign(StringArrayTag.class);
 
-		assign(ObjectTag.class, 100);
-		assign(ObjectArrayTag.class, 101);
+		assign(ObjectTag.class);
+		assign(ObjectArrayTag.class);
 	}
 
-	private static void assign(Class<?> type, int code) {
+	private static void assign(Class<?> type) {
 		TYPES[assignIndex] = type;
-		CODES[assignIndex] = (byte) code;
+		CODES.put(type, (byte) assignIndex);
 		assignIndex++;
 	}
 
 	static Tag<?> getTag(byte code) {
-		for(int i = 0; i < CODES.length; i++) {
-			if(CODES[i] == code) {
-				try {
-					return (Tag<?>) (TYPES[i].newInstance());
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
+		try {
+			return (Tag<?>) (TYPES[code].newInstance());
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		throw new RuntimeException();
 	}
 
 	static byte getCode(Class<?> type) {
-		for(int i = 0; i < TYPES.length; i++) {
-			if(TYPES[i] == type) {
-				return CODES[i];
-			}
-		}
-		throw new RuntimeException();
+		return CODES.get(type);
 	}
 
 }
