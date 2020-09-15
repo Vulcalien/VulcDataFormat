@@ -64,6 +64,10 @@ public class ObjectTag extends Tag<ObjectTag> {
 		return tag.get();
 	}
 
+	public Class<?> getType(String name) {
+		return getValue(name).getClass();
+	}
+
 	// getters and setters
 
 	public boolean getBoolean(String name) {
