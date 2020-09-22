@@ -234,9 +234,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	// IO
 
 	public void serialize(DataOutputStream out) throws IOException {
-		Set<String> keys = map.keySet();
-
-		for(String name : keys) {
+		for(String name : keySet()) {
 			Tag<?> tag = map.get(name);
 
 			out.writeByte(TypeTable.getCode(tag.getClass()));	// write code
