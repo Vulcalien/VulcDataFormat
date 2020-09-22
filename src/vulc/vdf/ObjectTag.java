@@ -56,7 +56,6 @@ public class ObjectTag extends Tag<ObjectTag> {
 		    throw new ClassCastException(type.getName());
 	}
 
-	// useful when data type is not known
 	public Object getValue(String name) {
 		if(!map.containsKey(name)) throw new NoSuchElementException(name);
 
@@ -237,38 +236,27 @@ public class ObjectTag extends Tag<ObjectTag> {
 	public void serialize(DataOutputStream out) throws IOException {
 		Set<String> keys = map.keySet();
 
-		// write size
-		out.writeInt(keys.size());
-
 		for(String name : keys) {
 			Tag<?> tag = map.get(name);
 
-			// write next tag's code
-			out.writeByte(TypeTable.getCode(tag.getClass()));
+			out.writeByte(TypeTable.getCode(tag.getClass()));	// write code
+			out.writeUTF(name);									// write name
 
-			// write its name
-			out.writeUTF(name);
-
-			// serialize its data
-			tag.serialize(out);
+			tag.serialize(out);									// serialize
 		}
+		out.writeByte(-1);										// write end mark
 	}
 
 	public void deserialize(DataInputStream in) throws IOException {
-		// read size
-		int size = in.readInt();
+		byte code;
+		while((code = in.readByte()) != -1) {					// read code, until end mark (-1) is found
+			Tag<?> tag = TypeTable.getTag(code);
 
-		for(int i = 0; i < size; i++) {
-			// read tag's code
-			Tag<?> tag = TypeTable.getTag(in.readByte());
+			String name = in.readUTF();							// read name
 
-			// read its name
-			String name = in.readUTF();
+			tag.deserialize(in);								// deserialize
 
-			// deserialize its data
-			tag.deserialize(in);
-
-			map.put(name, tag);
+			map.put(name, tag);									// add tag to this object
 		}
 	}
 
