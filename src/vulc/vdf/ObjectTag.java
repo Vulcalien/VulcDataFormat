@@ -47,20 +47,25 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	private <T> T getTag(String name, Class<T> type) {
-		if(!map.containsKey(name)) throw new NoSuchElementException(name);
-
 		Tag<?> tag = map.get(name);
-		if(type.isInstance(tag))
-		    return type.cast(tag);
-		else
-		    throw new ClassCastException(type.getName());
+
+		if(type.isInstance(tag)) {
+			return type.cast(tag);
+		} else if(tag == null) {
+			throw new NoSuchElementException(name);
+		} else {
+			throw new ClassCastException(type.getName());
+		}
 	}
 
 	public Object getValue(String name) {
-		if(!map.containsKey(name)) throw new NoSuchElementException(name);
-
 		Tag<?> tag = map.get(name);
-		return tag.get();
+
+		if(tag != null) {
+			return tag.get();
+		} else {
+			throw new NoSuchElementException(name);
+		}
 	}
 
 	public Class<?> getType(String name) {
