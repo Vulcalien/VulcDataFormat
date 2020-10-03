@@ -26,24 +26,12 @@ public class ObjectTag extends Tag<ObjectTag> {
 
 	private final HashMap<String, Tag<?>> map = new HashMap<String, Tag<?>>();
 
-	protected ObjectTag get() {
-		return this;
-	}
-
 	public int size() {
 		return map.size();
 	}
 
 	public Set<String> keySet() {
 		return map.keySet();
-	}
-
-	public void removeTag(String name) {
-		map.remove(name);
-	}
-
-	public void clear() {
-		map.clear();
 	}
 
 	private <T> T getTag(String name, Class<T> type) {
@@ -70,6 +58,18 @@ public class ObjectTag extends Tag<ObjectTag> {
 
 	public Class<?> getType(String name) {
 		return getValue(name).getClass();
+	}
+
+	public void removeTag(String name) {
+		map.remove(name);
+	}
+
+	public void clear() {
+		map.clear();
+	}
+
+	protected ObjectTag get() {
+		return this;
 	}
 
 	// getters and setters
