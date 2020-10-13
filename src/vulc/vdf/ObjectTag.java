@@ -75,7 +75,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	// getters and setters
 
 	public boolean getBoolean(String name) {
-		return getTag(name, BooleanTag.class).get();
+		return getTag(name, BooleanTag.class).value;
 	}
 
 	public void setBoolean(String name, boolean value) {
@@ -83,7 +83,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public char getChar(String name) {
-		return getTag(name, CharTag.class).get();
+		return getTag(name, CharTag.class).value;
 	}
 
 	public void setChar(String name, char value) {
@@ -91,7 +91,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public byte getByte(String name) {
-		return getTag(name, ByteTag.class).get();
+		return getTag(name, ByteTag.class).value;
 	}
 
 	public void setByte(String name, byte value) {
@@ -99,7 +99,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public short getShort(String name) {
-		return getTag(name, ShortTag.class).get();
+		return getTag(name, ShortTag.class).value;
 	}
 
 	public void setShort(String name, short value) {
@@ -107,7 +107,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public int getInt(String name) {
-		return getTag(name, IntTag.class).get();
+		return getTag(name, IntTag.class).value;
 	}
 
 	public void setInt(String name, int value) {
@@ -115,7 +115,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public long getLong(String name) {
-		return getTag(name, LongTag.class).get();
+		return getTag(name, LongTag.class).value;
 	}
 
 	public void setLong(String name, long value) {
@@ -123,7 +123,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public float getFloat(String name) {
-		return getTag(name, FloatTag.class).get();
+		return getTag(name, FloatTag.class).value;
 	}
 
 	public void setFloat(String name, float value) {
@@ -131,7 +131,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public double getDouble(String name) {
-		return getTag(name, DoubleTag.class).get();
+		return getTag(name, DoubleTag.class).value;
 	}
 
 	public void setDouble(String name, double value) {
@@ -139,7 +139,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public String getString(String name) {
-		return getTag(name, StringTag.class).get();
+		return getTag(name, StringTag.class).value;
 	}
 
 	public void setString(String name, String value) {
@@ -157,7 +157,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	// arrays
 
 	public boolean[] getBooleanArray(String name) {
-		return getTag(name, BooleanArrayTag.class).get();
+		return getTag(name, BooleanArrayTag.class).value;
 	}
 
 	public void setBooleanArray(String name, boolean[] value) {
@@ -165,7 +165,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public char[] getCharArray(String name) {
-		return getTag(name, CharArrayTag.class).get();
+		return getTag(name, CharArrayTag.class).value;
 	}
 
 	public void setCharArray(String name, char[] value) {
@@ -173,7 +173,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public byte[] getByteArray(String name) {
-		return getTag(name, ByteArrayTag.class).get();
+		return getTag(name, ByteArrayTag.class).value;
 	}
 
 	public void setByteArray(String name, byte[] value) {
@@ -181,7 +181,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public short[] getShortArray(String name) {
-		return getTag(name, ShortArrayTag.class).get();
+		return getTag(name, ShortArrayTag.class).value;
 	}
 
 	public void setShortArray(String name, short[] value) {
@@ -189,7 +189,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public int[] getIntArray(String name) {
-		return getTag(name, IntArrayTag.class).get();
+		return getTag(name, IntArrayTag.class).value;
 	}
 
 	public void setIntArray(String name, int[] value) {
@@ -197,7 +197,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public long[] getLongArray(String name) {
-		return getTag(name, LongArrayTag.class).get();
+		return getTag(name, LongArrayTag.class).value;
 	}
 
 	public void setLongArray(String name, long[] value) {
@@ -205,7 +205,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public float[] getFloatArray(String name) {
-		return getTag(name, FloatArrayTag.class).get();
+		return getTag(name, FloatArrayTag.class).value;
 	}
 
 	public void setFloatArray(String name, float[] value) {
@@ -213,7 +213,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public double[] getDoubleArray(String name) {
-		return getTag(name, DoubleArrayTag.class).get();
+		return getTag(name, DoubleArrayTag.class).value;
 	}
 
 	public void setDoubleArray(String name, double[] value) {
@@ -221,7 +221,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public String[] getStringArray(String name) {
-		return getTag(name, StringArrayTag.class).get();
+		return getTag(name, StringArrayTag.class).value;
 	}
 
 	public void setStringArray(String name, String[] value) {
@@ -229,7 +229,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public ObjectTag[] getObjectArray(String name) {
-		return getTag(name, ObjectArrayTag.class).get();
+		return getTag(name, ObjectArrayTag.class).value;
 	}
 
 	public void setObjectArray(String name, ObjectTag[] value) {

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class DoubleTag extends Tag<Double> {
 
-	private double value;
+	protected double value;
 
 	public DoubleTag() {
 	}

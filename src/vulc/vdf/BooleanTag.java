@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class BooleanTag extends Tag<Boolean> {
 
-	private boolean value;
+	protected boolean value;
 
 	public BooleanTag() {
 	}

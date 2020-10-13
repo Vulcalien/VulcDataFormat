@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class IntTag extends Tag<Integer> {
 
-	private int value;
+	protected int value;
 
 	public IntTag() {
 	}

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class ShortTag extends Tag<Short> {
 
-	private short value;
+	protected short value;
 
 	public ShortTag() {
 	}

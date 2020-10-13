@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class IntArrayTag extends Tag<int[]> {
 
-	private int[] value;
+	protected int[] value;
 
 	public IntArrayTag() {
 	}

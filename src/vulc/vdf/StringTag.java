@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class StringTag extends Tag<String> {
 
-	private String value;
+	protected String value;
 
 	public StringTag() {
 	}

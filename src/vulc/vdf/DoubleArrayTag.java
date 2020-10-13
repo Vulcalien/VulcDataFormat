@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class DoubleArrayTag extends Tag<double[]> {
 
-	private double[] value;
+	protected double[] value;
 
 	public DoubleArrayTag() {
 	}

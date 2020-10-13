@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class ShortArrayTag extends Tag<short[]> {
 
-	private short[] value;
+	protected short[] value;
 
 	public ShortArrayTag() {
 	}

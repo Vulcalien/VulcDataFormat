@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class LongArrayTag extends Tag<long[]> {
 
-	private long[] value;
+	protected long[] value;
 
 	public LongArrayTag() {
 	}

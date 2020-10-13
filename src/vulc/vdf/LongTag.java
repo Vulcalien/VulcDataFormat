@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class LongTag extends Tag<Long> {
 
-	private long value;
+	protected long value;
 
 	public LongTag() {
 	}

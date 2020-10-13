@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class CharArrayTag extends Tag<char[]> {
 
-	private char[] value;
+	protected char[] value;
 
 	public CharArrayTag() {
 	}

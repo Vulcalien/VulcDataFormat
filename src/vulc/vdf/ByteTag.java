@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class ByteTag extends Tag<Byte> {
 
-	private byte value;
+	protected byte value;
 
 	public ByteTag() {
 	}

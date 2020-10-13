@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class ByteArrayTag extends Tag<byte[]> {
 
-	private byte[] value;
+	protected byte[] value;
 
 	public ByteArrayTag() {
 	}

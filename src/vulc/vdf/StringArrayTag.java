@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class StringArrayTag extends Tag<String[]> {
 
-	private String[] value;
+	protected String[] value;
 
 	public StringArrayTag() {
 	}

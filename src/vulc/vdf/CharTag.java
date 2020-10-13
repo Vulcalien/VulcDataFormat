@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class CharTag extends Tag<Character> {
 
-	private char value;
+	protected char value;
 
 	public CharTag() {
 	}

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class FloatTag extends Tag<Float> {
 
-	private float value;
+	protected float value;
 
 	public FloatTag() {
 	}

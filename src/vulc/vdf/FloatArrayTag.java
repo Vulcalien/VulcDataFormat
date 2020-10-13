@@ -6,7 +6,7 @@ import java.io.IOException;
 
 class FloatArrayTag extends Tag<float[]> {
 
-	private float[] value;
+	protected float[] value;
 
 	public FloatArrayTag() {
 	}
