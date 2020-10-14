@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class DoubleArrayTag extends Tag<double[]> {
+class DoubleArrayTag extends Tag {
 
 	protected double[] value;
 
@@ -15,7 +15,7 @@ class DoubleArrayTag extends Tag<double[]> {
 		this.value = value;
 	}
 
-	protected double[] get() {
+	protected Object get() {
 		return value;
 	}
 

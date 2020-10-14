@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class StringTag extends Tag<String> {
+class StringTag extends Tag {
 
 	protected String value;
 
@@ -15,7 +15,7 @@ class StringTag extends Tag<String> {
 		this.value = value;
 	}
 
-	protected String get() {
+	protected Object get() {
 		return value;
 	}
 

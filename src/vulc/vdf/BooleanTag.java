@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class BooleanTag extends Tag<Boolean> {
+class BooleanTag extends Tag {
 
 	protected boolean value;
 
@@ -15,7 +15,7 @@ class BooleanTag extends Tag<Boolean> {
 		this.value = value;
 	}
 
-	public Boolean get() {
+	protected Object get() {
 		return value;
 	}
 

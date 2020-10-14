@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ShortTag extends Tag<Short> {
+class ShortTag extends Tag {
 
 	protected short value;
 
@@ -15,7 +15,7 @@ class ShortTag extends Tag<Short> {
 		this.value = value;
 	}
 
-	protected Short get() {
+	protected Object get() {
 		return value;
 	}
 

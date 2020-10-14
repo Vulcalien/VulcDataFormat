@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ByteArrayTag extends Tag<byte[]> {
+class ByteArrayTag extends Tag {
 
 	protected byte[] value;
 
@@ -15,7 +15,7 @@ class ByteArrayTag extends Tag<byte[]> {
 		this.value = value;
 	}
 
-	protected byte[] get() {
+	protected Object get() {
 		return value;
 	}
 

@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class CharTag extends Tag<Character> {
+class CharTag extends Tag {
 
 	protected char value;
 
@@ -15,7 +15,7 @@ class CharTag extends Tag<Character> {
 		this.value = value;
 	}
 
-	protected Character get() {
+	protected Object get() {
 		return value;
 	}
 

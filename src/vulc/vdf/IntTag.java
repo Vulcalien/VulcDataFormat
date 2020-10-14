@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class IntTag extends Tag<Integer> {
+class IntTag extends Tag {
 
 	protected int value;
 
@@ -15,7 +15,7 @@ class IntTag extends Tag<Integer> {
 		this.value = value;
 	}
 
-	protected Integer get() {
+	protected Object get() {
 		return value;
 	}
 

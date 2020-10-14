@@ -4,9 +4,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-abstract class Tag<T> {
+abstract class Tag {
 
-	protected abstract T get();
+	protected abstract Object get();
 
 	public abstract void serialize(DataOutputStream out) throws IOException;
 

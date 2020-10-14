@@ -40,9 +40,9 @@ abstract class TypeTable {
 		assignIndex++;
 	}
 
-	static Tag<?> getTag(byte code) {
+	static Tag getTag(byte code) {
 		try {
-			return (Tag<?>) (TYPES[code].newInstance());
+			return (Tag) (TYPES[code].newInstance());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

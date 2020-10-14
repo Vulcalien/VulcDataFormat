@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class LongTag extends Tag<Long> {
+class LongTag extends Tag {
 
 	protected long value;
 
@@ -15,7 +15,7 @@ class LongTag extends Tag<Long> {
 		this.value = value;
 	}
 
-	protected Long get() {
+	protected Object get() {
 		return value;
 	}
 

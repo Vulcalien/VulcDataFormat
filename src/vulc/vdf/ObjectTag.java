@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class ObjectTag extends Tag<ObjectTag> {
+public class ObjectTag extends Tag {
 
-	private final HashMap<String, Tag<?>> map = new HashMap<String, Tag<?>>();
+	private final HashMap<String, Tag> map = new HashMap<String, Tag>();
 
 	public int size() {
 		return map.size();
@@ -35,7 +35,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	private <T> T getTag(String name, Class<T> type) {
-		Tag<?> tag = map.get(name);
+		Tag tag = map.get(name);
 
 		if(type.isInstance(tag)) {
 			return type.cast(tag);
@@ -47,7 +47,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	}
 
 	public Object getValue(String name) {
-		Tag<?> tag = map.get(name);
+		Tag tag = map.get(name);
 
 		if(tag != null) {
 			return tag.get();
@@ -68,7 +68,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 		map.clear();
 	}
 
-	protected ObjectTag get() {
+	protected Object get() {
 		return this;
 	}
 
@@ -240,7 +240,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 
 	public void serialize(DataOutputStream out) throws IOException {
 		for(String name : keySet()) {
-			Tag<?> tag = map.get(name);
+			Tag tag = map.get(name);
 
 			out.writeByte(TypeTable.getCode(tag.getClass()));	// write code
 			out.writeUTF(name);									// write name
@@ -253,7 +253,7 @@ public class ObjectTag extends Tag<ObjectTag> {
 	public void deserialize(DataInputStream in) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {					// read code, until end mark (-1) is found
-			Tag<?> tag = TypeTable.getTag(code);
+			Tag tag = TypeTable.getTag(code);
 
 			String name = in.readUTF();							// read name
 

@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class FloatArrayTag extends Tag<float[]> {
+class FloatArrayTag extends Tag {
 
 	protected float[] value;
 
@@ -15,7 +15,7 @@ class FloatArrayTag extends Tag<float[]> {
 		this.value = value;
 	}
 
-	protected float[] get() {
+	protected Object get() {
 		return value;
 	}
 

@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class DoubleTag extends Tag<Double> {
+class DoubleTag extends Tag {
 
 	protected double value;
 
@@ -15,7 +15,7 @@ class DoubleTag extends Tag<Double> {
 		this.value = value;
 	}
 
-	protected Double get() {
+	protected Object get() {
 		return value;
 	}
 

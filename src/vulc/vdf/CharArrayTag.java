@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class CharArrayTag extends Tag<char[]> {
+class CharArrayTag extends Tag {
 
 	protected char[] value;
 
@@ -15,7 +15,7 @@ class CharArrayTag extends Tag<char[]> {
 		this.value = value;
 	}
 
-	protected char[] get() {
+	protected Object get() {
 		return value;
 	}
 

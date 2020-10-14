@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class BooleanArrayTag extends Tag<boolean[]> {
+class BooleanArrayTag extends Tag {
 
 	protected boolean[] value;
 
@@ -15,7 +15,7 @@ class BooleanArrayTag extends Tag<boolean[]> {
 		this.value = value;
 	}
 
-	protected boolean[] get() {
+	protected Object get() {
 		return value;
 	}
 

@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ShortArrayTag extends Tag<short[]> {
+class ShortArrayTag extends Tag {
 
 	protected short[] value;
 
@@ -15,7 +15,7 @@ class ShortArrayTag extends Tag<short[]> {
 		this.value = value;
 	}
 
-	protected short[] get() {
+	protected Object get() {
 		return value;
 	}
 
