@@ -10,28 +10,28 @@ abstract class TypeTable {
 	private static int assignIndex = 0;
 
 	static {
-		assign(BooleanTag.class);
-		assign(CharTag.class);
-		assign(ByteTag.class);
-		assign(ShortTag.class);
-		assign(IntTag.class);
-		assign(LongTag.class);
-		assign(FloatTag.class);
-		assign(DoubleTag.class);
-		assign(StringTag.class);
+		assign(BooleanElement.class);
+		assign(CharElement.class);
+		assign(ByteElement.class);
+		assign(ShortElement.class);
+		assign(IntElement.class);
+		assign(LongElement.class);
+		assign(FloatElement.class);
+		assign(DoubleElement.class);
+		assign(StringElement.class);
 
-		assign(BooleanArrayTag.class);
-		assign(CharArrayTag.class);
-		assign(ByteArrayTag.class);
-		assign(ShortArrayTag.class);
-		assign(IntArrayTag.class);
-		assign(LongArrayTag.class);
-		assign(FloatArrayTag.class);
-		assign(DoubleArrayTag.class);
-		assign(StringArrayTag.class);
+		assign(BooleanArrayElement.class);
+		assign(CharArrayElement.class);
+		assign(ByteArrayElement.class);
+		assign(ShortArrayElement.class);
+		assign(IntArrayElement.class);
+		assign(LongArrayElement.class);
+		assign(FloatArrayElement.class);
+		assign(DoubleArrayElement.class);
+		assign(StringArrayElement.class);
 
-		assign(ObjectTag.class);
-		assign(ObjectArrayTag.class);
+		assign(ObjectElement.class);
+		assign(ObjectArrayElement.class);
 	}
 
 	private static void assign(Class<?> type) {
@@ -40,9 +40,9 @@ abstract class TypeTable {
 		assignIndex++;
 	}
 
-	static Tag getTag(byte code) {
+	static Element createElement(byte code) {
 		try {
-			return (Tag) (TYPES[code].newInstance());
+			return (Element) (TYPES[code].newInstance());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

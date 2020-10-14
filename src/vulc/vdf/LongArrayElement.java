@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ByteArrayTag extends Tag {
+class LongArrayElement extends Element {
 
-	protected byte[] value;
+	protected long[] value;
 
-	public ByteArrayTag() {
+	public LongArrayElement() {
 	}
 
-	public ByteArrayTag(byte[] value) {
+	public LongArrayElement(long[] value) {
 		this.value = value;
 	}
 
@@ -22,14 +22,14 @@ class ByteArrayTag extends Tag {
 	public void serialize(DataOutputStream out) throws IOException {
 		out.writeInt(value.length);
 		for(int i = 0; i < value.length; i++) {
-			out.writeByte(value[i]);
+			out.writeLong(value[i]);
 		}
 	}
 
 	public void deserialize(DataInputStream in) throws IOException {
-		value = new byte[in.readInt()];
+		value = new long[in.readInt()];
 		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readByte();
+			value[i] = in.readLong();
 		}
 	}
 

@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class ObjectTag extends Tag {
+public class ObjectElement extends Element {
 
-	private final HashMap<String, Tag> map = new HashMap<String, Tag>();
+	private final HashMap<String, Element> map = new HashMap<String, Element>();
 
 	public int size() {
 		return map.size();
@@ -34,12 +34,12 @@ public class ObjectTag extends Tag {
 		return map.keySet();
 	}
 
-	private <T> T getTag(String name, Class<T> type) {
-		Tag tag = map.get(name);
+	private <T> T getElement(String name, Class<T> type) {
+		Element e = map.get(name);
 
-		if(type.isInstance(tag)) {
-			return type.cast(tag);
-		} else if(tag == null) {
+		if(type.isInstance(e)) {
+			return type.cast(e);
+		} else if(e == null) {
 			throw new NoSuchElementException(name);
 		} else {
 			throw new ClassCastException(type.getName());
@@ -47,10 +47,10 @@ public class ObjectTag extends Tag {
 	}
 
 	public Object getValue(String name) {
-		Tag tag = map.get(name);
+		Element e = map.get(name);
 
-		if(tag != null) {
-			return tag.get();
+		if(e != null) {
+			return e.get();
 		} else {
 			throw new NoSuchElementException(name);
 		}
@@ -60,7 +60,7 @@ public class ObjectTag extends Tag {
 		return getValue(name).getClass();
 	}
 
-	public void removeTag(String name) {
+	public void removeElement(String name) {
 		map.remove(name);
 	}
 
@@ -75,177 +75,177 @@ public class ObjectTag extends Tag {
 	// getters and setters
 
 	public boolean getBoolean(String name) {
-		return getTag(name, BooleanTag.class).value;
+		return getElement(name, BooleanElement.class).value;
 	}
 
 	public void setBoolean(String name, boolean value) {
-		map.put(name, new BooleanTag(value));
+		map.put(name, new BooleanElement(value));
 	}
 
 	public char getChar(String name) {
-		return getTag(name, CharTag.class).value;
+		return getElement(name, CharElement.class).value;
 	}
 
 	public void setChar(String name, char value) {
-		map.put(name, new CharTag(value));
+		map.put(name, new CharElement(value));
 	}
 
 	public byte getByte(String name) {
-		return getTag(name, ByteTag.class).value;
+		return getElement(name, ByteElement.class).value;
 	}
 
 	public void setByte(String name, byte value) {
-		map.put(name, new ByteTag(value));
+		map.put(name, new ByteElement(value));
 	}
 
 	public short getShort(String name) {
-		return getTag(name, ShortTag.class).value;
+		return getElement(name, ShortElement.class).value;
 	}
 
 	public void setShort(String name, short value) {
-		map.put(name, new ShortTag(value));
+		map.put(name, new ShortElement(value));
 	}
 
 	public int getInt(String name) {
-		return getTag(name, IntTag.class).value;
+		return getElement(name, IntElement.class).value;
 	}
 
 	public void setInt(String name, int value) {
-		map.put(name, new IntTag(value));
+		map.put(name, new IntElement(value));
 	}
 
 	public long getLong(String name) {
-		return getTag(name, LongTag.class).value;
+		return getElement(name, LongElement.class).value;
 	}
 
 	public void setLong(String name, long value) {
-		map.put(name, new LongTag(value));
+		map.put(name, new LongElement(value));
 	}
 
 	public float getFloat(String name) {
-		return getTag(name, FloatTag.class).value;
+		return getElement(name, FloatElement.class).value;
 	}
 
 	public void setFloat(String name, float value) {
-		map.put(name, new FloatTag(value));
+		map.put(name, new FloatElement(value));
 	}
 
 	public double getDouble(String name) {
-		return getTag(name, DoubleTag.class).value;
+		return getElement(name, DoubleElement.class).value;
 	}
 
 	public void setDouble(String name, double value) {
-		map.put(name, new DoubleTag(value));
+		map.put(name, new DoubleElement(value));
 	}
 
 	public String getString(String name) {
-		return getTag(name, StringTag.class).value;
+		return getElement(name, StringElement.class).value;
 	}
 
 	public void setString(String name, String value) {
-		map.put(name, new StringTag(value));
+		map.put(name, new StringElement(value));
 	}
 
-	public ObjectTag getObject(String name) {
-		return getTag(name, ObjectTag.class);
+	public ObjectElement getObject(String name) {
+		return getElement(name, ObjectElement.class);
 	}
 
-	public void setObject(String name, ObjectTag objectTag) {
-		map.put(name, objectTag);
+	public void setObject(String name, ObjectElement objectElement) {
+		map.put(name, objectElement);
 	}
 
 	// arrays
 
 	public boolean[] getBooleanArray(String name) {
-		return getTag(name, BooleanArrayTag.class).value;
+		return getElement(name, BooleanArrayElement.class).value;
 	}
 
 	public void setBooleanArray(String name, boolean[] value) {
-		map.put(name, new BooleanArrayTag(value));
+		map.put(name, new BooleanArrayElement(value));
 	}
 
 	public char[] getCharArray(String name) {
-		return getTag(name, CharArrayTag.class).value;
+		return getElement(name, CharArrayElement.class).value;
 	}
 
 	public void setCharArray(String name, char[] value) {
-		map.put(name, new CharArrayTag(value));
+		map.put(name, new CharArrayElement(value));
 	}
 
 	public byte[] getByteArray(String name) {
-		return getTag(name, ByteArrayTag.class).value;
+		return getElement(name, ByteArrayElement.class).value;
 	}
 
 	public void setByteArray(String name, byte[] value) {
-		map.put(name, new ByteArrayTag(value));
+		map.put(name, new ByteArrayElement(value));
 	}
 
 	public short[] getShortArray(String name) {
-		return getTag(name, ShortArrayTag.class).value;
+		return getElement(name, ShortArrayElement.class).value;
 	}
 
 	public void setShortArray(String name, short[] value) {
-		map.put(name, new ShortArrayTag(value));
+		map.put(name, new ShortArrayElement(value));
 	}
 
 	public int[] getIntArray(String name) {
-		return getTag(name, IntArrayTag.class).value;
+		return getElement(name, IntArrayElement.class).value;
 	}
 
 	public void setIntArray(String name, int[] value) {
-		map.put(name, new IntArrayTag(value));
+		map.put(name, new IntArrayElement(value));
 	}
 
 	public long[] getLongArray(String name) {
-		return getTag(name, LongArrayTag.class).value;
+		return getElement(name, LongArrayElement.class).value;
 	}
 
 	public void setLongArray(String name, long[] value) {
-		map.put(name, new LongArrayTag(value));
+		map.put(name, new LongArrayElement(value));
 	}
 
 	public float[] getFloatArray(String name) {
-		return getTag(name, FloatArrayTag.class).value;
+		return getElement(name, FloatArrayElement.class).value;
 	}
 
 	public void setFloatArray(String name, float[] value) {
-		map.put(name, new FloatArrayTag(value));
+		map.put(name, new FloatArrayElement(value));
 	}
 
 	public double[] getDoubleArray(String name) {
-		return getTag(name, DoubleArrayTag.class).value;
+		return getElement(name, DoubleArrayElement.class).value;
 	}
 
 	public void setDoubleArray(String name, double[] value) {
-		map.put(name, new DoubleArrayTag(value));
+		map.put(name, new DoubleArrayElement(value));
 	}
 
 	public String[] getStringArray(String name) {
-		return getTag(name, StringArrayTag.class).value;
+		return getElement(name, StringArrayElement.class).value;
 	}
 
 	public void setStringArray(String name, String[] value) {
-		map.put(name, new StringArrayTag(value));
+		map.put(name, new StringArrayElement(value));
 	}
 
-	public ObjectTag[] getObjectArray(String name) {
-		return getTag(name, ObjectArrayTag.class).value;
+	public ObjectElement[] getObjectArray(String name) {
+		return getElement(name, ObjectArrayElement.class).value;
 	}
 
-	public void setObjectArray(String name, ObjectTag[] value) {
-		map.put(name, new ObjectArrayTag(value));
+	public void setObjectArray(String name, ObjectElement[] value) {
+		map.put(name, new ObjectArrayElement(value));
 	}
 
 	// IO
 
 	public void serialize(DataOutputStream out) throws IOException {
 		for(String name : keySet()) {
-			Tag tag = map.get(name);
+			Element e = map.get(name);
 
-			out.writeByte(TypeTable.getCode(tag.getClass()));	// write code
+			out.writeByte(TypeTable.getCode(e.getClass()));		// write code
 			out.writeUTF(name);									// write name
 
-			tag.serialize(out);									// serialize
+			e.serialize(out);									// serialize
 		}
 		out.writeByte(-1);										// write end mark
 	}
@@ -253,13 +253,13 @@ public class ObjectTag extends Tag {
 	public void deserialize(DataInputStream in) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {					// read code, until end mark (-1) is found
-			Tag tag = TypeTable.getTag(code);
+			Element e = TypeTable.createElement(code);
 
 			String name = in.readUTF();							// read name
 
-			tag.deserialize(in);								// deserialize
+			e.deserialize(in);									// deserialize
 
-			map.put(name, tag);									// add tag to this object
+			map.put(name, e);									// add element to this object
 		}
 	}
 

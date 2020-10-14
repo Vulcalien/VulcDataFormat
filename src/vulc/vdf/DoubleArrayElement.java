@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ObjectArrayTag extends Tag {
+class DoubleArrayElement extends Element {
 
-	protected ObjectTag[] value;
+	protected double[] value;
 
-	public ObjectArrayTag() {
+	public DoubleArrayElement() {
 	}
 
-	public ObjectArrayTag(ObjectTag[] value) {
+	public DoubleArrayElement(double[] value) {
 		this.value = value;
 	}
 
@@ -22,15 +22,14 @@ class ObjectArrayTag extends Tag {
 	public void serialize(DataOutputStream out) throws IOException {
 		out.writeInt(value.length);
 		for(int i = 0; i < value.length; i++) {
-			value[i].serialize(out);
+			out.writeDouble(value[i]);
 		}
 	}
 
 	public void deserialize(DataInputStream in) throws IOException {
-		value = new ObjectTag[in.readInt()];
+		value = new double[in.readInt()];
 		for(int i = 0; i < value.length; i++) {
-			value[i] = new ObjectTag();
-			value[i].deserialize(in);
+			value[i] = in.readDouble();
 		}
 	}
 

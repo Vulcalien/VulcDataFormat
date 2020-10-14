@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class StringTag extends Tag {
+class StringElement extends Element {
 
 	protected String value;
 
-	public StringTag() {
+	public StringElement() {
 	}
 
-	public StringTag(String value) {
+	public StringElement(String value) {
 		this.value = value;
 	}
 

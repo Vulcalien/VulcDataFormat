@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class FloatArrayTag extends Tag {
+class FloatArrayElement extends Element {
 
 	protected float[] value;
 
-	public FloatArrayTag() {
+	public FloatArrayElement() {
 	}
 
-	public FloatArrayTag(float[] value) {
+	public FloatArrayElement(float[] value) {
 		this.value = value;
 	}
 

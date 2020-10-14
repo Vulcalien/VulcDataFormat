@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class FloatTag extends Tag {
+class BooleanElement extends Element {
 
-	protected float value;
+	protected boolean value;
 
-	public FloatTag() {
+	public BooleanElement() {
 	}
 
-	public FloatTag(float value) {
+	public BooleanElement(boolean value) {
 		this.value = value;
 	}
 
@@ -20,11 +20,11 @@ class FloatTag extends Tag {
 	}
 
 	public void serialize(DataOutputStream out) throws IOException {
-		out.writeFloat(value);
+		out.writeBoolean(value);
 	}
 
 	public void deserialize(DataInputStream in) throws IOException {
-		this.value = in.readFloat();
+		this.value = in.readBoolean();
 	}
 
 }

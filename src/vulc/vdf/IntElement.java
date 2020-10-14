@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class DoubleTag extends Tag {
+class IntElement extends Element {
 
-	protected double value;
+	protected int value;
 
-	public DoubleTag() {
+	public IntElement() {
 	}
 
-	public DoubleTag(double value) {
+	public IntElement(int value) {
 		this.value = value;
 	}
 
@@ -20,11 +20,11 @@ class DoubleTag extends Tag {
 	}
 
 	public void serialize(DataOutputStream out) throws IOException {
-		out.writeDouble(value);
+		out.writeInt(value);
 	}
 
 	public void deserialize(DataInputStream in) throws IOException {
-		this.value = in.readDouble();
+		this.value = in.readInt();
 	}
 
 }

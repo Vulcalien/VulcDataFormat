@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ShortTag extends Tag {
+class ByteElement extends Element {
 
-	protected short value;
+	protected byte value;
 
-	public ShortTag() {
+	public ByteElement() {
 	}
 
-	public ShortTag(short value) {
+	public ByteElement(byte value) {
 		this.value = value;
 	}
 
@@ -20,11 +20,11 @@ class ShortTag extends Tag {
 	}
 
 	public void serialize(DataOutputStream out) throws IOException {
-		out.writeShort(value);
+		out.writeByte(value);
 	}
 
 	public void deserialize(DataInputStream in) throws IOException {
-		this.value = in.readShort();
+		this.value = in.readByte();
 	}
 
 }

@@ -4,7 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-abstract class Tag {
+abstract class Element {
 
 	protected abstract Object get();
 

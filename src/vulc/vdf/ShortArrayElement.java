@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class ShortArrayTag extends Tag {
+class ShortArrayElement extends Element {
 
 	protected short[] value;
 
-	public ShortArrayTag() {
+	public ShortArrayElement() {
 	}
 
-	public ShortArrayTag(short[] value) {
+	public ShortArrayElement(short[] value) {
 		this.value = value;
 	}
 

@@ -4,14 +4,14 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-class CharArrayTag extends Tag {
+class CharArrayElement extends Element {
 
 	protected char[] value;
 
-	public CharArrayTag() {
+	public CharArrayElement() {
 	}
 
-	public CharArrayTag(char[] value) {
+	public CharArrayElement(char[] value) {
 		this.value = value;
 	}
 
