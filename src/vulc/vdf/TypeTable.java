@@ -11,23 +11,23 @@ abstract class TypeTable {
 
 	static {
 		assign(BooleanElement.class);
-		assign(CharElement.class);
 		assign(ByteElement.class);
 		assign(ShortElement.class);
 		assign(IntElement.class);
 		assign(LongElement.class);
 		assign(FloatElement.class);
 		assign(DoubleElement.class);
+		assign(CharElement.class);
 		assign(StringElement.class);
 
 		assign(BooleanArrayElement.class);
-		assign(CharArrayElement.class);
 		assign(ByteArrayElement.class);
 		assign(ShortArrayElement.class);
 		assign(IntArrayElement.class);
 		assign(LongArrayElement.class);
 		assign(FloatArrayElement.class);
 		assign(DoubleArrayElement.class);
+		assign(CharArrayElement.class);
 		assign(StringArrayElement.class);
 
 		assign(ObjectElement.class);
