@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import vulc.vdf.io.BinaryIO;
+
 public class ObjectElement extends Element {
 
 	private final HashMap<String, Element> map = new HashMap<String, Element>();
@@ -239,28 +241,11 @@ public class ObjectElement extends Element {
 	// IO
 
 	public void serialize(DataOutputStream out) throws IOException {
-		for(String name : keySet()) {
-			Element e = map.get(name);
-
-			out.writeByte(TypeTable.getCode(e.getClass()));		// write code
-			out.writeUTF(name);									// write name
-
-			e.serialize(out);									// serialize
-		}
-		out.writeByte(-1);										// write end mark
+		BinaryIO.serialize(out, this);
 	}
 
 	public void deserialize(DataInputStream in) throws IOException {
-		byte code;
-		while((code = in.readByte()) != -1) {					// read code, until end mark (-1) is found
-			Element e = TypeTable.createElement(code);
-
-			String name = in.readUTF();							// read name
-
-			e.deserialize(in);									// deserialize
-
-			map.put(name, e);									// add element to this object
-		}
+		BinaryIO.deserialize(in, this);
 	}
 
 }

@@ -40,9 +40,7 @@ abstract class BinaryReader {
 		DESERIALIZERS[code] = deserializer;
 	}
 
-	protected static ObjectElement deserializeObject(DataInputStream in) throws IOException {
-		ObjectElement obj = new ObjectElement();
-
+	protected static ObjectElement deserializeObject(DataInputStream in, ObjectElement obj) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {				// read code, until end mark (-1) is found
 			String name = in.readUTF();						// read name
@@ -127,13 +125,13 @@ abstract class BinaryReader {
 	}
 
 	private static void readObject(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		obj.setObject(name, deserializeObject(in));
+		obj.setObject(name, deserializeObject(in, new ObjectElement()));
 	}
 
 	private static void readObjectArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
 		ObjectElement[] value = new ObjectElement[in.readInt()];
 		for(int i = 0; i < value.length; i++) {
-			value[i] = deserializeObject(in);
+			value[i] = deserializeObject(in, new ObjectElement());
 		}
 		obj.setObjectArray(name, value);
 	}

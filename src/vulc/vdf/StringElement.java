@@ -1,9 +1,5 @@
 package vulc.vdf;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 class StringElement extends Element {
 
 	protected String value;
@@ -17,14 +13,6 @@ class StringElement extends Element {
 
 	protected Object get() {
 		return value;
-	}
-
-	public void serialize(DataOutputStream out) throws IOException {
-		out.writeUTF(value);
-	}
-
-	public void deserialize(DataInputStream in) throws IOException {
-		this.value = in.readUTF();
 	}
 
 }
