@@ -82,14 +82,6 @@ public class ObjectElement extends Element {
 		map.put(name, new BooleanElement(value));
 	}
 
-	public char getChar(String name) {
-		return getElement(name, CharElement.class).value;
-	}
-
-	public void setChar(String name, char value) {
-		map.put(name, new CharElement(value));
-	}
-
 	public byte getByte(String name) {
 		return getElement(name, ByteElement.class).value;
 	}
@@ -138,6 +130,14 @@ public class ObjectElement extends Element {
 		map.put(name, new DoubleElement(value));
 	}
 
+	public char getChar(String name) {
+		return getElement(name, CharElement.class).value;
+	}
+
+	public void setChar(String name, char value) {
+		map.put(name, new CharElement(value));
+	}
+
 	public String getString(String name) {
 		return getElement(name, StringElement.class).value;
 	}
@@ -162,14 +162,6 @@ public class ObjectElement extends Element {
 
 	public void setBooleanArray(String name, boolean[] value) {
 		map.put(name, new BooleanArrayElement(value));
-	}
-
-	public char[] getCharArray(String name) {
-		return getElement(name, CharArrayElement.class).value;
-	}
-
-	public void setCharArray(String name, char[] value) {
-		map.put(name, new CharArrayElement(value));
 	}
 
 	public byte[] getByteArray(String name) {
@@ -218,6 +210,14 @@ public class ObjectElement extends Element {
 
 	public void setDoubleArray(String name, double[] value) {
 		map.put(name, new DoubleArrayElement(value));
+	}
+
+	public char[] getCharArray(String name) {
+		return getElement(name, CharArrayElement.class).value;
+	}
+
+	public void setCharArray(String name, char[] value) {
+		map.put(name, new CharArrayElement(value));
 	}
 
 	public String[] getStringArray(String name) {
