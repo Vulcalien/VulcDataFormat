@@ -1,6 +1,6 @@
 package vulc.vdf.io;
 
-import static vulc.vdf.io.BinaryCodes.*;
+import static vulc.vdf.io.VDFCodes.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

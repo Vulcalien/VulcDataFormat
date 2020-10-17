@@ -1,14 +1,13 @@
 package vulc.vdf.io;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import vulc.vdf.ObjectElement;
 
 @SuppressWarnings("unchecked")
-abstract class VDFWriter<T extends OutputStream> {
+abstract class VDFWriter<T> {
 
-	protected final Serializer<T>[] serializers = new Serializer[BinaryCodes.TYPES];
+	protected final Serializer<T>[] serializers = new Serializer[VDFCodes.TYPES];
 
 	protected void add(Serializer<T> serializer, byte code) {
 		serializers[code] = serializer;

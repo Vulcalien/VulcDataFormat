@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import vulc.vdf.ObjectElement;
 
-abstract class BinaryCodes {
+abstract class VDFCodes {
 
 	protected static final byte TYPES = 20;
 

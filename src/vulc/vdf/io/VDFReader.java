@@ -1,14 +1,13 @@
 package vulc.vdf.io;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import vulc.vdf.ObjectElement;
 
 @SuppressWarnings("unchecked")
-abstract class VDFReader<T extends InputStream> {
+abstract class VDFReader<T> {
 
-	protected final Deserializer<T>[] deserializers = new Deserializer[BinaryCodes.TYPES]; // TODO remove reference to a "binary" class
+	protected final Deserializer<T>[] deserializers = new Deserializer[VDFCodes.TYPES];
 
 	protected void add(Deserializer<T> deserializer, byte code) {
 		deserializers[code] = deserializer;
