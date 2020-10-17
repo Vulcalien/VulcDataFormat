@@ -7,11 +7,9 @@ import java.io.IOException;
 
 import vulc.vdf.ObjectElement;
 
-abstract class BinaryWriter {
+class BinaryWriter extends VDFWriter {
 
-	private static final Serializer[] SERIALIZERS = new Serializer[TYPES];
-
-	static {
+	protected BinaryWriter() {
 		add((value, out) -> out.writeBoolean((boolean) value), BOOLEAN);
 		add((value, out) -> out.writeByte((byte) value), BYTE);
 		add((value, out) -> out.writeShort((short) value), SHORT);
@@ -22,25 +20,21 @@ abstract class BinaryWriter {
 		add((value, out) -> out.writeChar((char) value), CHAR);
 		add((value, out) -> out.writeUTF((String) value), STRING);
 
-		add(BinaryWriter::writeBooleanArray, BOOLEAN_A);
-		add(BinaryWriter::writeByteArray, BYTE_A);
-		add(BinaryWriter::writeShortArray, SHORT_A);
-		add(BinaryWriter::writeIntArray, INT_A);
-		add(BinaryWriter::writeLongArray, LONG_A);
-		add(BinaryWriter::writeFloatArray, FLOAT_A);
-		add(BinaryWriter::writeDoubleArray, DOUBLE_A);
-		add(BinaryWriter::writeCharArray, CHAR_A);
-		add(BinaryWriter::writeStringArray, STRING_A);
+		add(this::writeBooleanArray, BOOLEAN_A);
+		add(this::writeByteArray, BYTE_A);
+		add(this::writeShortArray, SHORT_A);
+		add(this::writeIntArray, INT_A);
+		add(this::writeLongArray, LONG_A);
+		add(this::writeFloatArray, FLOAT_A);
+		add(this::writeDoubleArray, DOUBLE_A);
+		add(this::writeCharArray, CHAR_A);
+		add(this::writeStringArray, STRING_A);
 
-		add(BinaryWriter::writeObject, OBJECT);
-		add(BinaryWriter::writeObjectArray, OBJECT_A);
+		add(this::writeObject, OBJECT);
+		add(this::writeObjectArray, OBJECT_A);
 	}
 
-	private static void add(Serializer serializer, byte code) {
-		SERIALIZERS[code] = serializer;
-	}
-
-	protected static void serializeObject(DataOutputStream out, ObjectElement obj) throws IOException {
+	protected void serializeObject(DataOutputStream out, ObjectElement obj) throws IOException {
 		for(String name : obj.keySet()) {
 			Object value = obj.getValue(name);
 
@@ -56,7 +50,7 @@ abstract class BinaryWriter {
 
 	// write
 
-	private static void writeBooleanArray(Object value, DataOutputStream out) throws IOException {
+	private void writeBooleanArray(Object value, DataOutputStream out) throws IOException {
 		boolean[] array = (boolean[]) value;
 
 		out.writeInt(array.length);
@@ -65,7 +59,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeByteArray(Object value, DataOutputStream out) throws IOException {
+	private void writeByteArray(Object value, DataOutputStream out) throws IOException {
 		byte[] array = (byte[]) value;
 
 		out.writeInt(array.length);
@@ -74,7 +68,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeShortArray(Object value, DataOutputStream out) throws IOException {
+	private void writeShortArray(Object value, DataOutputStream out) throws IOException {
 		short[] array = (short[]) value;
 
 		out.writeInt(array.length);
@@ -83,7 +77,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeIntArray(Object value, DataOutputStream out) throws IOException {
+	private void writeIntArray(Object value, DataOutputStream out) throws IOException {
 		int[] array = (int[]) value;
 
 		out.writeInt(array.length);
@@ -92,7 +86,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeLongArray(Object value, DataOutputStream out) throws IOException {
+	private void writeLongArray(Object value, DataOutputStream out) throws IOException {
 		long[] array = (long[]) value;
 
 		out.writeInt(array.length);
@@ -101,7 +95,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeFloatArray(Object value, DataOutputStream out) throws IOException {
+	private void writeFloatArray(Object value, DataOutputStream out) throws IOException {
 		float[] array = (float[]) value;
 
 		out.writeInt(array.length);
@@ -110,7 +104,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeDoubleArray(Object value, DataOutputStream out) throws IOException {
+	private void writeDoubleArray(Object value, DataOutputStream out) throws IOException {
 		double[] array = (double[]) value;
 
 		out.writeInt(array.length);
@@ -119,7 +113,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeCharArray(Object value, DataOutputStream out) throws IOException {
+	private void writeCharArray(Object value, DataOutputStream out) throws IOException {
 		char[] array = (char[]) value;
 
 		out.writeInt(array.length);
@@ -128,7 +122,7 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeStringArray(Object value, DataOutputStream out) throws IOException {
+	private void writeStringArray(Object value, DataOutputStream out) throws IOException {
 		String[] array = (String[]) value;
 
 		out.writeInt(array.length);
@@ -137,11 +131,11 @@ abstract class BinaryWriter {
 		}
 	}
 
-	private static void writeObject(Object value, DataOutputStream out) throws IOException {
+	private void writeObject(Object value, DataOutputStream out) throws IOException {
 		serializeObject(out, (ObjectElement) value);
 	}
 
-	private static void writeObjectArray(Object value, DataOutputStream out) throws IOException {
+	private void writeObjectArray(Object value, DataOutputStream out) throws IOException {
 		ObjectElement[] array = (ObjectElement[]) value;
 
 		out.writeInt(array.length);
