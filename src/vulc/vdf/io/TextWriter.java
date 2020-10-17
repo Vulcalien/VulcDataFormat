@@ -16,8 +16,8 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		add((value, out) -> out.append((long) value), LONG);
 		add((value, out) -> out.append((float) value), FLOAT);
 		add((value, out) -> out.append((double) value), DOUBLE);
-		add((value, out) -> out.append("'" + value + "'"), CHAR);
-		add((value, out) -> out.append("\"" + value + "\""), STRING);
+		add((value, out) -> out.append("'" + clearChar(String.valueOf(value)) + "'"), CHAR);
+		add((value, out) -> out.append("\"" + clearString((String) value) + "\""), STRING);
 
 		add(this::writeBooleanArray, BOOLEAN_A);
 		add(this::writeByteArray, BYTE_A);
@@ -42,7 +42,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			byte code = CODES.get(value.getClass());
 
 			out.append(TextCodes.TAGS[code]);
-			out.append("\"" + name + "\""); // TODO allow escape sequences
+			out.append("\"" + clearString(name) + "\"");
 			out.append(":");
 			serializers[code].serialize(value, out);
 			out.append(","); // TODO don't add last comma
@@ -126,7 +126,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		out.append("[");
 
 		for(char v : (char[]) value) {
-			out.append("'" + v + "'");
+			out.append("'" + clearChar(String.valueOf(v)) + "'");
 			out.append(",");
 		}
 		out.append("]");
@@ -136,7 +136,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		out.append("[");
 
 		for(String v : (String[]) value) {
-			out.append("\"" + v + "\"");
+			out.append("\"" + clearString(v) + "\"");
 			out.append(",");
 		}
 		out.append("]");
@@ -154,6 +154,28 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			out.append(",");
 		}
 		out.append("]");
+	}
+
+	// utils
+
+	private String clearString(String string) {
+		return string.replace("\\", "\\\\")
+		             .replace("\t", "\\t")
+		             .replace("\b", "\\b")
+		             .replace("\n", "\\n")
+		             .replace("\r", "\\r")
+		             .replace("\f", "\\f")
+		             .replace("\"", "\\\"");
+	}
+
+	private String clearChar(String charStr) {
+		return charStr.replace("\\", "\\\\")
+		              .replace("\t", "\\t")
+		              .replace("\b", "\\b")
+		              .replace("\n", "\\n")
+		              .replace("\r", "\\r")
+		              .replace("\f", "\\f")
+		              .replace("'", "\\'");
 	}
 
 }
