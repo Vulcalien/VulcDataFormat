@@ -1,7 +1,7 @@
 package vulc.vdf.io;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.PrintStream;
 
 import vulc.vdf.ObjectElement;
 
@@ -18,7 +18,7 @@ public abstract class TextIO {
 //		return null;
 //	}
 
-	public static void serialize(PrintWriter out, ObjectElement obj) throws IOException {
+	public static void serialize(PrintStream out, ObjectElement obj) throws IOException {
 		out.println(stringify(obj));
 	}
 

@@ -16,8 +16,8 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		add((value, out) -> out.append((long) value), LONG);
 		add((value, out) -> out.append((float) value), FLOAT);
 		add((value, out) -> out.append((double) value), DOUBLE);
-		add((value, out) -> out.append((char) value), CHAR);
-		add((value, out) -> out.append((String) value), STRING);
+		add((value, out) -> out.append("'" + value + "'"), CHAR);
+		add((value, out) -> out.append("\"" + value + "\""), STRING);
 
 		add(this::writeBooleanArray, BOOLEAN_A);
 		add(this::writeByteArray, BYTE_A);
@@ -42,7 +42,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			byte code = CODES.get(value.getClass());
 
 			out.append(TextCodes.TAGS[code]);
-			out.append('"' + name + '"'); // TODO allow escape sequences
+			out.append("\"" + name + "\""); // TODO allow escape sequences
 			out.append(":");
 			serializers[code].serialize(value, out);
 			out.append(","); // TODO don't add last comma
@@ -126,7 +126,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		out.append("[");
 
 		for(char v : (char[]) value) {
-			out.append(v);
+			out.append("'" + v + "'");
 			out.append(",");
 		}
 		out.append("]");
@@ -136,7 +136,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		out.append("[");
 
 		for(String v : (String[]) value) {
-			out.append(v);
+			out.append("\"" + v + "\"");
 			out.append(",");
 		}
 		out.append("]");
