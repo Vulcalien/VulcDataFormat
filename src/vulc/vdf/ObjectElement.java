@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import vulc.vdf.io.BinaryIO;
+import vulc.vdf.io.TextIO;
 
 public class ObjectElement extends Element {
 
@@ -240,12 +241,16 @@ public class ObjectElement extends Element {
 
 	// IO
 
+	public void deserialize(DataInputStream in) throws IOException {
+		BinaryIO.deserialize(in, this);
+	}
+
 	public void serialize(DataOutputStream out) throws IOException {
 		BinaryIO.serialize(out, this);
 	}
 
-	public void deserialize(DataInputStream in) throws IOException {
-		BinaryIO.deserialize(in, this);
+	public String toString() {
+		return TextIO.stringify(this);
 	}
 
 }
