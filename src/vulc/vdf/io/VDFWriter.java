@@ -15,4 +15,10 @@ abstract class VDFWriter {
 
 	protected abstract void serializeObject(DataOutputStream out, ObjectElement obj) throws IOException;
 
+	static interface Serializer {
+
+		void serialize(Object value, DataOutputStream out) throws IOException;
+
+	}
+
 }

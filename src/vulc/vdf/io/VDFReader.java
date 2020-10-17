@@ -15,4 +15,10 @@ abstract class VDFReader {
 
 	protected abstract ObjectElement deserializeObject(DataInputStream in, ObjectElement obj) throws IOException;
 
+	static interface Deserializer {
+
+		void deserialize(ObjectElement obj, String name, DataInputStream in) throws IOException;
+
+	}
+
 }
