@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import vulc.vdf.ObjectElement;
 
-class BinaryReader extends VDFReader {
+class BinaryReader extends VDFReader<DataInputStream> {
 
 	protected BinaryReader() {
 		add((obj, name, in) -> obj.setBoolean(name, in.readBoolean()), BOOLEAN);

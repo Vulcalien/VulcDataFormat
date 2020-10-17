@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import vulc.vdf.ObjectElement;
 
-class BinaryWriter extends VDFWriter {
+class BinaryWriter extends VDFWriter<DataOutputStream> {
 
 	protected BinaryWriter() {
 		add((value, out) -> out.writeBoolean((boolean) value), BOOLEAN);
@@ -43,7 +43,7 @@ class BinaryWriter extends VDFWriter {
 			out.writeByte(code);						// write code
 			out.writeUTF(name);							// write name
 
-			SERIALIZERS[code].serialize(value, out);	// serialize
+			serializers[code].serialize(value, out);	// serialize
 		}
 		out.writeByte(-1);								// write end mark
 	}
