@@ -15,7 +15,7 @@ abstract class VDFReader<T> {
 
 	protected abstract ObjectElement deserializeObject(T in, ObjectElement obj) throws IOException;
 
-	protected static interface Deserializer<S> {
+	protected interface Deserializer<S> {
 
 		void deserialize(ObjectElement obj, String name, S in) throws IOException;
 

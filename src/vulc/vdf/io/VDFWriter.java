@@ -15,7 +15,7 @@ abstract class VDFWriter<T> {
 
 	protected abstract void serializeObject(T out, ObjectElement obj) throws IOException;
 
-	protected static interface Serializer<S> {
+	protected interface Serializer<S> {
 
 		void serialize(Object value, S out) throws IOException;
 
