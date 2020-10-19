@@ -11,10 +11,6 @@ class BinaryReader {
 
 	private final BinaryDeserializer[] deserializers = new BinaryDeserializer[VDFCodes.TYPES];
 
-	private void add(BinaryDeserializer deserializer, byte code) {
-		deserializers[code] = deserializer;
-	}
-
 	protected BinaryReader() {
 		add((obj, name, in) -> obj.setBoolean(name, in.readBoolean()), BOOLEAN);
 		add((obj, name, in) -> obj.setByte(name, in.readByte()), BYTE);
@@ -25,6 +21,7 @@ class BinaryReader {
 		add((obj, name, in) -> obj.setDouble(name, in.readDouble()), DOUBLE);
 		add((obj, name, in) -> obj.setChar(name, in.readChar()), CHAR);
 		add((obj, name, in) -> obj.setString(name, in.readUTF()), STRING);
+		add(this::readObject, OBJECT);
 
 		add(this::readBooleanArray, BOOLEAN_A);
 		add(this::readByteArray, BYTE_A);
@@ -35,9 +32,11 @@ class BinaryReader {
 		add(this::readDoubleArray, DOUBLE_A);
 		add(this::readCharArray, CHAR_A);
 		add(this::readStringArray, STRING_A);
-
-		add(this::readObject, OBJECT);
 		add(this::readObjectArray, OBJECT_A);
+	}
+
+	private void add(BinaryDeserializer deserializer, byte code) {
+		deserializers[code] = deserializer;
 	}
 
 	protected ObjectElement deserializeObject(DataInputStream in, ObjectElement obj) throws IOException {

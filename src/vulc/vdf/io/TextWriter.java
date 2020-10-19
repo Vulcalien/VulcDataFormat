@@ -11,10 +11,6 @@ class TextWriter {
 
 	private final TextSerializer[] serializers = new TextSerializer[VDFCodes.TYPES];
 
-	private void add(TextSerializer serializer, byte code) {
-		serializers[code] = serializer;
-	}
-
 	protected TextWriter() {
 		add((value, out) -> out.append((boolean) value), BOOLEAN);
 		add((value, out) -> out.append((byte) value), BYTE);
@@ -25,6 +21,7 @@ class TextWriter {
 		add((value, out) -> out.append((double) value), DOUBLE);
 		add((value, out) -> out.append("'" + escapeChar((char) value) + "'"), CHAR);
 		add((value, out) -> out.append("\"" + escapeString((String) value) + "\""), STRING);
+		add(this::writeObject, OBJECT);
 
 		add(getArrayWriter((value) -> value), BOOLEAN_A);
 		add(getArrayWriter((value) -> value), BYTE_A);
@@ -35,9 +32,11 @@ class TextWriter {
 		add(getArrayWriter((value) -> value), DOUBLE_A);
 		add(getArrayWriter((value) -> "'" + escapeChar((char) value) + "'"), CHAR_A);
 		add(getArrayWriter((value) -> "\"" + escapeString((String) value) + "\""), STRING_A);
-
-		add(this::writeObject, OBJECT);
 		add(getArrayWriter((value) -> value), OBJECT_A);
+	}
+
+	private void add(TextSerializer serializer, byte code) {
+		serializers[code] = serializer;
 	}
 
 	protected void serializeObject(StringBuilder out, ObjectElement obj) throws IOException {

@@ -2,33 +2,40 @@ package vulc.vdf.io;
 
 import static vulc.vdf.io.VDFCodes.*;
 
+import java.util.HashMap;
+
 abstract class TextCodes {
 
 	protected static final String[] TAGS = new String[TYPES];
+	protected static final HashMap<String, Byte> TAG_CODES = new HashMap<String, Byte>();
 
 	static {
-		TAGS[BOOLEAN] = "boolean";
-		TAGS[BYTE] = "byte";
-		TAGS[SHORT] = "short";
-		TAGS[INT] = "int";
-		TAGS[LONG] = "long";
-		TAGS[FLOAT] = "float";
-		TAGS[DOUBLE] = "double";
-		TAGS[CHAR] = "char";
-		TAGS[STRING] = "string";
+		assign(BOOLEAN, "boolean");
+		assign(BYTE, "byte");
+		assign(SHORT, "short");
+		assign(INT, "int");
+		assign(LONG, "long");
+		assign(FLOAT, "float");
+		assign(DOUBLE, "double");
+		assign(CHAR, "char");
+		assign(STRING, "string");
+		assign(OBJECT, "obj");
 
-		TAGS[BOOLEAN_A] = "boolean[]";
-		TAGS[BYTE_A] = "byte[]";
-		TAGS[SHORT_A] = "short[]";
-		TAGS[INT_A] = "int[]";
-		TAGS[LONG_A] = "long[]";
-		TAGS[FLOAT_A] = "float[]";
-		TAGS[DOUBLE_A] = "double[]";
-		TAGS[CHAR_A] = "char[]";
-		TAGS[STRING_A] = "string[]";
+		assign(BOOLEAN_A, "boolean[]");
+		assign(BYTE_A, "byte[]");
+		assign(SHORT_A, "short[]");
+		assign(INT_A, "int[]");
+		assign(LONG_A, "long[]");
+		assign(FLOAT_A, "float[]");
+		assign(DOUBLE_A, "double[]");
+		assign(CHAR_A, "char[]");
+		assign(STRING_A, "string[]");
+		assign(OBJECT_A, "obj[]");
+	}
 
-		TAGS[OBJECT] = "obj";
-		TAGS[OBJECT_A] = "obj[]";
+	private static void assign(byte code, String tag) {
+		TAGS[code] = tag;
+		TAG_CODES.put(tag, code);
 	}
 
 }

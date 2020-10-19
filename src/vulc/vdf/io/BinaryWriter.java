@@ -11,10 +11,6 @@ class BinaryWriter {
 
 	private final BinarySerializer[] serializers = new BinarySerializer[VDFCodes.TYPES];
 
-	private void add(BinarySerializer serializer, byte code) {
-		serializers[code] = serializer;
-	}
-
 	protected BinaryWriter() {
 		add((value, out) -> out.writeBoolean((boolean) value), BOOLEAN);
 		add((value, out) -> out.writeByte((byte) value), BYTE);
@@ -25,6 +21,7 @@ class BinaryWriter {
 		add((value, out) -> out.writeDouble((double) value), DOUBLE);
 		add((value, out) -> out.writeChar((char) value), CHAR);
 		add((value, out) -> out.writeUTF((String) value), STRING);
+		add(this::writeObject, OBJECT);
 
 		add(this::writeBooleanArray, BOOLEAN_A);
 		add(this::writeByteArray, BYTE_A);
@@ -35,9 +32,11 @@ class BinaryWriter {
 		add(this::writeDoubleArray, DOUBLE_A);
 		add(this::writeCharArray, CHAR_A);
 		add(this::writeStringArray, STRING_A);
-
-		add(this::writeObject, OBJECT);
 		add(this::writeObjectArray, OBJECT_A);
+	}
+
+	private void add(BinarySerializer serializer, byte code) {
+		serializers[code] = serializer;
 	}
 
 	protected void serializeObject(DataOutputStream out, ObjectElement obj) throws IOException {
