@@ -7,7 +7,13 @@ import java.io.IOException;
 
 import vulc.vdf.ObjectElement;
 
-class BinaryReader extends VDFReader<DataInputStream> {
+class BinaryReader {
+
+	private final BinaryDeserializer[] deserializers = new BinaryDeserializer[VDFCodes.TYPES];
+
+	private void add(BinaryDeserializer deserializer, byte code) {
+		deserializers[code] = deserializer;
+	}
 
 	protected BinaryReader() {
 		add((obj, name, in) -> obj.setBoolean(name, in.readBoolean()), BOOLEAN);
@@ -128,6 +134,12 @@ class BinaryReader extends VDFReader<DataInputStream> {
 			value[i] = deserializeObject(in, new ObjectElement());
 		}
 		obj.setObjectArray(name, value);
+	}
+
+	private interface BinaryDeserializer {
+
+		void deserialize(ObjectElement obj, String name, DataInputStream in) throws IOException;
+
 	}
 
 }

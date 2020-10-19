@@ -7,7 +7,13 @@ import java.io.IOException;
 
 import vulc.vdf.ObjectElement;
 
-class BinaryWriter extends VDFWriter<DataOutputStream> {
+class BinaryWriter {
+
+	private final BinarySerializer[] serializers = new BinarySerializer[VDFCodes.TYPES];
+
+	private void add(BinarySerializer serializer, byte code) {
+		serializers[code] = serializer;
+	}
 
 	protected BinaryWriter() {
 		add((value, out) -> out.writeBoolean((boolean) value), BOOLEAN);
@@ -142,6 +148,12 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 		for(int i = 0; i < array.length; i++) {
 			serializeObject(out, array[i]);
 		}
+	}
+
+	private interface BinarySerializer {
+
+		void serialize(Object value, DataOutputStream out) throws IOException;
+
 	}
 
 }

@@ -7,9 +7,15 @@ import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
 
-class TextWriter extends VDFWriter<StringBuilder> {
+class TextWriter {
 
-	public TextWriter() {
+	private final TextSerializer[] serializers = new TextSerializer[VDFCodes.TYPES];
+
+	private void add(TextSerializer serializer, byte code) {
+		serializers[code] = serializer;
+	}
+
+	protected TextWriter() {
 		add((value, out) -> out.append((boolean) value), BOOLEAN);
 		add((value, out) -> out.append((byte) value), BYTE);
 		add((value, out) -> out.append((short) value), SHORT);
@@ -53,7 +59,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		out.append("}");
 	}
 
-	private Serializer<StringBuilder> getArrayWriter(OutputTransformer transformer) {
+	private TextSerializer getArrayWriter(OutputTransformer transformer) {
 		return (value, out) -> {
 			out.append("[");
 
@@ -102,7 +108,13 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		return String.valueOf(c);
 	}
 
-	private static interface OutputTransformer {
+	private interface TextSerializer {
+
+		void serialize(Object value, StringBuilder out) throws IOException;
+
+	}
+
+	private interface OutputTransformer {
 
 		Object transform(Object value);
 
