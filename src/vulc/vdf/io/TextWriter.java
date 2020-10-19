@@ -24,16 +24,22 @@ class TextWriter {
 		add((value, out) -> out.append(STRING_QUOTE + escapeString((String) value) + STRING_QUOTE), STRING);
 		add((value, out) -> serializeObject(out, (ObjectElement) value), OBJECT);
 
-		add(getArrayWriter((value) -> value), BOOLEAN_A);
-		add(getArrayWriter((value) -> value), BYTE_A);
-		add(getArrayWriter((value) -> value), SHORT_A);
-		add(getArrayWriter((value) -> value), INT_A);
-		add(getArrayWriter((value) -> value), LONG_A);
-		add(getArrayWriter((value) -> value), FLOAT_A);
-		add(getArrayWriter((value) -> value), DOUBLE_A);
-		add(getArrayWriter((value) -> CHAR_QUOTE + escapeChar((char) value) + CHAR_QUOTE), CHAR_A);
-		add(getArrayWriter((value) -> STRING_QUOTE + escapeString((String) value) + STRING_QUOTE), STRING_A);
-		add(getArrayWriter((value) -> value), OBJECT_A);
+		add(getArrayWriter(boolean[].class, (array, i, out) -> out.append(array[i])), BOOLEAN_A);
+		add(getArrayWriter(byte[].class, (array, i, out) -> out.append(array[i])), BYTE_A);
+		add(getArrayWriter(short[].class, (array, i, out) -> out.append(array[i])), SHORT_A);
+		add(getArrayWriter(int[].class, (array, i, out) -> out.append(array[i])), INT_A);
+		add(getArrayWriter(long[].class, (array, i, out) -> out.append(array[i])), LONG_A);
+		add(getArrayWriter(float[].class, (array, i, out) -> out.append(array[i])), FLOAT_A);
+		add(getArrayWriter(double[].class, (array, i, out) -> out.append(array[i])), DOUBLE_A);
+		add(getArrayWriter(char[].class, (array, i, out) -> out.append(CHAR_QUOTE
+		                                                               + escapeChar(array[i])
+		                                                               + CHAR_QUOTE)),
+		    CHAR_A);
+		add(getArrayWriter(String[].class, (array, i, out) -> out.append(STRING_QUOTE
+		                                                                 + escapeString(array[i])
+		                                                                 + STRING_QUOTE)),
+		    STRING_A);
+		add(getArrayWriter(ObjectElement[].class, (array, i, out) -> out.append(array[i])), OBJECT_A);
 	}
 
 	private void add(TextSerializer serializer, byte code) {
@@ -59,14 +65,14 @@ class TextWriter {
 		out.append(CLOSE_OBJECT);
 	}
 
-	private TextSerializer getArrayWriter(OutputTransformer transformer) {
+	private <T> TextSerializer getArrayWriter(Class<T> arrayType, ArrayElementSerializer<T> elementSerializer) {
 		return (value, out) -> {
 			out.append(OPEN_ARRAY);
 
 			int length = Array.getLength(value);
 			for(int i = 0; i < length; i++) {
 				if(i != 0) out.append(SEPARATOR);
-				out.append(transformer.transform(Array.get(value, i))); // TODO performance issue: Array.get
+				elementSerializer.serialize(arrayType.cast(value), i, out);
 			}
 			out.append(CLOSE_ARRAY);
 		};
@@ -110,9 +116,9 @@ class TextWriter {
 
 	}
 
-	private interface OutputTransformer {
+	private interface ArrayElementSerializer<T> {
 
-		Object transform(Object value);
+		void serialize(T array, int i, StringBuilder out);
 
 	}
 
