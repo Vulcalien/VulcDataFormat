@@ -3,6 +3,7 @@ package vulc.vdf.io;
 import static vulc.vdf.io.VDFCodes.*;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
 
@@ -19,18 +20,18 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		add((value, out) -> out.append("'" + clearChar(String.valueOf(value)) + "'"), CHAR);
 		add((value, out) -> out.append("\"" + clearString((String) value) + "\""), STRING);
 
-		add(this::writeBooleanArray, BOOLEAN_A);
-		add(this::writeByteArray, BYTE_A);
-		add(this::writeShortArray, SHORT_A);
-		add(this::writeIntArray, INT_A);
-		add(this::writeLongArray, LONG_A);
-		add(this::writeFloatArray, FLOAT_A);
-		add(this::writeDoubleArray, DOUBLE_A);
-		add(this::writeCharArray, CHAR_A);
-		add(this::writeStringArray, STRING_A);
+		add(getArrayWriter((value) -> value), BOOLEAN_A);
+		add(getArrayWriter((value) -> value), BYTE_A);
+		add(getArrayWriter((value) -> value), SHORT_A);
+		add(getArrayWriter((value) -> value), INT_A);
+		add(getArrayWriter((value) -> value), LONG_A);
+		add(getArrayWriter((value) -> value), FLOAT_A);
+		add(getArrayWriter((value) -> value), DOUBLE_A);
+		add(getArrayWriter((value) -> "'" + clearChar(String.valueOf(value)) + "'"), CHAR_A);
+		add(getArrayWriter((value) -> "\"" + clearString((String) value) + "\""), STRING_A);
 
 		add(this::writeObject, OBJECT);
-		add(this::writeObjectArray, OBJECT_A);
+		add(getArrayWriter((value) -> value), OBJECT_A);
 	}
 
 	protected void serializeObject(StringBuilder out, ObjectElement obj) throws IOException {
@@ -45,118 +46,29 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			out.append("\"" + clearString(name) + "\"");
 			out.append(":");
 			serializers[code].serialize(value, out);
-			out.append(","); // TODO don't add last comma
+			out.append(",");
 		}
+		if(obj.size() != 0) out.deleteCharAt(out.length() - 1);
+
 		out.append("}");
 	}
 
-	// write
+	private Serializer<StringBuilder> getArrayWriter(StringTransformer transformer) {
+		return (value, out) -> {
+			out.append("[");
 
-	private void writeBooleanArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(boolean v : (boolean[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeByteArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(byte v : (byte[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeShortArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(short v : (short[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeIntArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(int v : (int[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeLongArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(long v : (long[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeFloatArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(float v : (float[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeDoubleArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(double v : (double[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeCharArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(char v : (char[]) value) {
-			out.append("'" + clearChar(String.valueOf(v)) + "'");
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	private void writeStringArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(String v : (String[]) value) {
-			out.append("\"" + clearString(v) + "\"");
-			out.append(",");
-		}
-		out.append("]");
+			int length = Array.getLength(value);
+			for(int i = 0; i < length; i++) {
+				if(i != 0) out.append(",");
+				out.append(transformer.transform(Array.get(value, i).toString()));
+			}
+			out.append("]");
+		};
 	}
 
 	private void writeObject(Object value, StringBuilder out) throws IOException {
 		serializeObject(out, (ObjectElement) value);
 	}
-
-	private void writeObjectArray(Object value, StringBuilder out) {
-		out.append("[");
-
-		for(ObjectElement v : (ObjectElement[]) value) {
-			out.append(v);
-			out.append(",");
-		}
-		out.append("]");
-	}
-
-	// utils
 
 	private String clearString(String string) {
 		return string.replace("\\", "\\\\")
@@ -176,6 +88,12 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		              .replace("\r", "\\r")
 		              .replace("\f", "\\f")
 		              .replace("'", "\\'");
+	}
+
+	private static interface StringTransformer {
+
+		Object transform(String value);
+
 	}
 
 }

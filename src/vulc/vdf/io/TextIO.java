@@ -18,7 +18,7 @@ public abstract class TextIO {
 //		return null;
 //	}
 
-	public static void serialize(PrintStream out, ObjectElement obj) throws IOException {
+	public static void serialize(PrintStream out, ObjectElement obj) {
 		out.println(stringify(obj));
 	}
 
