@@ -17,8 +17,8 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		add((value, out) -> out.append((long) value), LONG);
 		add((value, out) -> out.append((float) value), FLOAT);
 		add((value, out) -> out.append((double) value), DOUBLE);
-		add((value, out) -> out.append("'" + clearChar(String.valueOf(value)) + "'"), CHAR);
-		add((value, out) -> out.append("\"" + clearString((String) value) + "\""), STRING);
+		add((value, out) -> out.append("'" + escapeChar((char) value) + "'"), CHAR);
+		add((value, out) -> out.append("\"" + escapeString((String) value) + "\""), STRING);
 
 		add(getArrayWriter((value) -> value), BOOLEAN_A);
 		add(getArrayWriter((value) -> value), BYTE_A);
@@ -27,8 +27,8 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		add(getArrayWriter((value) -> value), LONG_A);
 		add(getArrayWriter((value) -> value), FLOAT_A);
 		add(getArrayWriter((value) -> value), DOUBLE_A);
-		add(getArrayWriter((value) -> "'" + clearChar(String.valueOf(value)) + "'"), CHAR_A);
-		add(getArrayWriter((value) -> "\"" + clearString((String) value) + "\""), STRING_A);
+		add(getArrayWriter((value) -> "'" + escapeChar((char) value) + "'"), CHAR_A);
+		add(getArrayWriter((value) -> "\"" + escapeString((String) value) + "\""), STRING_A);
 
 		add(this::writeObject, OBJECT);
 		add(getArrayWriter((value) -> value), OBJECT_A);
@@ -43,7 +43,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			byte code = CODES.get(value.getClass());
 
 			out.append(TextCodes.TAGS[code]);
-			out.append("\"" + clearString(name) + "\"");
+			out.append("\"" + escapeString(name) + "\"");
 			out.append(":");
 			serializers[code].serialize(value, out);
 			out.append(",");
@@ -53,14 +53,14 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		out.append("}");
 	}
 
-	private Serializer<StringBuilder> getArrayWriter(StringTransformer transformer) {
+	private Serializer<StringBuilder> getArrayWriter(OutputTransformer transformer) {
 		return (value, out) -> {
 			out.append("[");
 
 			int length = Array.getLength(value);
 			for(int i = 0; i < length; i++) {
 				if(i != 0) out.append(",");
-				out.append(transformer.transform(Array.get(value, i).toString()));
+				out.append(transformer.transform(Array.get(value, i)));
 			}
 			out.append("]");
 		};
@@ -70,29 +70,41 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		serializeObject(out, (ObjectElement) value);
 	}
 
-	private String clearString(String string) {
-		return string.replace("\\", "\\\\")
-		             .replace("\t", "\\t")
-		             .replace("\b", "\\b")
-		             .replace("\n", "\\n")
-		             .replace("\r", "\\r")
-		             .replace("\f", "\\f")
-		             .replace("\"", "\\\"");
+	private String escapeString(String string) {
+		StringBuilder result = new StringBuilder();
+		for(int i = 0; i < string.length(); i++) {
+			result.append(escapeStringChar(string.charAt(i)));
+		}
+		return result.toString();
 	}
 
-	private String clearChar(String charStr) {
-		return charStr.replace("\\", "\\\\")
-		              .replace("\t", "\\t")
-		              .replace("\b", "\\b")
-		              .replace("\n", "\\n")
-		              .replace("\r", "\\r")
-		              .replace("\f", "\\f")
-		              .replace("'", "\\'");
+	private String escapeChar(char c) {
+		if(c == '\\') return "\\\\";
+		if(c == '\t') return "\\t";
+		if(c == '\b') return "\\b";
+		if(c == '\n') return "\\n";
+		if(c == '\r') return "\\r";
+		if(c == '\f') return "\\f";
+		if(c == '\'') return "\\'";
+
+		return String.valueOf(c);
 	}
 
-	private static interface StringTransformer {
+	private String escapeStringChar(char c) {
+		if(c == '\\') return "\\\\";
+		if(c == '\t') return "\\t";
+		if(c == '\b') return "\\b";
+		if(c == '\n') return "\\n";
+		if(c == '\r') return "\\r";
+		if(c == '\f') return "\\f";
+		if(c == '\"') return "\\\"";
 
-		Object transform(String value);
+		return String.valueOf(c);
+	}
+
+	private static interface OutputTransformer {
+
+		Object transform(Object value);
 
 	}
 
