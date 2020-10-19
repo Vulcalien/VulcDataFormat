@@ -4,6 +4,7 @@ import static vulc.vdf.io.VDFCodes.*;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
 
@@ -21,18 +22,18 @@ class BinaryWriter {
 		add((value, out) -> out.writeDouble((double) value), DOUBLE);
 		add((value, out) -> out.writeChar((char) value), CHAR);
 		add((value, out) -> out.writeUTF((String) value), STRING);
-		add(this::writeObject, OBJECT);
+		add((value, out) -> serializeObject(out, (ObjectElement) value), OBJECT);
 
-		add(this::writeBooleanArray, BOOLEAN_A);
-		add(this::writeByteArray, BYTE_A);
-		add(this::writeShortArray, SHORT_A);
-		add(this::writeIntArray, INT_A);
-		add(this::writeLongArray, LONG_A);
-		add(this::writeFloatArray, FLOAT_A);
-		add(this::writeDoubleArray, DOUBLE_A);
-		add(this::writeCharArray, CHAR_A);
-		add(this::writeStringArray, STRING_A);
-		add(this::writeObjectArray, OBJECT_A);
+		add(getArrayWriter(boolean[].class, (array, i, out) -> out.writeBoolean(array[i])), BOOLEAN_A);
+		add(getArrayWriter(byte[].class, (array, i, out) -> out.writeByte(array[i])), BYTE_A);
+		add(getArrayWriter(short[].class, (array, i, out) -> out.writeShort(array[i])), SHORT_A);
+		add(getArrayWriter(int[].class, (array, i, out) -> out.writeInt(array[i])), INT_A);
+		add(getArrayWriter(long[].class, (array, i, out) -> out.writeLong(array[i])), LONG_A);
+		add(getArrayWriter(float[].class, (array, i, out) -> out.writeFloat(array[i])), FLOAT_A);
+		add(getArrayWriter(double[].class, (array, i, out) -> out.writeDouble(array[i])), DOUBLE_A);
+		add(getArrayWriter(char[].class, (array, i, out) -> out.writeChar(array[i])), CHAR_A);
+		add(getArrayWriter(String[].class, (array, i, out) -> out.writeUTF(array[i])), STRING_A);
+		add(getArrayWriter(ObjectElement[].class, (array, i, out) -> serializeObject(out, array[i])), OBJECT_A);
 	}
 
 	private void add(BinarySerializer serializer, byte code) {
@@ -53,105 +54,26 @@ class BinaryWriter {
 		out.writeByte(-1);								// write end mark
 	}
 
-	// write
+	private <T> BinarySerializer getArrayWriter(Class<T> arrayType, ArrayElementSerializer<T> elementSerializer) {
+		return (value, out) -> {
+			int length = Array.getLength(value);
 
-	private void writeBooleanArray(Object value, DataOutputStream out) throws IOException {
-		boolean[] array = (boolean[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeBoolean(array[i]);
-		}
-	}
-
-	private void writeByteArray(Object value, DataOutputStream out) throws IOException {
-		byte[] array = (byte[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeByte(array[i]);
-		}
-	}
-
-	private void writeShortArray(Object value, DataOutputStream out) throws IOException {
-		short[] array = (short[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeShort(array[i]);
-		}
-	}
-
-	private void writeIntArray(Object value, DataOutputStream out) throws IOException {
-		int[] array = (int[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeInt(array[i]);
-		}
-	}
-
-	private void writeLongArray(Object value, DataOutputStream out) throws IOException {
-		long[] array = (long[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeLong(array[i]);
-		}
-	}
-
-	private void writeFloatArray(Object value, DataOutputStream out) throws IOException {
-		float[] array = (float[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeFloat(array[i]);
-		}
-	}
-
-	private void writeDoubleArray(Object value, DataOutputStream out) throws IOException {
-		double[] array = (double[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeDouble(array[i]);
-		}
-	}
-
-	private void writeCharArray(Object value, DataOutputStream out) throws IOException {
-		char[] array = (char[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeChar(array[i]);
-		}
-	}
-
-	private void writeStringArray(Object value, DataOutputStream out) throws IOException {
-		String[] array = (String[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			out.writeUTF(array[i]);
-		}
-	}
-
-	private void writeObject(Object value, DataOutputStream out) throws IOException {
-		serializeObject(out, (ObjectElement) value);
-	}
-
-	private void writeObjectArray(Object value, DataOutputStream out) throws IOException {
-		ObjectElement[] array = (ObjectElement[]) value;
-
-		out.writeInt(array.length);
-		for(int i = 0; i < array.length; i++) {
-			serializeObject(out, array[i]);
-		}
+			out.writeInt(length);
+			for(int i = 0; i < length; i++) {
+				elementSerializer.serialize(arrayType.cast(value), i, out);
+			}
+		};
 	}
 
 	private interface BinarySerializer {
 
 		void serialize(Object value, DataOutputStream out) throws IOException;
+
+	}
+
+	private interface ArrayElementSerializer<T> {
+
+		void serialize(T array, int i, DataOutputStream out) throws IOException;
 
 	}
 

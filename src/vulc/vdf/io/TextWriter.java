@@ -1,5 +1,6 @@
 package vulc.vdf.io;
 
+import static vulc.vdf.io.TextTokens.*;
 import static vulc.vdf.io.VDFCodes.*;
 
 import java.io.IOException;
@@ -19,9 +20,9 @@ class TextWriter {
 		add((value, out) -> out.append((long) value), LONG);
 		add((value, out) -> out.append((float) value), FLOAT);
 		add((value, out) -> out.append((double) value), DOUBLE);
-		add((value, out) -> out.append("'" + escapeChar((char) value) + "'"), CHAR);
-		add((value, out) -> out.append("\"" + escapeString((String) value) + "\""), STRING);
-		add(this::writeObject, OBJECT);
+		add((value, out) -> out.append(CHAR_QUOTE + escapeChar((char) value) + CHAR_QUOTE), CHAR);
+		add((value, out) -> out.append(STRING_QUOTE + escapeString((String) value) + STRING_QUOTE), STRING);
+		add((value, out) -> serializeObject(out, (ObjectElement) value), OBJECT);
 
 		add(getArrayWriter((value) -> value), BOOLEAN_A);
 		add(getArrayWriter((value) -> value), BYTE_A);
@@ -30,8 +31,8 @@ class TextWriter {
 		add(getArrayWriter((value) -> value), LONG_A);
 		add(getArrayWriter((value) -> value), FLOAT_A);
 		add(getArrayWriter((value) -> value), DOUBLE_A);
-		add(getArrayWriter((value) -> "'" + escapeChar((char) value) + "'"), CHAR_A);
-		add(getArrayWriter((value) -> "\"" + escapeString((String) value) + "\""), STRING_A);
+		add(getArrayWriter((value) -> CHAR_QUOTE + escapeChar((char) value) + CHAR_QUOTE), CHAR_A);
+		add(getArrayWriter((value) -> STRING_QUOTE + escapeString((String) value) + STRING_QUOTE), STRING_A);
 		add(getArrayWriter((value) -> value), OBJECT_A);
 	}
 
@@ -40,7 +41,7 @@ class TextWriter {
 	}
 
 	protected void serializeObject(StringBuilder out, ObjectElement obj) throws IOException {
-		out.append("{");
+		out.append(OPEN_OBJECT);
 
 		for(String name : obj.keySet()) {
 			Object value = obj.getValue(name);
@@ -48,31 +49,27 @@ class TextWriter {
 			byte code = CODES.get(value.getClass());
 
 			out.append(TextCodes.TAGS[code]);
-			out.append("\"" + escapeString(name) + "\"");
-			out.append(":");
+			out.append(STRING_QUOTE + escapeString(name) + STRING_QUOTE);
+			out.append(ASSIGN);
 			serializers[code].serialize(value, out);
-			out.append(",");
+			out.append(SEPARATOR);
 		}
 		if(obj.size() != 0) out.deleteCharAt(out.length() - 1);
 
-		out.append("}");
+		out.append(CLOSE_OBJECT);
 	}
 
 	private TextSerializer getArrayWriter(OutputTransformer transformer) {
 		return (value, out) -> {
-			out.append("[");
+			out.append(OPEN_ARRAY);
 
 			int length = Array.getLength(value);
 			for(int i = 0; i < length; i++) {
-				if(i != 0) out.append(",");
-				out.append(transformer.transform(Array.get(value, i)));
+				if(i != 0) out.append(SEPARATOR);
+				out.append(transformer.transform(Array.get(value, i))); // TODO performance issue: Array.get
 			}
-			out.append("]");
+			out.append(CLOSE_ARRAY);
 		};
-	}
-
-	private void writeObject(Object value, StringBuilder out) throws IOException {
-		serializeObject(out, (ObjectElement) value);
 	}
 
 	private String escapeString(String string) {
