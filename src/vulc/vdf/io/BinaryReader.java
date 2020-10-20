@@ -4,6 +4,7 @@ import static vulc.vdf.io.VDFCodes.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
 
@@ -21,18 +22,57 @@ class BinaryReader {
 		add((obj, name, in) -> obj.setDouble(name, in.readDouble()), DOUBLE);
 		add((obj, name, in) -> obj.setChar(name, in.readChar()), CHAR);
 		add((obj, name, in) -> obj.setString(name, in.readUTF()), STRING);
-		add(this::readObject, OBJECT);
+		add((obj, name, in) -> obj.setObject(name, deserializeObject(in, new ObjectElement())), OBJECT);
 
-		add(this::readBooleanArray, BOOLEAN_A);
-		add(this::readByteArray, BYTE_A);
-		add(this::readShortArray, SHORT_A);
-		add(this::readIntArray, INT_A);
-		add(this::readLongArray, LONG_A);
-		add(this::readFloatArray, FLOAT_A);
-		add(this::readDoubleArray, DOUBLE_A);
-		add(this::readCharArray, CHAR_A);
-		add(this::readStringArray, STRING_A);
-		add(this::readObjectArray, OBJECT_A);
+		add(getArrayReader(boolean[].class,
+		                   (array, i, in) -> array[i] = in.readBoolean(),
+		                   (obj, name, array) -> obj.setBooleanArray(name, array)),
+		    BOOLEAN_A);
+
+		add(getArrayReader(byte[].class,
+		                   (array, i, in) -> array[i] = in.readByte(),
+		                   (obj, name, array) -> obj.setByteArray(name, array)),
+		    BYTE_A);
+
+		add(getArrayReader(short[].class,
+		                   (array, i, in) -> array[i] = in.readShort(),
+		                   (obj, name, array) -> obj.setShortArray(name, array)),
+		    SHORT_A);
+
+		add(getArrayReader(int[].class,
+		                   (array, i, in) -> array[i] = in.readInt(),
+		                   (obj, name, array) -> obj.setIntArray(name, array)),
+		    INT_A);
+
+		add(getArrayReader(long[].class,
+		                   (array, i, in) -> array[i] = in.readLong(),
+		                   (obj, name, array) -> obj.setLongArray(name, array)),
+		    LONG_A);
+
+		add(getArrayReader(float[].class,
+		                   (array, i, in) -> array[i] = in.readFloat(),
+		                   (obj, name, array) -> obj.setFloatArray(name, array)),
+		    FLOAT_A);
+
+		add(getArrayReader(double[].class,
+		                   (array, i, in) -> array[i] = in.readDouble(),
+		                   (obj, name, array) -> obj.setDoubleArray(name, array)),
+		    DOUBLE_A);
+
+		add(getArrayReader(char[].class,
+		                   (array, i, in) -> array[i] = in.readChar(),
+		                   (obj, name, array) -> obj.setCharArray(name, array)),
+		    CHAR_A);
+
+		add(getArrayReader(String[].class,
+		                   (array, i, in) -> array[i] = in.readUTF(),
+		                   (obj, name, array) -> obj.setStringArray(name, array)),
+		    STRING_A);
+
+		add(getArrayReader(ObjectElement[].class,
+		                   (array, i, in) -> array[i] = deserializeObject(in, new ObjectElement()),
+		                   (obj, name, array) -> obj.setObjectArray(name, array)),
+		    OBJECT_A);
 	}
 
 	private void add(BinaryDeserializer deserializer, byte code) {
@@ -49,95 +89,35 @@ class BinaryReader {
 		return obj;
 	}
 
-	// read
+	private <T> BinaryDeserializer getArrayReader(Class<T> type,
+	                                              ArrayElementDeserializer<T> elementDeserializer,
+	                                              ArrayAdder<T> arrayAdder) {
+		return (obj, name, in) -> {
+			int length = in.readInt();
 
-	private void readBooleanArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		boolean[] value = new boolean[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readBoolean();
-		}
-		obj.setBooleanArray(name, value);
-	}
-
-	private void readByteArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		byte[] value = new byte[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readByte();
-		}
-		obj.setByteArray(name, value);
-	}
-
-	private void readShortArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		short[] value = new short[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readShort();
-		}
-		obj.setShortArray(name, value);
-	}
-
-	private void readIntArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		int[] value = new int[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readInt();
-		}
-		obj.setIntArray(name, value);
-	}
-
-	private void readLongArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		long[] value = new long[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readLong();
-		}
-		obj.setLongArray(name, value);
-	}
-
-	private void readFloatArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		float[] value = new float[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readFloat();
-		}
-		obj.setFloatArray(name, value);
-	}
-
-	private void readDoubleArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		double[] value = new double[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readDouble();
-		}
-		obj.setDoubleArray(name, value);
-	}
-
-	private void readCharArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		char[] value = new char[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readChar();
-		}
-		obj.setCharArray(name, value);
-	}
-
-	private void readStringArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		String[] value = new String[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = in.readUTF();
-		}
-		obj.setStringArray(name, value);
-	}
-
-	private void readObject(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		obj.setObject(name, deserializeObject(in, new ObjectElement()));
-	}
-
-	private void readObjectArray(ObjectElement obj, String name, DataInputStream in) throws IOException {
-		ObjectElement[] value = new ObjectElement[in.readInt()];
-		for(int i = 0; i < value.length; i++) {
-			value[i] = deserializeObject(in, new ObjectElement());
-		}
-		obj.setObjectArray(name, value);
+			T array = type.cast(Array.newInstance(type.getComponentType(), length));
+			for(int i = 0; i < length; i++) {
+				elementDeserializer.deserialize(array, i, in);
+			}
+			arrayAdder.add(obj, name, array);
+		};
 	}
 
 	private interface BinaryDeserializer {
 
 		void deserialize(ObjectElement obj, String name, DataInputStream in) throws IOException;
+
+	}
+
+	private interface ArrayElementDeserializer<T> {
+
+		void deserialize(T array, int i, DataInputStream in) throws IOException;
+
+	}
+
+	private interface ArrayAdder<T> {
+
+		void add(ObjectElement obj, String name, T array);
 
 	}
 

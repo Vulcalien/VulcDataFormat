@@ -54,13 +54,13 @@ class BinaryWriter {
 		out.writeByte(-1);								// write end mark
 	}
 
-	private <T> BinarySerializer getArrayWriter(Class<T> arrayType, ArrayElementSerializer<T> elementSerializer) {
+	private <T> BinarySerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
 		return (value, out) -> {
 			int length = Array.getLength(value);
 
 			out.writeInt(length);
 			for(int i = 0; i < length; i++) {
-				elementSerializer.serialize(arrayType.cast(value), i, out);
+				elementSerializer.serialize(type.cast(value), i, out);
 			}
 		};
 	}

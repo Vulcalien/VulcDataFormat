@@ -65,14 +65,14 @@ class TextWriter {
 		out.append(CLOSE_OBJECT);
 	}
 
-	private <T> TextSerializer getArrayWriter(Class<T> arrayType, ArrayElementSerializer<T> elementSerializer) {
+	private <T> TextSerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
 		return (value, out) -> {
 			out.append(OPEN_ARRAY);
 
 			int length = Array.getLength(value);
 			for(int i = 0; i < length; i++) {
 				if(i != 0) out.append(SEPARATOR);
-				elementSerializer.serialize(arrayType.cast(value), i, out);
+				elementSerializer.serialize(type.cast(value), i, out);
 			}
 			out.append(CLOSE_ARRAY);
 		};
