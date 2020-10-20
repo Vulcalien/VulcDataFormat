@@ -14,4 +14,10 @@ abstract class TextTokens {
 	protected static final char SEPARATOR = ',';
 	protected static final char ASSIGN = ':';
 
+	protected static final char WHITESPACE = ' ';
+	protected static final char TAB = '\t';
+
+	protected static final char CR = '\r';
+	protected static final char LF = '\n';
+
 }

@@ -13,16 +13,16 @@ class TextWriter {
 	private final TextSerializer[] serializers = new TextSerializer[VDFCodes.TYPES];
 
 	protected TextWriter() {
-		add((value, out) -> out.append((boolean) value), BOOLEAN);
-		add((value, out) -> out.append((byte) value), BYTE);
-		add((value, out) -> out.append((short) value), SHORT);
-		add((value, out) -> out.append((int) value), INT);
-		add((value, out) -> out.append((long) value), LONG);
-		add((value, out) -> out.append((float) value), FLOAT);
-		add((value, out) -> out.append((double) value), DOUBLE);
-		add((value, out) -> out.append(CHAR_QUOTE + escapeChar((char) value) + CHAR_QUOTE), CHAR);
-		add((value, out) -> out.append(STRING_QUOTE + escapeString((String) value) + STRING_QUOTE), STRING);
-		add((value, out) -> serializeObject(out, (ObjectElement) value), OBJECT);
+		add((value, out, format) -> out.append((boolean) value), BOOLEAN);
+		add((value, out, format) -> out.append((byte) value), BYTE);
+		add((value, out, format) -> out.append((short) value), SHORT);
+		add((value, out, format) -> out.append((int) value), INT);
+		add((value, out, format) -> out.append((long) value), LONG);
+		add((value, out, format) -> out.append((float) value), FLOAT);
+		add((value, out, format) -> out.append((double) value), DOUBLE);
+		add((value, out, format) -> out.append(CHAR_QUOTE + escapeChar((char) value) + CHAR_QUOTE), CHAR);
+		add((value, out, format) -> out.append(STRING_QUOTE + escapeString((String) value) + STRING_QUOTE), STRING);
+		add((value, out, format) -> serializeObject(out, (ObjectElement) value, format), OBJECT);
 
 		add(getArrayWriter(boolean[].class, (array, i, out) -> out.append(array[i])), BOOLEAN_A);
 		add(getArrayWriter(byte[].class, (array, i, out) -> out.append(array[i])), BYTE_A);
@@ -46,7 +46,7 @@ class TextWriter {
 		serializers[code] = serializer;
 	}
 
-	protected void serializeObject(StringBuilder out, ObjectElement obj) throws IOException {
+	protected void serializeObject(StringBuilder out, ObjectElement obj, boolean format) throws IOException {
 		out.append(OPEN_OBJECT);
 
 		for(String name : obj.keySet()) {
@@ -57,7 +57,7 @@ class TextWriter {
 			out.append(TextCodes.TAGS[code]);
 			out.append(STRING_QUOTE + escapeString(name) + STRING_QUOTE);
 			out.append(ASSIGN);
-			serializers[code].serialize(value, out);
+			serializers[code].serialize(value, out, format);
 			out.append(SEPARATOR);
 		}
 		if(obj.size() != 0) out.deleteCharAt(out.length() - 1);
@@ -66,7 +66,7 @@ class TextWriter {
 	}
 
 	private <T> TextSerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
-		return (value, out) -> {
+		return (value, out, format) -> {
 			out.append(OPEN_ARRAY);
 
 			int length = Array.getLength(value);
@@ -112,7 +112,7 @@ class TextWriter {
 
 	private interface TextSerializer {
 
-		void serialize(Object value, StringBuilder out) throws IOException;
+		void serialize(Object value, StringBuilder out, boolean format) throws IOException;
 
 	}
 

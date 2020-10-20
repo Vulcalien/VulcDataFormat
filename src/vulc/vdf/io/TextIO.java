@@ -7,16 +7,19 @@ import vulc.vdf.ObjectElement;
 
 public abstract class TextIO {
 
-//	private static final TextReader READER = new TextReader();
+	private static final TextReader READER = new TextReader();
 	private static final TextWriter WRITER = new TextWriter();
 
-//	public static ObjectElement deserialize(DataInputStream in, ObjectElement obj) throws IOException {
-//		return null;
-//	}
-//
-//	public static ObjectElement deserialize(DataInputStream in) throws IOException {
-//		return null;
-//	}
+	// TODO rewrite all this messy code
+
+	public static ObjectElement deserialize(String in, ObjectElement obj) {
+		try {
+			return READER.deserializeObject(in, obj);
+		} catch(TextualVDFSyntaxException e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
 
 	public static void serialize(PrintStream out, ObjectElement obj) {
 		out.println(stringify(obj));
@@ -25,7 +28,7 @@ public abstract class TextIO {
 	public static String stringify(ObjectElement obj) {
 		StringBuilder builder = new StringBuilder();
 		try {
-			WRITER.serializeObject(builder, obj);
+			WRITER.serializeObject(builder, obj, false);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
