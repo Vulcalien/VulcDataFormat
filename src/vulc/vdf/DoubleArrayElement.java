@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class DoubleArrayElement extends Element {
 
-	protected double[] value;
-
-	public DoubleArrayElement() {
-	}
+	protected final double[] value;
 
 	public DoubleArrayElement(double[] value) {
 		this.value = value;

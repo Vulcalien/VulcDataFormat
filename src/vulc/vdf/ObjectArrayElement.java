@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class ObjectArrayElement extends Element {
 
-	protected ObjectElement[] value;
-
-	public ObjectArrayElement() {
-	}
+	protected final ObjectElement[] value;
 
 	public ObjectArrayElement(ObjectElement[] value) {
 		this.value = value;

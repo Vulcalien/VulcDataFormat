@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class ShortArrayElement extends Element {
 
-	protected short[] value;
-
-	public ShortArrayElement() {
-	}
+	protected final short[] value;
 
 	public ShortArrayElement(short[] value) {
 		this.value = value;

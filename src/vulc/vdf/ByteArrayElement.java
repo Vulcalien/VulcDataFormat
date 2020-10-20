@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class ByteArrayElement extends Element {
 
-	protected byte[] value;
-
-	public ByteArrayElement() {
-	}
+	protected final byte[] value;
 
 	public ByteArrayElement(byte[] value) {
 		this.value = value;

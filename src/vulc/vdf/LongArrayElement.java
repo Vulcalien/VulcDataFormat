@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class LongArrayElement extends Element {
 
-	protected long[] value;
-
-	public LongArrayElement() {
-	}
+	protected final long[] value;
 
 	public LongArrayElement(long[] value) {
 		this.value = value;

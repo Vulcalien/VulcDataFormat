@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class BooleanElement extends Element {
 
-	protected boolean value;
-
-	public BooleanElement() {
-	}
+	protected final boolean value;
 
 	public BooleanElement(boolean value) {
 		this.value = value;

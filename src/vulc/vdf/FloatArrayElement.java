@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class FloatArrayElement extends Element {
 
-	protected float[] value;
-
-	public FloatArrayElement() {
-	}
+	protected final float[] value;
 
 	public FloatArrayElement(float[] value) {
 		this.value = value;

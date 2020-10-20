@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class CharElement extends Element {
 
-	protected char value;
-
-	public CharElement() {
-	}
+	protected final char value;
 
 	public CharElement(char value) {
 		this.value = value;

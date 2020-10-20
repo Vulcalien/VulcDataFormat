@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class FloatElement extends Element {
 
-	protected float value;
-
-	public FloatElement() {
-	}
+	protected final float value;
 
 	public FloatElement(float value) {
 		this.value = value;

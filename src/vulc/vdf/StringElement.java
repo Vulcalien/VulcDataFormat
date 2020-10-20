@@ -2,10 +2,7 @@ package vulc.vdf;
 
 class StringElement extends Element {
 
-	protected String value;
-
-	public StringElement() {
-	}
+	protected final String value;
 
 	public StringElement(String value) {
 		this.value = value;
