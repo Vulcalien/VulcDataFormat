@@ -10,8 +10,6 @@ public abstract class TextIO {
 	private static final TextReader READER = new TextReader();
 	private static final TextWriter WRITER = new TextWriter();
 
-	// TODO rewrite all this messy code
-
 	public static ObjectElement deserialize(String in, ObjectElement obj) {
 		try {
 			return READER.deserializeObject(in, obj);
@@ -21,14 +19,14 @@ public abstract class TextIO {
 		return obj;
 	}
 
-	public static void serialize(PrintStream out, ObjectElement obj) {
-		out.println(stringify(obj));
+	public static void serialize(PrintStream out, ObjectElement obj, boolean format) {
+		out.println(stringify(obj, format));
 	}
 
-	public static String stringify(ObjectElement obj) {
+	public static String stringify(ObjectElement obj, boolean format) {
 		StringBuilder builder = new StringBuilder();
 		try {
-			WRITER.serializeObject(builder, obj, false);
+			WRITER.serializeObject(builder, obj, format, 0);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

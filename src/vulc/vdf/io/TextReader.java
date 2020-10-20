@@ -49,7 +49,7 @@ public class TextReader {
 
 		add(getArrayReader(short[].class,
 		                   defaultReader,
-		                   (array, i, value) -> array[i] = Byte.valueOf(value),
+		                   (array, i, value) -> array[i] = Short.valueOf(value),
 		                   (obj, name, array) -> obj.setShortArray(name, array)),
 		    SHORT_A);
 
@@ -75,7 +75,9 @@ public class TextReader {
 				continue;
 			}
 
-			String type = in.readUntil(WHITESPACE, STRING_QUOTE).toLowerCase(); // TODO test performance: tolowercase
+			String type = in.readUntil(WHITESPACE, TAB, CR, LF,
+			                           STRING_QUOTE)
+			                .toLowerCase(); // TODO test performance: tolowercase
 			in.checkToken(STRING_QUOTE);
 			String name = in.readUntil(STRING_QUOTE);
 			in.read();

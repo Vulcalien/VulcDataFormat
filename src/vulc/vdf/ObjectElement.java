@@ -250,7 +250,7 @@ public class ObjectElement extends Element {
 	}
 
 	public String toString() {
-		return TextIO.stringify(this);
+		return TextIO.stringify(this, false);
 	}
 
 }
