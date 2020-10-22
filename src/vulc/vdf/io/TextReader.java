@@ -4,8 +4,6 @@ import static vulc.vdf.io.TextTokens.*;
 import static vulc.vdf.io.VDFCodes.*;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 import vulc.vdf.ObjectElement;
 
@@ -20,6 +18,7 @@ public class TextReader {
 		    CR, LF
 		};
 
+		// TODO allow integer oct and hex
 		add((obj, name, in) -> obj.setBoolean(name, Boolean.valueOf(in.readUntil(endOfValue))), BOOLEAN);
 		add((obj, name, in) -> obj.setByte(name, Byte.valueOf(in.readUntil(endOfValue))), BYTE);
 		add((obj, name, in) -> obj.setShort(name, Short.valueOf(in.readUntil(endOfValue))), SHORT);
@@ -27,42 +26,76 @@ public class TextReader {
 		add((obj, name, in) -> obj.setLong(name, Long.valueOf(in.readUntil(endOfValue))), LONG);
 		add((obj, name, in) -> obj.setFloat(name, Float.valueOf(in.readUntil(endOfValue))), FLOAT);
 		add((obj, name, in) -> obj.setDouble(name, Double.valueOf(in.readUntil(endOfValue))), DOUBLE);
+		add((obj, name, in) -> obj.setChar(name, readChar(in)), CHAR);
+		add((obj, name, in) -> obj.setString(name, readString(in)), STRING);
+		add((obj, name, in) -> obj.setObject(name, deserializeObject(in, new ObjectElement())), OBJECT);
 
-		// TODO unescape
-//		add((obj, name, in) -> obj.setChar(name, Character.valueOf(in.readUntil(endOfValue))), CHAR);
-//		add((obj, name, in) -> obj.setString(name, in.readUntil(endOfValue)), STRING);
-//		add((obj, name, in) -> obj.setObject(/*...*/), OBJECT);
-
-		ArrayElementReader defaultReader = (in) -> in.readUntil(endOfValue);
+		char[] arrayEndOfValue = new char[] {
+		    CLOSE_ARRAY, SEPARATOR,
+		    WHITESPACE, TAB,
+		    CR, LF
+		};
 
 		add(getArrayReader(boolean[].class,
-		                   defaultReader,
-		                   (array, i, value) -> array[i] = Boolean.valueOf(value),
+		                   (array, i, in) -> array[i] = Boolean.valueOf(in.readUntil(arrayEndOfValue)),
 		                   (obj, name, array) -> obj.setBooleanArray(name, array)),
 		    BOOLEAN_A);
 
 		add(getArrayReader(byte[].class,
-		                   defaultReader,
-		                   (array, i, value) -> array[i] = Byte.valueOf(value),
+		                   (array, i, in) -> array[i] = Byte.valueOf(in.readUntil(arrayEndOfValue)),
 		                   (obj, name, array) -> obj.setByteArray(name, array)),
 		    BYTE_A);
 
 		add(getArrayReader(short[].class,
-		                   defaultReader,
-		                   (array, i, value) -> array[i] = Short.valueOf(value),
+		                   (array, i, in) -> array[i] = Short.valueOf(in.readUntil(arrayEndOfValue)),
 		                   (obj, name, array) -> obj.setShortArray(name, array)),
 		    SHORT_A);
 
-		// TODO it's boring
+		add(getArrayReader(int[].class,
+		                   (array, i, in) -> array[i] = Integer.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (obj, name, array) -> obj.setIntArray(name, array)),
+		    INT_A);
+
+		add(getArrayReader(long[].class,
+		                   (array, i, in) -> array[i] = Long.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (obj, name, array) -> obj.setLongArray(name, array)),
+		    LONG_A);
+
+		add(getArrayReader(float[].class,
+		                   (array, i, in) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (obj, name, array) -> obj.setFloatArray(name, array)),
+		    FLOAT_A);
+
+		add(getArrayReader(double[].class,
+		                   (array, i, in) -> array[i] = Double.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (obj, name, array) -> obj.setDoubleArray(name, array)),
+		    DOUBLE_A);
+
+		add(getArrayReader(char[].class,
+		                   (array, i, in) -> array[i] = readChar(in),
+		                   (obj, name, array) -> obj.setCharArray(name, array)),
+		    CHAR_A);
+
+		add(getArrayReader(String[].class,
+		                   (array, i, in) -> array[i] = readString(in),
+		                   (obj, name, array) -> obj.setStringArray(name, array)),
+		    STRING_A);
+
+		add(getArrayReader(ObjectElement[].class,
+		                   (array, i, in) -> array[i] = deserializeObject(in, new ObjectElement()),
+		                   (obj, name, array) -> obj.setObjectArray(name, array)),
+		    OBJECT_A);
 	}
 
 	private void add(TextDeserializer deserializer, byte code) {
 		deserializers[code] = deserializer;
 	}
 
-	protected ObjectElement deserializeObject(String inStr, ObjectElement obj) throws TextualVDFSyntaxException {
-		StringAnalyzer in = new StringAnalyzer(inStr);
+	protected ObjectElement deserializeObject(String in, ObjectElement obj) throws TextualVDFSyntaxException {
+		return deserializeObject(new StringAnalyzer(in), obj);
+	}
 
+	private ObjectElement deserializeObject(StringAnalyzer in, ObjectElement obj) throws TextualVDFSyntaxException {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
@@ -75,12 +108,8 @@ public class TextReader {
 				continue;
 			}
 
-			String type = in.readUntil(WHITESPACE, TAB, CR, LF,
-			                           STRING_QUOTE)
-			                .toLowerCase(); // TODO test performance: tolowercase
-			in.checkToken(STRING_QUOTE);
-			String name = in.readUntil(STRING_QUOTE);
-			in.read();
+			String type = in.readUntil(WHITESPACE, TAB, CR, LF, STRING_QUOTE).toLowerCase();
+			String name = readString(in);
 			in.checkToken(ASSIGN);
 			in.skipWhitespaces();
 
@@ -97,14 +126,16 @@ public class TextReader {
 		return obj;
 	}
 
-	private <T> TextDeserializer getArrayReader(Class<T> type,
-	                                            ArrayElementReader elementReader,
-	                                            ArrayElementAdder<T> elementAdder,
-	                                            ArrayAdder<T> arrayAdder) {
+	private <T, E> TextDeserializer getArrayReader(Class<T> type,
+	                                               ArrayElementDeserializer<T> elementDeserializer,
+	                                               ArrayAdder<T> arrayAdder) {
 		return (obj, name, in) -> {
 			in.checkToken(OPEN_ARRAY);
 
-			List<String> stringValues = new ArrayList<String>();
+			int length = 8;
+			T array = type.cast(Array.newInstance(type.getComponentType(), length));
+
+			int i = 0;
 			while(true) {
 				in.skipWhitespaces();
 				if(in.next() == CLOSE_ARRAY) {
@@ -116,7 +147,14 @@ public class TextReader {
 					continue;
 				}
 
-				stringValues.add(elementReader.read(in));
+				if(i == length) {
+					T newArray = type.cast(Array.newInstance(type.getComponentType(), length + 8));
+					System.arraycopy(array, 0, newArray, 0, length);
+					array = newArray;
+					length += 8;
+				}
+
+				elementDeserializer.add(array, i++, in);
 				in.skipWhitespaces();
 
 				char token = in.read();
@@ -124,14 +162,57 @@ public class TextReader {
 				if(token != SEPARATOR) in.missingToken(SEPARATOR);
 			}
 
-			int length = stringValues.size();
-
-			T array = type.cast(Array.newInstance(type.getComponentType(), length));
-			for(int i = 0; i < length; i++) {
-				elementAdder.add(array, i, stringValues.get(i));
-			}
-			arrayAdder.add(obj, name, array);
+			T result = type.cast(Array.newInstance(type.getComponentType(), i));
+			System.arraycopy(array, 0, result, 0, i);
+			arrayAdder.add(obj, name, result);
 		};
+	}
+
+	private char readChar(StringAnalyzer in) throws TextualVDFSyntaxException {
+		StringBuilder result = new StringBuilder();
+
+		in.checkToken(CHAR_QUOTE);
+		while(true) {
+			result.append(in.readUntil(CHAR_QUOTE, '\\'));
+
+			char token = in.read();
+			if(token == CHAR_QUOTE) {
+				return unescapeChar(result.toString());
+			} else {
+				result.append('\\');
+				result.append(in.read());
+			}
+		}
+	}
+
+	private String readString(StringAnalyzer in) throws TextualVDFSyntaxException {
+		StringBuilder result = new StringBuilder();
+
+		in.checkToken(STRING_QUOTE);
+		while(true) {
+			result.append(in.readUntil(STRING_QUOTE, '\\'));
+
+			char token = in.read();
+			if(token == STRING_QUOTE) {
+				return result.toString();
+			} else {
+				result.append(unescapeChar("\\" + in.read()));
+			}
+		}
+	}
+
+	private char unescapeChar(String strChar) throws TextualVDFSyntaxException {
+		if(strChar.equals("\\\\")) return '\\';
+		if(strChar.equals("\\t")) return '\t';
+		if(strChar.equals("\\b")) return '\b';
+		if(strChar.equals("\\n")) return '\n';
+		if(strChar.equals("\\r")) return '\r';
+		if(strChar.equals("\\f")) return '\f';
+		if(strChar.equals("\\'")) return '\'';
+		if(strChar.equals("\\\"")) return '\"';
+
+		if(strChar.length() != 1) throw new TextualVDFSyntaxException("char error"); // TODO better error message
+		return strChar.charAt(0);
 	}
 
 	private static class StringAnalyzer {
@@ -202,15 +283,9 @@ public class TextReader {
 
 	}
 
-	private interface ArrayElementReader {
+	private interface ArrayElementDeserializer<T> {
 
-		String read(StringAnalyzer in) throws TextualVDFSyntaxException;
-
-	}
-
-	private interface ArrayElementAdder<T> {
-
-		void add(T array, int i, String value);
+		void add(T array, int i, StringAnalyzer in) throws TextualVDFSyntaxException;
 
 	}
 
