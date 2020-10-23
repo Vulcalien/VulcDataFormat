@@ -18,12 +18,11 @@ public class TextReader {
 		    CR, LF
 		};
 
-		// TODO allow integer oct and hex
 		add((obj, name, in) -> obj.setBoolean(name, Boolean.valueOf(in.readUntil(endOfValue))), BOOLEAN);
-		add((obj, name, in) -> obj.setByte(name, Byte.valueOf(in.readUntil(endOfValue))), BYTE);
-		add((obj, name, in) -> obj.setShort(name, Short.valueOf(in.readUntil(endOfValue))), SHORT);
-		add((obj, name, in) -> obj.setInt(name, Integer.valueOf(in.readUntil(endOfValue))), INT);
-		add((obj, name, in) -> obj.setLong(name, Long.valueOf(in.readUntil(endOfValue))), LONG);
+		add((obj, name, in) -> obj.setByte(name, readNumber(Byte.class, in, endOfValue, Byte::valueOf)), BYTE);
+		add((obj, name, in) -> obj.setShort(name, readNumber(Short.class, in, endOfValue, Short::valueOf)), SHORT);
+		add((obj, name, in) -> obj.setInt(name, readNumber(Integer.class, in, endOfValue, Integer::valueOf)), INT);
+		add((obj, name, in) -> obj.setLong(name, readNumber(Long.class, in, endOfValue, Long::valueOf)), LONG);
 		add((obj, name, in) -> obj.setFloat(name, Float.valueOf(in.readUntil(endOfValue))), FLOAT);
 		add((obj, name, in) -> obj.setDouble(name, Double.valueOf(in.readUntil(endOfValue))), DOUBLE);
 		add((obj, name, in) -> obj.setChar(name, readChar(in)), CHAR);
@@ -42,22 +41,23 @@ public class TextReader {
 		    BOOLEAN_A);
 
 		add(getArrayReader(byte[].class,
-		                   (array, i, in) -> array[i] = Byte.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (array, i, in) -> array[i] = readNumber(Byte.class, in, arrayEndOfValue, Byte::valueOf),
 		                   (obj, name, array) -> obj.setByteArray(name, array)),
 		    BYTE_A);
 
 		add(getArrayReader(short[].class,
-		                   (array, i, in) -> array[i] = Short.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (array, i, in) -> array[i] = readNumber(Short.class, in, arrayEndOfValue, Short::valueOf),
 		                   (obj, name, array) -> obj.setShortArray(name, array)),
 		    SHORT_A);
 
 		add(getArrayReader(int[].class,
-		                   (array, i, in) -> array[i] = Integer.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (array, i, in) -> array[i] = readNumber(Integer.class, in,
+		                                                           arrayEndOfValue, Integer::valueOf),
 		                   (obj, name, array) -> obj.setIntArray(name, array)),
 		    INT_A);
 
 		add(getArrayReader(long[].class,
-		                   (array, i, in) -> array[i] = Long.valueOf(in.readUntil(arrayEndOfValue)),
+		                   (array, i, in) -> array[i] = readNumber(Long.class, in, arrayEndOfValue, Long::valueOf),
 		                   (obj, name, array) -> obj.setLongArray(name, array)),
 		    LONG_A);
 
@@ -166,6 +166,27 @@ public class TextReader {
 			System.arraycopy(array, 0, result, 0, i);
 			arrayAdder.add(obj, name, result);
 		};
+	}
+
+	private <T> T readNumber(Class<T> type, StringAnalyzer in,
+	                         char[] endOfValue, NumberReader<T> reader) throws TextualVDFSyntaxException {
+		String string = in.readUntil(endOfValue);
+
+		int radix = 10;
+		if(string.length() > 1 && string.charAt(0) == '0') {
+			char c1 = string.charAt(1);
+			if(c1 == 'b' || c1 == 'B') {
+				radix = 2;
+				string = string.substring(2);
+			} else if(c1 == 'x' || c1 == 'X') {
+				radix = 16;
+				string = string.substring(2);
+			} else {
+				radix = 8;
+				string = string.substring(1);
+			}
+		}
+		return reader.read(string, radix);
 	}
 
 	private char readChar(StringAnalyzer in) throws TextualVDFSyntaxException {
@@ -292,6 +313,12 @@ public class TextReader {
 	private interface ArrayAdder<T> {
 
 		void add(ObjectElement obj, String name, T array);
+
+	}
+
+	private interface NumberReader<T> {
+
+		T read(String value, int radix);
 
 	}
 
