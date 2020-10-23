@@ -1,4 +1,4 @@
-package vulc.vdf.io;
+package vulc.vdf.io.binary;
 
 import static vulc.vdf.io.VDFCodes.*;
 
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
+import vulc.vdf.io.VDFCodes;
 
 class BinaryWriter {
 
@@ -44,7 +45,7 @@ class BinaryWriter {
 		for(String name : obj.keySet()) {
 			Object value = obj.getValue(name);
 
-			byte code = CODES.get(value.getClass());
+			byte code = VDFCodes.get(value.getClass());
 
 			out.writeByte(code);						// write code
 			out.writeUTF(name);							// write name

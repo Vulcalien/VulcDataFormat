@@ -1,4 +1,4 @@
-package vulc.vdf.io;
+package vulc.vdf.io.binary;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

@@ -1,11 +1,12 @@
-package vulc.vdf.io;
+package vulc.vdf.io.text;
 
-import static vulc.vdf.io.TextTokens.*;
 import static vulc.vdf.io.VDFCodes.*;
+import static vulc.vdf.io.text.TextTokens.*;
 
 import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
+import vulc.vdf.io.VDFCodes;
 
 class TextWriter {
 
@@ -59,7 +60,7 @@ class TextWriter {
 				addIndentation(ind, out);
 			}
 
-			byte code = CODES.get(value.getClass());
+			byte code = VDFCodes.get(value.getClass());
 
 			out.append(TextCodes.TAGS[code]);
 			if(format) out.append(WHITESPACE);

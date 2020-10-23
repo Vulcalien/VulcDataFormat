@@ -4,33 +4,33 @@ import java.util.HashMap;
 
 import vulc.vdf.ObjectElement;
 
-abstract class VDFCodes {
+public abstract class VDFCodes {
 
-	protected static final byte TYPES = 20;
+	public static final byte TYPES = 20;
 
-	protected static final byte BOOLEAN = 0;
-	protected static final byte BYTE = 1;
-	protected static final byte SHORT = 2;
-	protected static final byte INT = 3;
-	protected static final byte LONG = 4;
-	protected static final byte FLOAT = 5;
-	protected static final byte DOUBLE = 6;
-	protected static final byte CHAR = 7;
-	protected static final byte STRING = 8;
-	protected static final byte OBJECT = 9;
+	public static final byte BOOLEAN = 0;
+	public static final byte BYTE = 1;
+	public static final byte SHORT = 2;
+	public static final byte INT = 3;
+	public static final byte LONG = 4;
+	public static final byte FLOAT = 5;
+	public static final byte DOUBLE = 6;
+	public static final byte CHAR = 7;
+	public static final byte STRING = 8;
+	public static final byte OBJECT = 9;
 
-	protected static final byte BOOLEAN_A = 10;
-	protected static final byte BYTE_A = 11;
-	protected static final byte SHORT_A = 12;
-	protected static final byte INT_A = 13;
-	protected static final byte LONG_A = 14;
-	protected static final byte FLOAT_A = 15;
-	protected static final byte DOUBLE_A = 16;
-	protected static final byte CHAR_A = 17;
-	protected static final byte STRING_A = 18;
-	protected static final byte OBJECT_A = 19;
+	public static final byte BOOLEAN_A = 10;
+	public static final byte BYTE_A = 11;
+	public static final byte SHORT_A = 12;
+	public static final byte INT_A = 13;
+	public static final byte LONG_A = 14;
+	public static final byte FLOAT_A = 15;
+	public static final byte DOUBLE_A = 16;
+	public static final byte CHAR_A = 17;
+	public static final byte STRING_A = 18;
+	public static final byte OBJECT_A = 19;
 
-	protected static final HashMap<Class<?>, Byte> CODES = new HashMap<Class<?>, Byte>();
+	private static final HashMap<Class<?>, Byte> CODES = new HashMap<Class<?>, Byte>();
 
 	static {
 		CODES.put(Boolean.class, BOOLEAN);
@@ -54,6 +54,10 @@ abstract class VDFCodes {
 		CODES.put(char[].class, CHAR_A);
 		CODES.put(String[].class, STRING_A);
 		CODES.put(ObjectElement[].class, OBJECT_A);
+	}
+
+	public static byte get(Object key) {
+		return CODES.get(key);
 	}
 
 }

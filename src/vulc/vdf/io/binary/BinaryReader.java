@@ -1,4 +1,4 @@
-package vulc.vdf.io;
+package vulc.vdf.io.binary;
 
 import static vulc.vdf.io.VDFCodes.*;
 
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
+import vulc.vdf.io.VDFCodes;
 
 class BinaryReader {
 

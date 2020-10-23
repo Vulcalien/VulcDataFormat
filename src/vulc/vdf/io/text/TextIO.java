@@ -1,4 +1,4 @@
-package vulc.vdf.io;
+package vulc.vdf.io.text;
 
 import vulc.vdf.ObjectElement;
 

@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import vulc.vdf.io.BinaryIO;
-import vulc.vdf.io.TextIO;
+import vulc.vdf.io.binary.BinaryIO;
+import vulc.vdf.io.text.TextIO;
 
 public class ObjectElement extends Element {
 
