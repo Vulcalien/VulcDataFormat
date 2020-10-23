@@ -52,8 +52,7 @@ class TextReader {
 		    SHORT_A);
 
 		add(getArrayReader(int[].class,
-		                   (array, i, in) -> array[i] = in.readNumber(Integer.class,
-		                                                              arrayEndOfValue, Integer::valueOf),
+		                   (array, i, in) -> array[i] = in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf),
 		                   (obj, name, array) -> obj.setIntArray(name, array)),
 		    INT_A);
 
@@ -100,14 +99,9 @@ class TextReader {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
-			if(in.next() == CLOSE_OBJECT) {
-				in.read();
-				break;
-			}
-			if(in.next() == SEPARATOR) {
-				in.read();
-				continue;
-			}
+
+			if(in.readIf(CLOSE_OBJECT)) break;
+			if(in.readIf(SEPARATOR)) continue;
 
 			String type = in.readUntil(WHITESPACE, TAB, CR, LF, STRING_QUOTE).toLowerCase();
 			String name = in.readString();
@@ -139,14 +133,9 @@ class TextReader {
 			int i = 0;
 			while(true) {
 				in.skipWhitespaces();
-				if(in.next() == CLOSE_ARRAY) {
-					in.read();
-					break;
-				}
-				if(in.next() == SEPARATOR) {
-					in.read();
-					continue;
-				}
+
+				if(in.readIf(CLOSE_ARRAY)) break;
+				if(in.readIf(SEPARATOR)) continue;
 
 				if(i == length) {
 					T newArray = type.cast(Array.newInstance(type.getComponentType(), length + 8));

@@ -13,44 +13,53 @@ class StringAnalyzer {
 	}
 
 	protected char read() {
-		if(mark >= string.length()) throw new VDFParseException("End of string");
+		checkCanRead(mark);
 		return string.charAt(mark++);
 	}
 
 	protected char next() {
-		char c = read();
+		checkCanRead(mark);
+		return string.charAt(mark);
+	}
+
+	protected void unread() {
 		mark--;
-		return c;
+	}
+
+	private void checkCanRead(int i) {
+		if(i >= string.length()) throw new VDFParseException("End of string");
+	}
+
+	protected boolean readIf(char c) {
+		if(next() == c) {
+			read();
+			return true;
+		}
+		return false;
 	}
 
 	protected String readUntil(char... until) {
 		StringBuilder result = new StringBuilder();
 
-		boolean hasRead = false;
 		read_for:
 		for(char c = read(); true; c = read()) {
-			hasRead = true;
-
 			for(char u : until) {
 				if(u == c) break read_for;
 			}
 
 			result.append(c);
 		}
-		if(hasRead) mark--;
+		unread();
 
 		return result.toString();
 	}
 
 	protected void skipWhitespaces() {
-		boolean hasRead = false;
 		for(char c = read(); true; c = read()) {
-			hasRead = true;
-
 			if(c != WHITESPACE && c != TAB
 			   && c != CR && c != LF) break;
 		}
-		if(hasRead) mark--;
+		unread();
 	}
 
 	protected void checkToken(char token) {
