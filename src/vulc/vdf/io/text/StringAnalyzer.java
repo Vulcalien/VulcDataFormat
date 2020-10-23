@@ -9,6 +9,8 @@ class StringAnalyzer {
 	private int mark = 0;
 	protected int line = 1;
 
+	private boolean avoidComments = true;
+
 	protected StringAnalyzer(String string) {
 		this.string = string;
 	}
@@ -16,7 +18,17 @@ class StringAnalyzer {
 	protected char read() {
 		checkCanRead(mark);
 		char c = string.charAt(mark++);
-		if(c == LF) line++;
+
+		if(c == LF) {
+			line++;
+		} else if(avoidComments && c == '/') {
+			char next = next();
+			if(next == '/') skipComment(false);
+			if(next == '*') skipComment(true);
+
+			// read the char that should be returned
+			c = read();
+		}
 		return c;
 	}
 
@@ -66,6 +78,26 @@ class StringAnalyzer {
 		unread();
 	}
 
+	private void skipComment(boolean multiline) {
+		avoidComments = false;
+
+		// consume second character of the comment, (// -> /), (/* -> *)
+		read();
+
+		if(multiline) {
+			boolean maybeClose = false;
+			for(char c = read(); true; c = read()) {
+				if(c == '*') maybeClose = true;
+				else if(maybeClose && c == '/') break;
+			}
+		} else {
+			for(char c = read(); true; c = read()) {
+				if(c == LF) break;
+			}
+		}
+		avoidComments = true;
+	}
+
 	protected void checkToken(char token) {
 		skipWhitespaces();
 		if(read() != token) missingToken(token);
@@ -100,11 +132,13 @@ class StringAnalyzer {
 		StringBuilder result = new StringBuilder();
 
 		checkToken(CHAR_QUOTE);
+		avoidComments = false;
 		while(true) {
 			result.append(readUntil(CHAR_QUOTE, '\\'));
 
 			char token = read();
 			if(token == CHAR_QUOTE) {
+				avoidComments = true;
 				return unescapeChar(result.toString());
 			} else {
 				result.append('\\');
@@ -117,11 +151,13 @@ class StringAnalyzer {
 		StringBuilder result = new StringBuilder();
 
 		checkToken(STRING_QUOTE);
+		avoidComments = false;
 		while(true) {
 			result.append(readUntil(STRING_QUOTE, '\\'));
 
 			char token = read();
 			if(token == STRING_QUOTE) {
+				avoidComments = true;
 				return result.toString();
 			} else {
 				result.append(unescapeChar("\\" + read()));
