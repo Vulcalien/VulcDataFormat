@@ -7,6 +7,7 @@ class StringAnalyzer {
 	private final String string;
 
 	private int mark = 0;
+	protected int line = 1;
 
 	protected StringAnalyzer(String string) {
 		this.string = string;
@@ -14,7 +15,9 @@ class StringAnalyzer {
 
 	protected char read() {
 		checkCanRead(mark);
-		return string.charAt(mark++);
+		char c = string.charAt(mark++);
+		if(c == LF) line++;
+		return c;
 	}
 
 	protected char next() {
@@ -24,10 +27,11 @@ class StringAnalyzer {
 
 	protected void unread() {
 		mark--;
+		if(next() == LF) line--;
 	}
 
 	private void checkCanRead(int i) {
-		if(i >= string.length()) throw new VDFParseException("End of string");
+		if(i >= string.length()) throw new VDFParseException("End of string", line);
 	}
 
 	protected boolean readIf(char c) {
@@ -68,7 +72,7 @@ class StringAnalyzer {
 	}
 
 	protected void missingToken(char token) {
-		throw new VDFParseException("token '" + token + "' expected");
+		throw new VDFParseException("token '" + token + "' expected", line);
 	}
 
 	protected <T> T readNumber(Class<T> type,
@@ -135,7 +139,7 @@ class StringAnalyzer {
 		if(strChar.equals("\\'")) return '\'';
 		if(strChar.equals("\\\"")) return '\"';
 
-		if(strChar.length() != 1) throw new VDFParseException("char error"); // TODO better error message
+		if(strChar.length() != 1) throw new VDFParseException("char error", line);
 		return strChar.charAt(0);
 	}
 

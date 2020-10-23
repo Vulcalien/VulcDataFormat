@@ -109,7 +109,7 @@ class TextReader {
 			in.skipWhitespaces();
 
 			Byte code = TextCodes.TAG_CODES.get(type);
-			if(code == null) throw new VDFParseException("type '" + type + "' does not exist");
+			if(code == null) throw new VDFParseException("type '" + type + "' does not exist", in.line);
 			deserializers[code].deserialize(obj, name, in);
 
 			in.skipWhitespaces();
