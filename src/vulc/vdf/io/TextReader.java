@@ -91,11 +91,11 @@ public class TextReader {
 		deserializers[code] = deserializer;
 	}
 
-	protected ObjectElement deserializeObject(String in, ObjectElement obj) throws TextualVDFSyntaxException {
+	protected ObjectElement deserializeObject(String in, ObjectElement obj) {
 		return deserializeObject(new StringAnalyzer(in), obj);
 	}
 
-	private ObjectElement deserializeObject(StringAnalyzer in, ObjectElement obj) throws TextualVDFSyntaxException {
+	private ObjectElement deserializeObject(StringAnalyzer in, ObjectElement obj) {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
@@ -114,7 +114,7 @@ public class TextReader {
 			in.skipWhitespaces();
 
 			Byte code = TextCodes.TAG_CODES.get(type);
-			if(code == null) throw new TextualVDFSyntaxException("type '" + type + "' does not exist");
+			if(code == null) throw new VDFParseException("type '" + type + "' does not exist");
 			deserializers[code].deserialize(obj, name, in);
 
 			in.skipWhitespaces();
@@ -169,7 +169,7 @@ public class TextReader {
 	}
 
 	private <T> T readNumber(Class<T> type, StringAnalyzer in,
-	                         char[] endOfValue, NumberReader<T> reader) throws TextualVDFSyntaxException {
+	                         char[] endOfValue, NumberReader<T> reader) {
 		String string = in.readUntil(endOfValue);
 
 		int radix = 10;
@@ -189,7 +189,7 @@ public class TextReader {
 		return reader.read(string, radix);
 	}
 
-	private char readChar(StringAnalyzer in) throws TextualVDFSyntaxException {
+	private char readChar(StringAnalyzer in) {
 		StringBuilder result = new StringBuilder();
 
 		in.checkToken(CHAR_QUOTE);
@@ -206,7 +206,7 @@ public class TextReader {
 		}
 	}
 
-	private String readString(StringAnalyzer in) throws TextualVDFSyntaxException {
+	private String readString(StringAnalyzer in) {
 		StringBuilder result = new StringBuilder();
 
 		in.checkToken(STRING_QUOTE);
@@ -222,7 +222,7 @@ public class TextReader {
 		}
 	}
 
-	private char unescapeChar(String strChar) throws TextualVDFSyntaxException {
+	private char unescapeChar(String strChar) {
 		if(strChar.equals("\\\\")) return '\\';
 		if(strChar.equals("\\t")) return '\t';
 		if(strChar.equals("\\b")) return '\b';
@@ -232,7 +232,7 @@ public class TextReader {
 		if(strChar.equals("\\'")) return '\'';
 		if(strChar.equals("\\\"")) return '\"';
 
-		if(strChar.length() != 1) throw new TextualVDFSyntaxException("char error"); // TODO better error message
+		if(strChar.length() != 1) throw new VDFParseException("char error"); // TODO better error message
 		return strChar.charAt(0);
 	}
 
@@ -246,18 +246,18 @@ public class TextReader {
 			this.string = string;
 		}
 
-		private char read() throws TextualVDFSyntaxException {
-			if(mark >= string.length()) throw new TextualVDFSyntaxException("End of string");
+		private char read() {
+			if(mark >= string.length()) throw new VDFParseException("End of string");
 			return string.charAt(mark++);
 		}
 
-		private char next() throws TextualVDFSyntaxException {
+		private char next() {
 			char c = read();
 			mark--;
 			return c;
 		}
 
-		private String readUntil(char... until) throws TextualVDFSyntaxException {
+		private String readUntil(char... until) {
 			StringBuilder result = new StringBuilder();
 
 			boolean hasRead = false;
@@ -276,7 +276,7 @@ public class TextReader {
 			return result.toString();
 		}
 
-		private void skipWhitespaces() throws TextualVDFSyntaxException {
+		private void skipWhitespaces() {
 			boolean hasRead = false;
 			for(char c = read(); true; c = read()) {
 				hasRead = true;
@@ -287,26 +287,26 @@ public class TextReader {
 			if(hasRead) mark--;
 		}
 
-		private void checkToken(char token) throws TextualVDFSyntaxException {
+		private void checkToken(char token) {
 			skipWhitespaces();
 			if(read() != token) missingToken(token);
 		}
 
-		private void missingToken(char token) throws TextualVDFSyntaxException {
-			throw new TextualVDFSyntaxException("token '" + token + "' expected");
+		private void missingToken(char token) {
+			throw new VDFParseException("token '" + token + "' expected");
 		}
 
 	}
 
 	private interface TextDeserializer {
 
-		void deserialize(ObjectElement obj, String name, StringAnalyzer in) throws TextualVDFSyntaxException;
+		void deserialize(ObjectElement obj, String name, StringAnalyzer in);
 
 	}
 
 	private interface ArrayElementDeserializer<T> {
 
-		void add(T array, int i, StringAnalyzer in) throws TextualVDFSyntaxException;
+		void add(T array, int i, StringAnalyzer in);
 
 	}
 

@@ -241,16 +241,24 @@ public class ObjectElement extends Element {
 
 	// IO
 
-	public void deserialize(DataInputStream in) throws IOException {
-		BinaryIO.deserialize(in, this);
+	public ObjectElement deserialize(DataInputStream in) throws IOException {
+		return BinaryIO.deserialize(in, this);
 	}
 
 	public void serialize(DataOutputStream out) throws IOException {
 		BinaryIO.serialize(out, this);
 	}
 
+	public ObjectElement parse(String string) {
+		return TextIO.deserialize(string, this);
+	}
+
+	public String toString(boolean format) {
+		return TextIO.stringify(this, format);
+	}
+
 	public String toString() {
-		return TextIO.stringify(this, false);
+		return toString(false);
 	}
 
 }

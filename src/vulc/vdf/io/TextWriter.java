@@ -3,7 +3,6 @@ package vulc.vdf.io;
 import static vulc.vdf.io.TextTokens.*;
 import static vulc.vdf.io.VDFCodes.*;
 
-import java.io.IOException;
 import java.lang.reflect.Array;
 
 import vulc.vdf.ObjectElement;
@@ -47,7 +46,7 @@ class TextWriter {
 		serializers[code] = serializer;
 	}
 
-	protected void serializeObject(StringBuilder out, ObjectElement obj, boolean format, int ind) throws IOException {
+	protected void serializeObject(StringBuilder out, ObjectElement obj, boolean format, int ind) {
 		out.append(OPEN_OBJECT);
 
 		ind++;
@@ -148,7 +147,7 @@ class TextWriter {
 
 	private interface TextSerializer {
 
-		void serialize(Object value, StringBuilder out, boolean format, int ind) throws IOException;
+		void serialize(Object value, StringBuilder out, boolean format, int ind);
 
 	}
 

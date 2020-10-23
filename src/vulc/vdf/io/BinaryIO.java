@@ -15,10 +15,6 @@ public abstract class BinaryIO {
 		return READER.deserializeObject(in, obj);
 	}
 
-	public static ObjectElement deserialize(DataInputStream in) throws IOException {
-		return READER.deserializeObject(in, new ObjectElement());
-	}
-
 	public static void serialize(DataOutputStream out, ObjectElement obj) throws IOException {
 		WRITER.serializeObject(out, obj);
 	}
