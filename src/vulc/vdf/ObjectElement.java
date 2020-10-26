@@ -37,26 +37,15 @@ public class ObjectElement extends Element {
 		return map.keySet();
 	}
 
-	private <T> T getElement(String name, Class<T> type) {
+	public Element getElement(String name) {
 		Element e = map.get(name);
 
-		if(type.isInstance(e)) {
-			return type.cast(e);
-		} else if(e == null) {
-			throw new NoSuchElementException(name);
-		} else {
-			throw new ClassCastException(type.getName());
-		}
+		if(e == null) throw new NoSuchElementException(name);
+		return e;
 	}
 
 	public Object getValue(String name) {
-		Element e = map.get(name);
-
-		if(e != null) {
-			return e.get();
-		} else {
-			throw new NoSuchElementException(name);
-		}
+		return getElement(name).get();
 	}
 
 	public Class<?> getType(String name) {
@@ -78,7 +67,7 @@ public class ObjectElement extends Element {
 	// getters and setters
 
 	public boolean getBoolean(String name) {
-		return getElement(name, BooleanElement.class).value;
+		return ((BooleanElement) getElement(name)).value;
 	}
 
 	public void setBoolean(String name, boolean value) {
@@ -86,7 +75,7 @@ public class ObjectElement extends Element {
 	}
 
 	public byte getByte(String name) {
-		return getElement(name, ByteElement.class).value;
+		return ((ByteElement) getElement(name)).value;
 	}
 
 	public void setByte(String name, byte value) {
@@ -94,7 +83,7 @@ public class ObjectElement extends Element {
 	}
 
 	public short getShort(String name) {
-		return getElement(name, ShortElement.class).value;
+		return ((ShortElement) getElement(name)).value;
 	}
 
 	public void setShort(String name, short value) {
@@ -102,7 +91,7 @@ public class ObjectElement extends Element {
 	}
 
 	public int getInt(String name) {
-		return getElement(name, IntElement.class).value;
+		return ((IntElement) getElement(name)).value;
 	}
 
 	public void setInt(String name, int value) {
@@ -110,7 +99,7 @@ public class ObjectElement extends Element {
 	}
 
 	public long getLong(String name) {
-		return getElement(name, LongElement.class).value;
+		return ((LongElement) getElement(name)).value;
 	}
 
 	public void setLong(String name, long value) {
@@ -118,7 +107,7 @@ public class ObjectElement extends Element {
 	}
 
 	public float getFloat(String name) {
-		return getElement(name, FloatElement.class).value;
+		return ((FloatElement) getElement(name)).value;
 	}
 
 	public void setFloat(String name, float value) {
@@ -126,7 +115,7 @@ public class ObjectElement extends Element {
 	}
 
 	public double getDouble(String name) {
-		return getElement(name, DoubleElement.class).value;
+		return ((DoubleElement) getElement(name)).value;
 	}
 
 	public void setDouble(String name, double value) {
@@ -134,7 +123,7 @@ public class ObjectElement extends Element {
 	}
 
 	public char getChar(String name) {
-		return getElement(name, CharElement.class).value;
+		return ((CharElement) getElement(name)).value;
 	}
 
 	public void setChar(String name, char value) {
@@ -142,7 +131,7 @@ public class ObjectElement extends Element {
 	}
 
 	public String getString(String name) {
-		return getElement(name, StringElement.class).value;
+		return ((StringElement) getElement(name)).value;
 	}
 
 	public void setString(String name, String value) {
@@ -150,7 +139,7 @@ public class ObjectElement extends Element {
 	}
 
 	public ObjectElement getObject(String name) {
-		return getElement(name, ObjectElement.class);
+		return (ObjectElement) getElement(name);
 	}
 
 	public void setObject(String name, ObjectElement objectElement) {
@@ -160,7 +149,7 @@ public class ObjectElement extends Element {
 	// arrays
 
 	public boolean[] getBooleanArray(String name) {
-		return getElement(name, BooleanArrayElement.class).value;
+		return ((BooleanArrayElement) getElement(name)).value;
 	}
 
 	public void setBooleanArray(String name, boolean[] value) {
@@ -168,7 +157,7 @@ public class ObjectElement extends Element {
 	}
 
 	public byte[] getByteArray(String name) {
-		return getElement(name, ByteArrayElement.class).value;
+		return ((ByteArrayElement) getElement(name)).value;
 	}
 
 	public void setByteArray(String name, byte[] value) {
@@ -176,7 +165,7 @@ public class ObjectElement extends Element {
 	}
 
 	public short[] getShortArray(String name) {
-		return getElement(name, ShortArrayElement.class).value;
+		return ((ShortArrayElement) getElement(name)).value;
 	}
 
 	public void setShortArray(String name, short[] value) {
@@ -184,7 +173,7 @@ public class ObjectElement extends Element {
 	}
 
 	public int[] getIntArray(String name) {
-		return getElement(name, IntArrayElement.class).value;
+		return ((IntArrayElement) getElement(name)).value;
 	}
 
 	public void setIntArray(String name, int[] value) {
@@ -192,7 +181,7 @@ public class ObjectElement extends Element {
 	}
 
 	public long[] getLongArray(String name) {
-		return getElement(name, LongArrayElement.class).value;
+		return ((LongArrayElement) getElement(name)).value;
 	}
 
 	public void setLongArray(String name, long[] value) {
@@ -200,7 +189,7 @@ public class ObjectElement extends Element {
 	}
 
 	public float[] getFloatArray(String name) {
-		return getElement(name, FloatArrayElement.class).value;
+		return ((FloatArrayElement) getElement(name)).value;
 	}
 
 	public void setFloatArray(String name, float[] value) {
@@ -208,7 +197,7 @@ public class ObjectElement extends Element {
 	}
 
 	public double[] getDoubleArray(String name) {
-		return getElement(name, DoubleArrayElement.class).value;
+		return ((DoubleArrayElement) getElement(name)).value;
 	}
 
 	public void setDoubleArray(String name, double[] value) {
@@ -216,7 +205,7 @@ public class ObjectElement extends Element {
 	}
 
 	public char[] getCharArray(String name) {
-		return getElement(name, CharArrayElement.class).value;
+		return ((CharArrayElement) getElement(name)).value;
 	}
 
 	public void setCharArray(String name, char[] value) {
@@ -224,7 +213,7 @@ public class ObjectElement extends Element {
 	}
 
 	public String[] getStringArray(String name) {
-		return getElement(name, StringArrayElement.class).value;
+		return ((StringArrayElement) getElement(name)).value;
 	}
 
 	public void setStringArray(String name, String[] value) {
@@ -232,7 +221,7 @@ public class ObjectElement extends Element {
 	}
 
 	public ObjectElement[] getObjectArray(String name) {
-		return getElement(name, ObjectArrayElement.class).value;
+		return ((ObjectArrayElement) getElement(name)).value;
 	}
 
 	public void setObjectArray(String name, ObjectElement[] value) {
