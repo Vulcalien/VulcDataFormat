@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class ShortElement extends Element {
+public class ShortElement extends Element {
 
 	protected final short value;
 

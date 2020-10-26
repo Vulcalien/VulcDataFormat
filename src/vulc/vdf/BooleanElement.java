@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class BooleanElement extends Element {
+public class BooleanElement extends Element {
 
 	protected final boolean value;
 

@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class CharElement extends Element {
+public class CharElement extends Element {
 
 	protected final char value;
 

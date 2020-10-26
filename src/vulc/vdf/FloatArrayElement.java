@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class FloatArrayElement extends Element {
+public class FloatArrayElement extends Element {
 
 	protected final float[] value;
 

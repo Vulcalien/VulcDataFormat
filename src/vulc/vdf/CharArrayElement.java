@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class CharArrayElement extends Element {
+public class CharArrayElement extends Element {
 
 	protected final char[] value;
 

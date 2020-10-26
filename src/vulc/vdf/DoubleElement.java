@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class DoubleElement extends Element {
+public class DoubleElement extends Element {
 
 	protected final double value;
 

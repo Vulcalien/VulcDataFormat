@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class IntElement extends Element {
+public class IntElement extends Element {
 
 	protected final int value;
 

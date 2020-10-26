@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class ObjectArrayElement extends Element {
+public class ObjectArrayElement extends Element {
 
 	protected final ObjectElement[] value;
 

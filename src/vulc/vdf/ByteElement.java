@@ -1,6 +1,6 @@
 package vulc.vdf;
 
-class ByteElement extends Element {
+public class ByteElement extends Element {
 
 	protected final byte value;
 
