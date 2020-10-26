@@ -2,13 +2,13 @@ package vulc.vdf;
 
 public class IntElement extends Element {
 
-	protected final int value;
+	public final int value;
 
 	public IntElement(int value) {
 		this.value = value;
 	}
 
-	protected Object get() {
+	public Object get() {
 		return value;
 	}
 

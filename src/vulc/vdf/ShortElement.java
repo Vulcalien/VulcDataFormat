@@ -2,13 +2,13 @@ package vulc.vdf;
 
 public class ShortElement extends Element {
 
-	protected final short value;
+	public final short value;
 
 	public ShortElement(short value) {
 		this.value = value;
 	}
 
-	protected Object get() {
+	public Object get() {
 		return value;
 	}
 

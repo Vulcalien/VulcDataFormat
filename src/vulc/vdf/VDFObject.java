@@ -67,7 +67,7 @@ public class VDFObject extends Element {
 		map.clear();
 	}
 
-	protected Object get() {
+	public Object get() {
 		return this;
 	}
 
