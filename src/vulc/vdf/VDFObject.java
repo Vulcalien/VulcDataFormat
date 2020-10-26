@@ -15,9 +15,16 @@
  ******************************************************************************/
 package vulc.vdf;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -228,15 +235,37 @@ public class VDFObject extends Element {
 		map.put(name, new ObjectArrayElement(value));
 	}
 
-	// IO
+	// binary IO
 
 	public VDFObject deserialize(DataInputStream in) throws IOException {
 		return BinaryIO.deserialize(in, this);
 	}
 
+	public VDFObject deserialize(InputStream in) throws IOException {
+		return deserialize(new DataInputStream(in));
+	}
+
+	public VDFObject deserialize(File file) throws IOException {
+		try(InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+			return deserialize(in);
+		}
+	}
+
 	public void serialize(DataOutputStream out) throws IOException {
 		BinaryIO.serialize(out, this);
 	}
+
+	public void serialize(OutputStream out) throws IOException {
+		serialize(new DataOutputStream(out));
+	}
+
+	public void serialize(File file) throws IOException {
+		try(OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+			serialize(out);
+		}
+	}
+
+	// text IO
 
 	public VDFObject parse(String string) {
 		return TextIO.deserialize(string, this);
