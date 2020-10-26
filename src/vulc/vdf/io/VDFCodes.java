@@ -2,7 +2,7 @@ package vulc.vdf.io;
 
 import java.util.HashMap;
 
-import vulc.vdf.ObjectElement;
+import vulc.vdf.VDFObject;
 
 public abstract class VDFCodes {
 
@@ -42,7 +42,7 @@ public abstract class VDFCodes {
 		CODES.put(Double.class, DOUBLE);
 		CODES.put(Character.class, CHAR);
 		CODES.put(String.class, STRING);
-		CODES.put(ObjectElement.class, OBJECT);
+		CODES.put(VDFObject.class, OBJECT);
 
 		CODES.put(boolean[].class, BOOLEAN_A);
 		CODES.put(byte[].class, BYTE_A);
@@ -53,7 +53,7 @@ public abstract class VDFCodes {
 		CODES.put(double[].class, DOUBLE_A);
 		CODES.put(char[].class, CHAR_A);
 		CODES.put(String[].class, STRING_A);
-		CODES.put(ObjectElement[].class, OBJECT_A);
+		CODES.put(VDFObject[].class, OBJECT_A);
 	}
 
 	public static byte get(Object key) {

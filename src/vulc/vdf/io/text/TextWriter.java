@@ -5,7 +5,7 @@ import static vulc.vdf.io.text.TextTokens.*;
 
 import java.lang.reflect.Array;
 
-import vulc.vdf.ObjectElement;
+import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
 class TextWriter {
@@ -23,7 +23,7 @@ class TextWriter {
 		add((value, out, format, ind) -> out.append(CHAR_QUOTE + escapeChar((char) value) + CHAR_QUOTE), CHAR);
 		add((value, out, format, ind) -> out.append(STRING_QUOTE + escapeString((String) value) + STRING_QUOTE),
 		    STRING);
-		add((value, out, format, ind) -> serializeObject(out, (ObjectElement) value, format, ind), OBJECT);
+		add((value, out, format, ind) -> serializeObject(out, (VDFObject) value, format, ind), OBJECT);
 
 		add(getArrayWriter(boolean[].class, (array, i, out) -> out.append(array[i])), BOOLEAN_A);
 		add(getArrayWriter(byte[].class, (array, i, out) -> out.append(array[i])), BYTE_A);
@@ -40,14 +40,14 @@ class TextWriter {
 		                                                                 + escapeString(array[i])
 		                                                                 + STRING_QUOTE)),
 		    STRING_A);
-		add(getArrayWriter(ObjectElement[].class, (array, i, out) -> out.append(array[i])), OBJECT_A);
+		add(getArrayWriter(VDFObject[].class, (array, i, out) -> out.append(array[i])), OBJECT_A);
 	}
 
 	private void add(TextSerializer serializer, byte code) {
 		serializers[code] = serializer;
 	}
 
-	protected void serializeObject(StringBuilder out, ObjectElement obj, boolean format, int ind) {
+	protected void serializeObject(StringBuilder out, VDFObject obj, boolean format, int ind) {
 		out.append(OPEN_OBJECT);
 
 		ind++;

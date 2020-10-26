@@ -5,7 +5,7 @@ import static vulc.vdf.io.text.TextTokens.*;
 
 import java.lang.reflect.Array;
 
-import vulc.vdf.ObjectElement;
+import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
 class TextReader {
@@ -28,7 +28,7 @@ class TextReader {
 		add((obj, name, in) -> obj.setDouble(name, Double.valueOf(in.readUntil(endOfValue))), DOUBLE);
 		add((obj, name, in) -> obj.setChar(name, in.readChar()), CHAR);
 		add((obj, name, in) -> obj.setString(name, in.readString()), STRING);
-		add((obj, name, in) -> obj.setObject(name, deserializeObject(in, new ObjectElement())), OBJECT);
+		add((obj, name, in) -> obj.setObject(name, deserializeObject(in, new VDFObject())), OBJECT);
 
 		char[] arrayEndOfValue = new char[] {
 		    CLOSE_ARRAY, SEPARATOR,
@@ -81,8 +81,8 @@ class TextReader {
 		                   (obj, name, array) -> obj.setStringArray(name, array)),
 		    STRING_A);
 
-		add(getArrayReader(ObjectElement[].class,
-		                   (array, i, in) -> array[i] = deserializeObject(in, new ObjectElement()),
+		add(getArrayReader(VDFObject[].class,
+		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject()),
 		                   (obj, name, array) -> obj.setObjectArray(name, array)),
 		    OBJECT_A);
 	}
@@ -91,11 +91,11 @@ class TextReader {
 		deserializers[code] = deserializer;
 	}
 
-	protected ObjectElement deserializeObject(String in, ObjectElement obj) {
+	protected VDFObject deserializeObject(String in, VDFObject obj) {
 		return deserializeObject(new StringAnalyzer(in), obj);
 	}
 
-	private ObjectElement deserializeObject(StringAnalyzer in, ObjectElement obj) {
+	private VDFObject deserializeObject(StringAnalyzer in, VDFObject obj) {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
@@ -160,7 +160,7 @@ class TextReader {
 
 	private interface TextDeserializer {
 
-		void deserialize(ObjectElement obj, String name, StringAnalyzer in);
+		void deserialize(VDFObject obj, String name, StringAnalyzer in);
 
 	}
 
@@ -172,7 +172,7 @@ class TextReader {
 
 	private interface ArrayAdder<T> {
 
-		void add(ObjectElement obj, String name, T array);
+		void add(VDFObject obj, String name, T array);
 
 	}
 

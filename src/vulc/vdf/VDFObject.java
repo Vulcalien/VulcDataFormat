@@ -25,7 +25,7 @@ import java.util.Set;
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
 
-public class ObjectElement extends Element {
+public class VDFObject extends Element {
 
 	private final HashMap<String, Element> map = new HashMap<String, Element>();
 
@@ -138,11 +138,11 @@ public class ObjectElement extends Element {
 		map.put(name, new StringElement(value));
 	}
 
-	public ObjectElement getObject(String name) {
-		return (ObjectElement) getElement(name);
+	public VDFObject getObject(String name) {
+		return (VDFObject) getElement(name);
 	}
 
-	public void setObject(String name, ObjectElement objectElement) {
+	public void setObject(String name, VDFObject objectElement) {
 		map.put(name, objectElement);
 	}
 
@@ -220,17 +220,17 @@ public class ObjectElement extends Element {
 		map.put(name, new StringArrayElement(value));
 	}
 
-	public ObjectElement[] getObjectArray(String name) {
+	public VDFObject[] getObjectArray(String name) {
 		return ((ObjectArrayElement) getElement(name)).value;
 	}
 
-	public void setObjectArray(String name, ObjectElement[] value) {
+	public void setObjectArray(String name, VDFObject[] value) {
 		map.put(name, new ObjectArrayElement(value));
 	}
 
 	// IO
 
-	public ObjectElement deserialize(DataInputStream in) throws IOException {
+	public VDFObject deserialize(DataInputStream in) throws IOException {
 		return BinaryIO.deserialize(in, this);
 	}
 
@@ -238,7 +238,7 @@ public class ObjectElement extends Element {
 		BinaryIO.serialize(out, this);
 	}
 
-	public ObjectElement parse(String string) {
+	public VDFObject parse(String string) {
 		return TextIO.deserialize(string, this);
 	}
 

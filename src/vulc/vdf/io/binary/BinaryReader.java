@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 
-import vulc.vdf.ObjectElement;
+import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
 class BinaryReader {
@@ -23,7 +23,7 @@ class BinaryReader {
 		add((obj, name, in) -> obj.setDouble(name, in.readDouble()), DOUBLE);
 		add((obj, name, in) -> obj.setChar(name, in.readChar()), CHAR);
 		add((obj, name, in) -> obj.setString(name, in.readUTF()), STRING);
-		add((obj, name, in) -> obj.setObject(name, deserializeObject(in, new ObjectElement())), OBJECT);
+		add((obj, name, in) -> obj.setObject(name, deserializeObject(in, new VDFObject())), OBJECT);
 
 		add(getArrayReader(boolean[].class,
 		                   (array, i, in) -> array[i] = in.readBoolean(),
@@ -70,8 +70,8 @@ class BinaryReader {
 		                   (obj, name, array) -> obj.setStringArray(name, array)),
 		    STRING_A);
 
-		add(getArrayReader(ObjectElement[].class,
-		                   (array, i, in) -> array[i] = deserializeObject(in, new ObjectElement()),
+		add(getArrayReader(VDFObject[].class,
+		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject()),
 		                   (obj, name, array) -> obj.setObjectArray(name, array)),
 		    OBJECT_A);
 	}
@@ -80,7 +80,7 @@ class BinaryReader {
 		deserializers[code] = deserializer;
 	}
 
-	protected ObjectElement deserializeObject(DataInputStream in, ObjectElement obj) throws IOException {
+	protected VDFObject deserializeObject(DataInputStream in, VDFObject obj) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {				// read code, until end mark (-1) is found
 			String name = in.readUTF();						// read name
@@ -106,7 +106,7 @@ class BinaryReader {
 
 	private interface BinaryDeserializer {
 
-		void deserialize(ObjectElement obj, String name, DataInputStream in) throws IOException;
+		void deserialize(VDFObject obj, String name, DataInputStream in) throws IOException;
 
 	}
 
@@ -118,7 +118,7 @@ class BinaryReader {
 
 	private interface ArrayAdder<T> {
 
-		void add(ObjectElement obj, String name, T array);
+		void add(VDFObject obj, String name, T array);
 
 	}
 

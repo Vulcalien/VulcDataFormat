@@ -6,7 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 
-import vulc.vdf.ObjectElement;
+import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
 class BinaryWriter {
@@ -23,7 +23,7 @@ class BinaryWriter {
 		add((value, out) -> out.writeDouble((double) value), DOUBLE);
 		add((value, out) -> out.writeChar((char) value), CHAR);
 		add((value, out) -> out.writeUTF((String) value), STRING);
-		add((value, out) -> serializeObject(out, (ObjectElement) value), OBJECT);
+		add((value, out) -> serializeObject(out, (VDFObject) value), OBJECT);
 
 		add(getArrayWriter(boolean[].class, (array, i, out) -> out.writeBoolean(array[i])), BOOLEAN_A);
 		add(getArrayWriter(byte[].class, (array, i, out) -> out.writeByte(array[i])), BYTE_A);
@@ -34,14 +34,14 @@ class BinaryWriter {
 		add(getArrayWriter(double[].class, (array, i, out) -> out.writeDouble(array[i])), DOUBLE_A);
 		add(getArrayWriter(char[].class, (array, i, out) -> out.writeChar(array[i])), CHAR_A);
 		add(getArrayWriter(String[].class, (array, i, out) -> out.writeUTF(array[i])), STRING_A);
-		add(getArrayWriter(ObjectElement[].class, (array, i, out) -> serializeObject(out, array[i])), OBJECT_A);
+		add(getArrayWriter(VDFObject[].class, (array, i, out) -> serializeObject(out, array[i])), OBJECT_A);
 	}
 
 	private void add(BinarySerializer serializer, byte code) {
 		serializers[code] = serializer;
 	}
 
-	protected void serializeObject(DataOutputStream out, ObjectElement obj) throws IOException {
+	protected void serializeObject(DataOutputStream out, VDFObject obj) throws IOException {
 		for(String name : obj.keySet()) {
 			Object value = obj.getValue(name);
 
