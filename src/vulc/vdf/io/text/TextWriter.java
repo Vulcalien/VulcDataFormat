@@ -5,6 +5,16 @@ import static vulc.vdf.io.text.TextTokens.*;
 
 import java.lang.reflect.Array;
 
+import vulc.vdf.BooleanElement;
+import vulc.vdf.ByteElement;
+import vulc.vdf.CharElement;
+import vulc.vdf.DoubleElement;
+import vulc.vdf.Element;
+import vulc.vdf.FloatElement;
+import vulc.vdf.IntElement;
+import vulc.vdf.LongElement;
+import vulc.vdf.ShortElement;
+import vulc.vdf.StringElement;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
@@ -13,17 +23,17 @@ class TextWriter {
 	private final TextSerializer[] serializers = new TextSerializer[VDFCodes.TYPES];
 
 	protected TextWriter() {
-		add((value, out, format, ind) -> out.append((boolean) value), BOOLEAN);
-		add((value, out, format, ind) -> out.append((byte) value), BYTE);
-		add((value, out, format, ind) -> out.append((short) value), SHORT);
-		add((value, out, format, ind) -> out.append((int) value), INT);
-		add((value, out, format, ind) -> out.append((long) value), LONG);
-		add((value, out, format, ind) -> out.append((float) value), FLOAT);
-		add((value, out, format, ind) -> out.append((double) value), DOUBLE);
-		add((value, out, format, ind) -> out.append(CHAR_QUOTE + escapeChar((char) value) + CHAR_QUOTE), CHAR);
-		add((value, out, format, ind) -> out.append(STRING_QUOTE + escapeString((String) value) + STRING_QUOTE),
+		add((e, out, format, ind) -> out.append(((BooleanElement) e).value), BOOLEAN);
+		add((e, out, format, ind) -> out.append(((ByteElement) e).value), BYTE);
+		add((e, out, format, ind) -> out.append(((ShortElement) e).value), SHORT);
+		add((e, out, format, ind) -> out.append(((IntElement) e).value), INT);
+		add((e, out, format, ind) -> out.append(((LongElement) e).value), LONG);
+		add((e, out, format, ind) -> out.append(((FloatElement) e).value), FLOAT);
+		add((e, out, format, ind) -> out.append(((DoubleElement) e).value), DOUBLE);
+		add((e, out, format, ind) -> out.append(CHAR_QUOTE + escapeChar(((CharElement) e).value) + CHAR_QUOTE), CHAR);
+		add((e, out, format, ind) -> out.append(STRING_QUOTE + escapeString(((StringElement) e).value) + STRING_QUOTE),
 		    STRING);
-		add((value, out, format, ind) -> serializeObject(out, (VDFObject) value, format, ind), OBJECT);
+		add((e, out, format, ind) -> serializeObject(out, (VDFObject) e, format, ind), OBJECT);
 
 		add(getArrayWriter(boolean[].class, (array, i, out) -> out.append(array[i])), BOOLEAN_A);
 		add(getArrayWriter(byte[].class, (array, i, out) -> out.append(array[i])), BYTE_A);
@@ -53,14 +63,14 @@ class TextWriter {
 		ind++;
 
 		for(String name : obj.keySet()) {
-			Object value = obj.getValue(name);
+			Element e = obj.getElement(name);
 
 			if(format) {
 				out.append(LF);
 				addIndentation(ind, out);
 			}
 
-			byte code = VDFCodes.get(value.getClass());
+			byte code = VDFCodes.get(e.getClass());
 
 			out.append(TextCodes.TAGS[code]);
 			if(format) out.append(WHITESPACE);
@@ -70,7 +80,7 @@ class TextWriter {
 			out.append(ASSIGN);
 			if(format) out.append(WHITESPACE);
 
-			serializers[code].serialize(value, out, format, ind);
+			serializers[code].serialize(e, out, format, ind);
 
 			out.append(SEPARATOR);
 		}
@@ -84,12 +94,13 @@ class TextWriter {
 	}
 
 	private <T> TextSerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
-		return (value, out, format, ind) -> {
+		return (e, out, format, ind) -> {
 			out.append(OPEN_ARRAY);
 
 			ind++;
 
-			int length = Array.getLength(value);
+			Object array = e.get();
+			int length = Array.getLength(array);
 			for(int i = 0; i < length; i++) {
 				if(i != 0) out.append(SEPARATOR);
 
@@ -98,7 +109,7 @@ class TextWriter {
 					addIndentation(ind, out);
 				}
 
-				elementSerializer.serialize(type.cast(value), i, out);
+				elementSerializer.serialize(type.cast(array), i, out);
 			}
 			if(format) {
 				out.append(LF);
@@ -148,7 +159,7 @@ class TextWriter {
 
 	private interface TextSerializer {
 
-		void serialize(Object value, StringBuilder out, boolean format, int ind);
+		void serialize(Element e, StringBuilder out, boolean format, int ind);
 
 	}
 
