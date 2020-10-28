@@ -51,6 +51,10 @@ public class VDFObject extends Element {
 		return e;
 	}
 
+	public void setElement(String name, Element e) {
+		map.put(name, e);
+	}
+
 	public Object getValue(String name) {
 		return getElement(name).get();
 	}
@@ -78,7 +82,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setBoolean(String name, boolean value) {
-		map.put(name, new BooleanElement(value));
+		setElement(name, new BooleanElement(value));
 	}
 
 	public byte getByte(String name) {
@@ -86,7 +90,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setByte(String name, byte value) {
-		map.put(name, new ByteElement(value));
+		setElement(name, new ByteElement(value));
 	}
 
 	public short getShort(String name) {
@@ -94,7 +98,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setShort(String name, short value) {
-		map.put(name, new ShortElement(value));
+		setElement(name, new ShortElement(value));
 	}
 
 	public int getInt(String name) {
@@ -102,7 +106,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setInt(String name, int value) {
-		map.put(name, new IntElement(value));
+		setElement(name, new IntElement(value));
 	}
 
 	public long getLong(String name) {
@@ -110,7 +114,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setLong(String name, long value) {
-		map.put(name, new LongElement(value));
+		setElement(name, new LongElement(value));
 	}
 
 	public float getFloat(String name) {
@@ -118,7 +122,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setFloat(String name, float value) {
-		map.put(name, new FloatElement(value));
+		setElement(name, new FloatElement(value));
 	}
 
 	public double getDouble(String name) {
@@ -126,7 +130,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setDouble(String name, double value) {
-		map.put(name, new DoubleElement(value));
+		setElement(name, new DoubleElement(value));
 	}
 
 	public char getChar(String name) {
@@ -134,7 +138,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setChar(String name, char value) {
-		map.put(name, new CharElement(value));
+		setElement(name, new CharElement(value));
 	}
 
 	public String getString(String name) {
@@ -142,7 +146,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setString(String name, String value) {
-		map.put(name, new StringElement(value));
+		setElement(name, new StringElement(value));
 	}
 
 	public VDFObject getObject(String name) {
@@ -150,7 +154,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setObject(String name, VDFObject objectElement) {
-		map.put(name, objectElement);
+		setElement(name, objectElement);
 	}
 
 	// arrays
@@ -160,7 +164,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setBooleanArray(String name, boolean[] value) {
-		map.put(name, new BooleanArrayElement(value));
+		setElement(name, new BooleanArrayElement(value));
 	}
 
 	public byte[] getByteArray(String name) {
@@ -168,7 +172,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setByteArray(String name, byte[] value) {
-		map.put(name, new ByteArrayElement(value));
+		setElement(name, new ByteArrayElement(value));
 	}
 
 	public short[] getShortArray(String name) {
@@ -176,7 +180,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setShortArray(String name, short[] value) {
-		map.put(name, new ShortArrayElement(value));
+		setElement(name, new ShortArrayElement(value));
 	}
 
 	public int[] getIntArray(String name) {
@@ -184,7 +188,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setIntArray(String name, int[] value) {
-		map.put(name, new IntArrayElement(value));
+		setElement(name, new IntArrayElement(value));
 	}
 
 	public long[] getLongArray(String name) {
@@ -192,7 +196,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setLongArray(String name, long[] value) {
-		map.put(name, new LongArrayElement(value));
+		setElement(name, new LongArrayElement(value));
 	}
 
 	public float[] getFloatArray(String name) {
@@ -200,7 +204,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setFloatArray(String name, float[] value) {
-		map.put(name, new FloatArrayElement(value));
+		setElement(name, new FloatArrayElement(value));
 	}
 
 	public double[] getDoubleArray(String name) {
@@ -208,7 +212,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setDoubleArray(String name, double[] value) {
-		map.put(name, new DoubleArrayElement(value));
+		setElement(name, new DoubleArrayElement(value));
 	}
 
 	public char[] getCharArray(String name) {
@@ -216,7 +220,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setCharArray(String name, char[] value) {
-		map.put(name, new CharArrayElement(value));
+		setElement(name, new CharArrayElement(value));
 	}
 
 	public String[] getStringArray(String name) {
@@ -224,7 +228,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setStringArray(String name, String[] value) {
-		map.put(name, new StringArrayElement(value));
+		setElement(name, new StringArrayElement(value));
 	}
 
 	public VDFObject[] getObjectArray(String name) {
@@ -232,7 +236,7 @@ public class VDFObject extends Element {
 	}
 
 	public void setObjectArray(String name, VDFObject[] value) {
-		map.put(name, new ObjectArrayElement(value));
+		setElement(name, new ObjectArrayElement(value));
 	}
 
 	// binary IO
