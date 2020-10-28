@@ -56,54 +56,45 @@ class TextReader {
 		    CR, LF
 		};
 
-		add(getArrayReader(boolean[].class,
-		                   (array, i, in) -> array[i] = Boolean.valueOf(in.readUntil(arrayEndOfValue)),
-		                   array -> new BooleanArrayElement(array)),
+		add(getArrayReader(boolean[].class, BooleanArrayElement::new,
+		                   (array, i, in) -> array[i] = Boolean.valueOf(in.readUntil(arrayEndOfValue))),
 		    BOOLEAN_A);
 
-		add(getArrayReader(byte[].class,
-		                   (array, i, in) -> array[i] = in.readNumber(Byte.class, arrayEndOfValue, Byte::valueOf),
-		                   array -> new ByteArrayElement(array)),
+		add(getArrayReader(byte[].class, ByteArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readNumber(Byte.class, arrayEndOfValue, Byte::valueOf)),
 		    BYTE_A);
 
-		add(getArrayReader(short[].class,
-		                   (array, i, in) -> array[i] = in.readNumber(Short.class, arrayEndOfValue, Short::valueOf),
-		                   array -> new ShortArrayElement(array)),
+		add(getArrayReader(short[].class, ShortArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readNumber(Short.class, arrayEndOfValue, Short::valueOf)),
 		    SHORT_A);
 
-		add(getArrayReader(int[].class,
-		                   (array, i, in) -> array[i] = in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf),
-		                   array -> new IntArrayElement(array)),
+		add(getArrayReader(int[].class, IntArrayElement::new,
+		                   (array, i, in) -> array[i] =
+		                           in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf)),
 		    INT_A);
 
-		add(getArrayReader(long[].class,
-		                   (array, i, in) -> array[i] = in.readNumber(Long.class, arrayEndOfValue, Long::valueOf),
-		                   array -> new LongArrayElement(array)),
+		add(getArrayReader(long[].class, LongArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readNumber(Long.class, arrayEndOfValue, Long::valueOf)),
 		    LONG_A);
 
-		add(getArrayReader(float[].class,
-		                   (array, i, in) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue)),
-		                   array -> new FloatArrayElement(array)),
+		add(getArrayReader(float[].class, FloatArrayElement::new,
+		                   (array, i, in) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue))),
 		    FLOAT_A);
 
-		add(getArrayReader(double[].class,
-		                   (array, i, in) -> array[i] = Double.valueOf(in.readUntil(arrayEndOfValue)),
-		                   array -> new DoubleArrayElement(array)),
+		add(getArrayReader(double[].class, DoubleArrayElement::new,
+		                   (array, i, in) -> array[i] = Double.valueOf(in.readUntil(arrayEndOfValue))),
 		    DOUBLE_A);
 
-		add(getArrayReader(char[].class,
-		                   (array, i, in) -> array[i] = in.readChar(),
-		                   array -> new CharArrayElement(array)),
+		add(getArrayReader(char[].class, CharArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readChar()),
 		    CHAR_A);
 
-		add(getArrayReader(String[].class,
-		                   (array, i, in) -> array[i] = in.readString(),
-		                   array -> new StringArrayElement(array)),
+		add(getArrayReader(String[].class, StringArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readString()),
 		    STRING_A);
 
-		add(getArrayReader(VDFObject[].class,
-		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject()),
-		                   array -> new ObjectArrayElement(array)),
+		add(getArrayReader(VDFObject[].class, ObjectArrayElement::new,
+		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject())),
 		    OBJECT_A);
 	}
 
@@ -142,8 +133,8 @@ class TextReader {
 	}
 
 	private <T, E> ElementDeserializer getArrayReader(Class<T> type,
-	                                                  ArrayElementDeserializer<T> elementDeserializer,
-	                                                  ArrayMaker<T> arrayMaker) {
+	                                                  ArrayMaker<T> arrayMaker,
+	                                                  ArrayElementDeserializer<T> elementDeserializer) {
 		return (in) -> {
 			in.checkToken(OPEN_ARRAY);
 
@@ -184,15 +175,15 @@ class TextReader {
 
 	}
 
-	private interface ArrayElementDeserializer<T> {
-
-		void add(T array, int i, StringAnalyzer in);
-
-	}
-
 	private interface ArrayMaker<T> {
 
 		Element make(T array);
+
+	}
+
+	private interface ArrayElementDeserializer<T> {
+
+		void add(T array, int i, StringAnalyzer in);
 
 	}
 

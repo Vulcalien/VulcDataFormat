@@ -45,54 +45,44 @@ class BinaryReader {
 		add(in -> new StringElement(in.readUTF()), STRING);
 		add(in -> deserializeObject(in, new VDFObject()), OBJECT);
 
-		add(getArrayReader(boolean[].class,
-		                   (array, i, in) -> array[i] = in.readBoolean(),
-		                   array -> new BooleanArrayElement(array)),
+		add(getArrayReader(boolean[].class, BooleanArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readBoolean()),
 		    BOOLEAN_A);
 
-		add(getArrayReader(byte[].class,
-		                   (array, i, in) -> array[i] = in.readByte(),
-		                   array -> new ByteArrayElement(array)),
+		add(getArrayReader(byte[].class, ByteArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readByte()),
 		    BYTE_A);
 
-		add(getArrayReader(short[].class,
-		                   (array, i, in) -> array[i] = in.readShort(),
-		                   array -> new ShortArrayElement(array)),
+		add(getArrayReader(short[].class, ShortArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readShort()),
 		    SHORT_A);
 
-		add(getArrayReader(int[].class,
-		                   (array, i, in) -> array[i] = in.readInt(),
-		                   array -> new IntArrayElement(array)),
+		add(getArrayReader(int[].class, IntArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readInt()),
 		    INT_A);
 
-		add(getArrayReader(long[].class,
-		                   (array, i, in) -> array[i] = in.readLong(),
-		                   array -> new LongArrayElement(array)),
+		add(getArrayReader(long[].class, LongArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readLong()),
 		    LONG_A);
 
-		add(getArrayReader(float[].class,
-		                   (array, i, in) -> array[i] = in.readFloat(),
-		                   array -> new FloatArrayElement(array)),
+		add(getArrayReader(float[].class, FloatArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readFloat()),
 		    FLOAT_A);
 
-		add(getArrayReader(double[].class,
-		                   (array, i, in) -> array[i] = in.readDouble(),
-		                   array -> new DoubleArrayElement(array)),
+		add(getArrayReader(double[].class, DoubleArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readDouble()),
 		    DOUBLE_A);
 
-		add(getArrayReader(char[].class,
-		                   (array, i, in) -> array[i] = in.readChar(),
-		                   array -> new CharArrayElement(array)),
+		add(getArrayReader(char[].class, CharArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readChar()),
 		    CHAR_A);
 
-		add(getArrayReader(String[].class,
-		                   (array, i, in) -> array[i] = in.readUTF(),
-		                   array -> new StringArrayElement(array)),
+		add(getArrayReader(String[].class, StringArrayElement::new,
+		                   (array, i, in) -> array[i] = in.readUTF()),
 		    STRING_A);
 
-		add(getArrayReader(VDFObject[].class,
-		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject()),
-		                   array -> new ObjectArrayElement(array)),
+		add(getArrayReader(VDFObject[].class, ObjectArrayElement::new,
+		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject())),
 		    OBJECT_A);
 	}
 
@@ -111,8 +101,8 @@ class BinaryReader {
 	}
 
 	private <T> ElementDeserializer getArrayReader(Class<T> type,
-	                                               ArrayElementDeserializer<T> arrayElementDeserializer,
-	                                               ArrayMaker<T> arrayMaker) {
+	                                               ArrayMaker<T> arrayMaker,
+	                                               ArrayElementDeserializer<T> arrayElementDeserializer) {
 		return in -> {
 			int length = in.readInt();
 
@@ -130,15 +120,15 @@ class BinaryReader {
 
 	}
 
-	private interface ArrayElementDeserializer<T> {
-
-		void deserialize(T array, int i, DataInputStream in) throws IOException;
-
-	}
-
 	private interface ArrayMaker<T> {
 
 		Element make(T array);
+
+	}
+
+	private interface ArrayElementDeserializer<T> {
+
+		void deserialize(T array, int i, DataInputStream in) throws IOException;
 
 	}
 
