@@ -13,7 +13,10 @@ public abstract class TextIO {
 
 	public static String stringify(VDFObject obj, boolean format) {
 		StringBuilder builder = new StringBuilder();
+
 		WRITER.serializeObject(builder, obj, format, 0);
+		if(format) builder.append(TextTokens.LF);
+
 		return builder.toString();
 	}
 
