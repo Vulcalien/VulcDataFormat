@@ -55,16 +55,16 @@ public class VDFObject extends Element {
 		map.put(name, e);
 	}
 
+	public void removeElement(String name) {
+		map.remove(name);
+	}
+
 	public Object getValue(String name) {
 		return getElement(name).get();
 	}
 
 	public Class<?> getType(String name) {
 		return getValue(name).getClass();
-	}
-
-	public void removeElement(String name) {
-		map.remove(name);
 	}
 
 	public void clear() {
