@@ -31,6 +31,11 @@ class TestVDFObject {
 		obj.setObject("inner_obj", new VDFObject());
 		obj.getObject("inner_obj").setInt("inner_int", Integer.MAX_VALUE);
 
+		// inner list
+		obj.setList("inner_list", new VDFList());
+		obj.getList("inner_list").addBoolean(true);
+		obj.getList("inner_list").addObject(new VDFObject());
+
 		obj.setBooleanArray("boolean_a", new boolean[] {false, true});
 		obj.setByteArray("byte_a", new byte[] {Byte.MIN_VALUE, Byte.MAX_VALUE});
 		obj.setShortArray("short_a", new short[] {Short.MIN_VALUE, Short.MAX_VALUE});
@@ -43,6 +48,9 @@ class TestVDFObject {
 
 		obj.setObjectArray("obj_a", new VDFObject[] {new VDFObject(), new VDFObject()});
 		obj.getObjectArray("obj_a")[1].setString("in_objarr_str", "in array's obj test");
+
+		obj.setListArray("list_a", new VDFList[] {new VDFList(), new VDFList()});
+		obj.getListArray("list_a")[1].addFloat(1.125f);
 	}
 
 	@Test
@@ -59,7 +67,7 @@ class TestVDFObject {
 			deserializedObj.deserialize(in);
 		}
 
-		String error = compare(obj, deserializedObj);
+		String error = compare(obj, deserializedObj, "");
 		if(error != null) {
 			System.out.println("==='binaryIO' FAIL LOG===");
 
@@ -87,7 +95,7 @@ class TestVDFObject {
 		String string = obj.toString(format);
 		VDFObject parsedObj = new VDFObject().parse(string);
 
-		String error = compare(obj, parsedObj);
+		String error = compare(obj, parsedObj, "");
 		if(error == null && !string.equals(parsedObj.toString(format))) {
 			error = "compare passed, but toString is different";
 		}
@@ -110,34 +118,56 @@ class TestVDFObject {
 	}
 
 	// returns: error message or null if o0 equals o1
-	private String compare(VDFObject o0, VDFObject o1) {
-		for(String name : o0.keySet()) {
-			Object v0, v1;
-			try {
-				v0 = o0.getElement(name).get();
-				v1 = o1.getElement(name).get();
-			} catch(NoSuchElementException e) {
-				return "element " + name + " is missing";
-			}
+	private String compare(Element e0, Element e1, String name) {
+		if(e0.getClass() != e1.getClass()) return name + ": types are different";
 
-			if(v0.getClass().isArray() && v1.getClass().isArray()) {
+		if(e0 instanceof VDFObject) {
+			VDFObject obj0 = (VDFObject) e0;
+			VDFObject obj1 = (VDFObject) e1;
+
+			for(String key : obj0.keySet()) {
+				Element v0, v1;
+				try {
+					v0 = obj0.getElement(key);
+					v1 = obj1.getElement(key);
+				} catch(NoSuchElementException e) {
+					return name + "." + key + " is missing";
+				}
+				String result = compare(v0, v1, name + "." + key);
+				if(result != null) return result;
+			}
+		} else if(e0 instanceof VDFList) {
+			VDFList list0 = (VDFList) e0;
+			VDFList list1 = (VDFList) e1;
+
+			if(list0.size() != list1.size()) return name + ": list size is different";
+
+			String result;
+			for(int i = 0; i < list0.size(); i++) {
+				result = compare(list0.getElement(i), list1.getElement(i), name + "<" + i + ">");
+				if(result != null) return result;
+			}
+		} else {
+			Object v0 = e0.get();
+			Object v1 = e1.get();
+
+			if(v0.getClass().isArray()) {
 				int len = Array.getLength(v0);
 
 				if(Array.getLength(v1) != len) return name + ": array length is different";
 
-				for(int i = 0; i < len; i++) {
-					Object x0 = Array.get(v0, i);
-					Object x1 = Array.get(v1, i);
-					if(x0 instanceof VDFObject && x1 instanceof VDFObject) {
-						String result = compare((VDFObject) x0, (VDFObject) x1);
-						if(result != null) return name + "[" + i + "]: " + result;
-					} else {
-						if(!x0.equals(x1)) return name + "[" + i + "] is different";
+				if(Element.class.isAssignableFrom(v0.getClass().getComponentType())) { // if it's an array of elements
+					for(int i = 0; i < len; i++) {
+						String result = compare((Element) Array.get(v0, i),
+						                        (Element) Array.get(v1, i),
+						                        name + "[" + i + "]");
+						if(result != null) return result;
+					}
+				} else {
+					for(int i = 0; i < len; i++) {
+						if(!Array.get(v0, i).equals(Array.get(v1, i))) return name + "[" + i + "]" + " is different";
 					}
 				}
-			} else if(v0 instanceof VDFObject && v1 instanceof VDFObject) {
-				String result = compare((VDFObject) v0, (VDFObject) v1);
-				if(result != null) return name + ": " + result;
 			} else {
 				if(!v0.equals(v1)) return name + " is different";
 			}
