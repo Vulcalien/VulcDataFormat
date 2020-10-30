@@ -59,14 +59,6 @@ public class VDFObject extends Element {
 		map.remove(name);
 	}
 
-	public Object getValue(String name) {
-		return getElement(name).get();
-	}
-
-	public Class<?> getType(String name) {
-		return getValue(name).getClass();
-	}
-
 	public void clear() {
 		map.clear();
 	}
@@ -157,6 +149,15 @@ public class VDFObject extends Element {
 		setElement(name, objectElement);
 	}
 
+	// TODO test these
+	public VDFList getList(String name) {
+		return (VDFList) getElement(name);
+	}
+
+	public void setList(String name, VDFList listElement) {
+		setElement(name, listElement);
+	}
+
 	// arrays
 
 	public boolean[] getBooleanArray(String name) {
@@ -237,6 +238,15 @@ public class VDFObject extends Element {
 
 	public void setObjectArray(String name, VDFObject[] value) {
 		setElement(name, new ObjectArrayElement(value));
+	}
+
+	// TODO test these
+	public VDFList[] getListArray(String name) {
+		return ((ListArrayElement) getElement(name)).value;
+	}
+
+	public void setListArray(String name, VDFList[] value) {
+		setElement(name, new ListArrayElement(value));
 	}
 
 	// binary IO
