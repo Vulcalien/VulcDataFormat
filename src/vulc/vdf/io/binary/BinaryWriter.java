@@ -16,6 +16,7 @@ import vulc.vdf.IntElement;
 import vulc.vdf.LongElement;
 import vulc.vdf.ShortElement;
 import vulc.vdf.StringElement;
+import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
@@ -34,6 +35,7 @@ class BinaryWriter {
 		add((e, out) -> out.writeChar(((CharElement) e).value), CHAR);
 		add((e, out) -> out.writeUTF(((StringElement) e).value), STRING);
 		add((e, out) -> serializeObject(out, (VDFObject) e), OBJECT);
+		add((e, out) -> serializeList(out, (VDFList) e), LIST);
 
 		add(getArrayWriter(boolean[].class, (array, i, out) -> out.writeBoolean(array[i])), BOOLEAN_A);
 		add(getArrayWriter(byte[].class, (array, i, out) -> out.writeByte(array[i])), BYTE_A);
@@ -45,6 +47,7 @@ class BinaryWriter {
 		add(getArrayWriter(char[].class, (array, i, out) -> out.writeChar(array[i])), CHAR_A);
 		add(getArrayWriter(String[].class, (array, i, out) -> out.writeUTF(array[i])), STRING_A);
 		add(getArrayWriter(VDFObject[].class, (array, i, out) -> serializeObject(out, array[i])), OBJECT_A);
+		add(getArrayWriter(VDFList[].class, (array, i, out) -> serializeList(out, array[i])), LIST_A);
 	}
 
 	private void add(BinarySerializer serializer, byte code) {
@@ -60,6 +63,16 @@ class BinaryWriter {
 			out.writeByte(code);						// write code
 			out.writeUTF(name);							// write name
 
+			serializers[code].serialize(e, out);		// serialize
+		}
+		out.writeByte(-1);								// write end mark
+	}
+
+	protected void serializeList(DataOutputStream out, VDFList list) throws IOException {
+		for(Element e : list) {
+			byte code = VDFCodes.get(e.getClass());
+
+			out.writeByte(code);						// write code
 			serializers[code].serialize(e, out);		// serialize
 		}
 		out.writeByte(-1);								// write end mark

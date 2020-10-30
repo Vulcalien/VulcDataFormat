@@ -1,9 +1,22 @@
 package vulc.vdf;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class VDFList extends Element {
+import vulc.vdf.io.binary.BinaryIO;
+
+public class VDFList extends Element implements Iterable<Element> {
 
 	private final List<Element> list = new ArrayList<Element>();
 
@@ -33,6 +46,10 @@ public class VDFList extends Element {
 
 	public Object get() {
 		return this;
+	}
+
+	public Iterator<Element> iterator() {
+		return list.iterator();
 	}
 
 	// getters and setters
@@ -305,8 +322,51 @@ public class VDFList extends Element {
 		addElement(new ListArrayElement(value));
 	}
 
-	// binary IO TODO
+	// binary IO
+	// TODO untested
 
-	// text IO TODO
+	public VDFList deserialize(DataInputStream in) throws IOException {
+		return BinaryIO.deserialize(in, this);
+	}
+
+	public VDFList deserialize(InputStream in) throws IOException {
+		return deserialize(new DataInputStream(in));
+	}
+
+	public VDFList deserialize(File file) throws IOException {
+		try(InputStream in = new BufferedInputStream(new FileInputStream(file))) {
+			return deserialize(in);
+		}
+	}
+
+	public void serialize(DataOutputStream out) throws IOException {
+		BinaryIO.serialize(out, this);
+	}
+
+	public void serialize(OutputStream out) throws IOException {
+		serialize(new DataOutputStream(out));
+	}
+
+	public void serialize(File file) throws IOException {
+		try(OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
+			serialize(out);
+		}
+	}
+
+	// text IO
+
+	public VDFList parse(String string) {
+//		return TextIO.deserialize(string, this);
+		return null;// TODO
+	}
+
+	public String toString(boolean format) {
+//		return TextIO.stringify(this, format);
+		return super.toString();//TODO
+	}
+
+	public String toString() {
+		return toString(false);
+	}
 
 }

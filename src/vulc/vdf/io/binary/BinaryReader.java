@@ -19,6 +19,7 @@ import vulc.vdf.FloatArrayElement;
 import vulc.vdf.FloatElement;
 import vulc.vdf.IntArrayElement;
 import vulc.vdf.IntElement;
+import vulc.vdf.ListArrayElement;
 import vulc.vdf.LongArrayElement;
 import vulc.vdf.LongElement;
 import vulc.vdf.ObjectArrayElement;
@@ -26,6 +27,7 @@ import vulc.vdf.ShortArrayElement;
 import vulc.vdf.ShortElement;
 import vulc.vdf.StringArrayElement;
 import vulc.vdf.StringElement;
+import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
@@ -44,6 +46,7 @@ class BinaryReader {
 		add(in -> new CharElement(in.readChar()), CHAR);
 		add(in -> new StringElement(in.readUTF()), STRING);
 		add(in -> deserializeObject(in, new VDFObject()), OBJECT);
+		add(in -> deserializeList(in, new VDFList()), LIST);
 
 		add(getArrayReader(boolean[].class, BooleanArrayElement::new,
 		                   (array, i, in) -> array[i] = in.readBoolean()),
@@ -84,6 +87,10 @@ class BinaryReader {
 		add(getArrayReader(VDFObject[].class, ObjectArrayElement::new,
 		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject())),
 		    OBJECT_A);
+
+		add(getArrayReader(VDFList[].class, ListArrayElement::new,
+		                   (array, i, in) -> array[i] = deserializeList(in, new VDFList())),
+		    LIST_A);
 	}
 
 	private void add(ElementDeserializer deserializer, byte code) {
@@ -98,6 +105,14 @@ class BinaryReader {
 			obj.setElement(name, deserializers[code].deserialize(in));	// deserialize and add element to object
 		}
 		return obj;
+	}
+
+	protected VDFList deserializeList(DataInputStream in, VDFList list) throws IOException {
+		byte code;
+		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
+			list.addElement(deserializers[code].deserialize(in));		// deserialize and add element to list
+		}
+		return list;
 	}
 
 	private <T> ElementDeserializer getArrayReader(Class<T> type,
