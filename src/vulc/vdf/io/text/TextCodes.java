@@ -31,6 +31,7 @@ abstract class TextCodes {
 		assign(DOUBLE_A, "double[]");
 		assign(CHAR_A, "char[]");
 		assign(STRING_A, "string[]");
+		assign(OBJECT_A, "obj[]");
 		assign(LIST_A, "list[]");
 	}
 

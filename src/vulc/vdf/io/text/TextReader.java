@@ -103,7 +103,7 @@ class TextReader {
 
 		add(getArrayReader(VDFList[].class, ListArrayElement::new,
 		                   (array, i, in) -> array[i] = deserializeList(in, new VDFList())),
-		    OBJECT_A);
+		    LIST_A);
 	}
 
 	private void add(ElementDeserializer deserializer, byte code) {
