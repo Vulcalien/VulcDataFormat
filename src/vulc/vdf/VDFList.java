@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import vulc.vdf.io.binary.BinaryIO;
+import vulc.vdf.io.text.TextIO;
 
 public class VDFList extends Element implements Iterable<Element> {
 
@@ -356,13 +357,11 @@ public class VDFList extends Element implements Iterable<Element> {
 	// text IO
 
 	public VDFList parse(String string) {
-//		return TextIO.deserialize(string, this);
-		return null;// TODO
+		return TextIO.deserialize(string, this);
 	}
 
 	public String toString(boolean format) {
-//		return TextIO.stringify(this, format);
-		return super.toString();//TODO
+		return TextIO.stringify(this, format);
 	}
 
 	public String toString() {

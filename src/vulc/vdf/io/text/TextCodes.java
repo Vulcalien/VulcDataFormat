@@ -20,6 +20,7 @@ abstract class TextCodes {
 		assign(CHAR, "char");
 		assign(STRING, "string");
 		assign(OBJECT, "obj");
+		assign(LIST, "list");
 
 		assign(BOOLEAN_A, "boolean[]");
 		assign(BYTE_A, "byte[]");
@@ -30,7 +31,7 @@ abstract class TextCodes {
 		assign(DOUBLE_A, "double[]");
 		assign(CHAR_A, "char[]");
 		assign(STRING_A, "string[]");
-		assign(OBJECT_A, "obj[]");
+		assign(LIST_A, "list[]");
 	}
 
 	private static void assign(byte code, String tag) {

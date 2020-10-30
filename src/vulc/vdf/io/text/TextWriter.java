@@ -15,6 +15,7 @@ import vulc.vdf.IntElement;
 import vulc.vdf.LongElement;
 import vulc.vdf.ShortElement;
 import vulc.vdf.StringElement;
+import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
@@ -34,6 +35,7 @@ class TextWriter {
 		add((e, out, format, ind) -> out.append(STRING_QUOTE + escapeString(((StringElement) e).value) + STRING_QUOTE),
 		    STRING);
 		add((e, out, format, ind) -> serializeObject(out, (VDFObject) e, format, ind), OBJECT);
+		add((e, out, format, ind) -> serializeList(out, (VDFList) e, format, ind), LIST);
 
 		add(getArrayWriter(boolean[].class, (array, i, out, format, ind) -> out.append(array[i])), BOOLEAN_A);
 		add(getArrayWriter(byte[].class, (array, i, out, format, ind) -> out.append(array[i])), BYTE_A);
@@ -53,6 +55,9 @@ class TextWriter {
 		add(getArrayWriter(VDFObject[].class,
 		                   (array, i, out, format, ind) -> serializeObject(out, (VDFObject) array[i], format, ind)),
 		    OBJECT_A);
+		add(getArrayWriter(VDFList[].class,
+		                   (array, i, out, format, ind) -> serializeList(out, (VDFList) array[i], format, ind)),
+		    LIST_A);
 	}
 
 	private void add(TextSerializer serializer, byte code) {
@@ -83,7 +88,6 @@ class TextWriter {
 			if(format) out.append(WHITESPACE);
 
 			serializers[code].serialize(e, out, format, ind);
-
 			out.append(SEPARATOR);
 		}
 		if(obj.size() != 0) {
@@ -95,6 +99,36 @@ class TextWriter {
 			}
 		}
 		out.append(CLOSE_OBJECT);
+	}
+
+	protected void serializeList(StringBuilder out, VDFList list, boolean format, int ind) {
+		out.append(OPEN_LIST);
+
+		ind++;
+
+		for(Element e : list) {
+			if(format) {
+				out.append(LF);
+				addIndentation(ind, out);
+			}
+
+			byte code = VDFCodes.get(e.getClass());
+
+			out.append(TextCodes.TAGS[code]);
+			out.append(WHITESPACE);
+
+			serializers[code].serialize(e, out, format, ind);
+			out.append(SEPARATOR);
+		}
+		if(list.size() != 0) {
+			out.deleteCharAt(out.length() - 1);
+
+			if(format) {
+				out.append(LF);
+				addIndentation(ind - 1, out);
+			}
+		}
+		out.append(CLOSE_LIST);
 	}
 
 	private <T> TextSerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {

@@ -18,6 +18,7 @@ import vulc.vdf.FloatArrayElement;
 import vulc.vdf.FloatElement;
 import vulc.vdf.IntArrayElement;
 import vulc.vdf.IntElement;
+import vulc.vdf.ListArrayElement;
 import vulc.vdf.LongArrayElement;
 import vulc.vdf.LongElement;
 import vulc.vdf.ObjectArrayElement;
@@ -25,6 +26,7 @@ import vulc.vdf.ShortArrayElement;
 import vulc.vdf.ShortElement;
 import vulc.vdf.StringArrayElement;
 import vulc.vdf.StringElement;
+import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
 
@@ -34,7 +36,8 @@ class TextReader {
 
 	protected TextReader() {
 		char[] endOfValue = new char[] {
-		    CLOSE_OBJECT, SEPARATOR,
+		    CLOSE_OBJECT, CLOSE_LIST,
+		    SEPARATOR,
 		    WHITESPACE, TAB,
 		    CR, LF
 		};
@@ -49,6 +52,7 @@ class TextReader {
 		add(in -> new CharElement(in.readChar()), CHAR);
 		add(in -> new StringElement(in.readString()), STRING);
 		add(in -> deserializeObject(in, new VDFObject()), OBJECT);
+		add(in -> deserializeList(in, new VDFList()), LIST);
 
 		char[] arrayEndOfValue = new char[] {
 		    CLOSE_ARRAY, SEPARATOR,
@@ -96,6 +100,10 @@ class TextReader {
 		add(getArrayReader(VDFObject[].class, ObjectArrayElement::new,
 		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject())),
 		    OBJECT_A);
+
+		add(getArrayReader(VDFList[].class, ListArrayElement::new,
+		                   (array, i, in) -> array[i] = deserializeList(in, new VDFList())),
+		    OBJECT_A);
 	}
 
 	private void add(ElementDeserializer deserializer, byte code) {
@@ -104,6 +112,10 @@ class TextReader {
 
 	protected VDFObject deserializeObject(String in, VDFObject obj) {
 		return deserializeObject(new StringAnalyzer(in), obj);
+	}
+
+	protected VDFList deserializeList(String in, VDFList list) {
+		return deserializeList(new StringAnalyzer(in), list);
 	}
 
 	private VDFObject deserializeObject(StringAnalyzer in, VDFObject obj) {
@@ -130,6 +142,30 @@ class TextReader {
 			if(token != SEPARATOR) in.missingToken(SEPARATOR);
 		}
 		return obj;
+	}
+
+	private VDFList deserializeList(StringAnalyzer in, VDFList list) {
+		in.checkToken(OPEN_LIST);
+		while(true) {
+			in.skipWhitespaces();
+
+			if(in.readIf(CLOSE_LIST)) break;
+			if(in.readIf(SEPARATOR)) continue;
+
+			String type = in.readUntil(WHITESPACE, TAB, CR, LF).toLowerCase();
+			in.skipWhitespaces();
+
+			Byte code = TextCodes.TAG_CODES.get(type);
+			if(code == null) throw new VDFParseException("type '" + type + "' does not exist", in.line);
+			list.addElement(deserializers[code].deserialize(in));
+
+			in.skipWhitespaces();
+
+			char token = in.read();
+			if(token == CLOSE_LIST) break;
+			if(token != SEPARATOR) in.missingToken(SEPARATOR);
+		}
+		return list;
 	}
 
 	private <T, E> ElementDeserializer getArrayReader(Class<T> type,

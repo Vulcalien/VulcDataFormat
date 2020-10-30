@@ -5,6 +5,9 @@ abstract class TextTokens {
 	protected static final char OPEN_OBJECT = '{';
 	protected static final char CLOSE_OBJECT = '}';
 
+	protected static final char OPEN_LIST = '[';
+	protected static final char CLOSE_LIST = ']';
+
 	protected static final char OPEN_ARRAY = '[';
 	protected static final char CLOSE_ARRAY = ']';
 
