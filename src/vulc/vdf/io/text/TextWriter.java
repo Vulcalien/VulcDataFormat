@@ -35,22 +35,24 @@ class TextWriter {
 		    STRING);
 		add((e, out, format, ind) -> serializeObject(out, (VDFObject) e, format, ind), OBJECT);
 
-		add(getArrayWriter(boolean[].class, (array, i, out) -> out.append(array[i])), BOOLEAN_A);
-		add(getArrayWriter(byte[].class, (array, i, out) -> out.append(array[i])), BYTE_A);
-		add(getArrayWriter(short[].class, (array, i, out) -> out.append(array[i])), SHORT_A);
-		add(getArrayWriter(int[].class, (array, i, out) -> out.append(array[i])), INT_A);
-		add(getArrayWriter(long[].class, (array, i, out) -> out.append(array[i])), LONG_A);
-		add(getArrayWriter(float[].class, (array, i, out) -> out.append(array[i])), FLOAT_A);
-		add(getArrayWriter(double[].class, (array, i, out) -> out.append(array[i])), DOUBLE_A);
-		add(getArrayWriter(char[].class, (array, i, out) -> out.append(CHAR_QUOTE
-		                                                               + escapeChar(array[i])
-		                                                               + CHAR_QUOTE)),
+		add(getArrayWriter(boolean[].class, (array, i, out, format, ind) -> out.append(array[i])), BOOLEAN_A);
+		add(getArrayWriter(byte[].class, (array, i, out, format, ind) -> out.append(array[i])), BYTE_A);
+		add(getArrayWriter(short[].class, (array, i, out, format, ind) -> out.append(array[i])), SHORT_A);
+		add(getArrayWriter(int[].class, (array, i, out, format, ind) -> out.append(array[i])), INT_A);
+		add(getArrayWriter(long[].class, (array, i, out, format, ind) -> out.append(array[i])), LONG_A);
+		add(getArrayWriter(float[].class, (array, i, out, format, ind) -> out.append(array[i])), FLOAT_A);
+		add(getArrayWriter(double[].class, (array, i, out, format, ind) -> out.append(array[i])), DOUBLE_A);
+		add(getArrayWriter(char[].class, (array, i, out, format, ind) -> out.append(CHAR_QUOTE
+		                                                                            + escapeChar(array[i])
+		                                                                            + CHAR_QUOTE)),
 		    CHAR_A);
-		add(getArrayWriter(String[].class, (array, i, out) -> out.append(STRING_QUOTE
-		                                                                 + escapeString(array[i])
-		                                                                 + STRING_QUOTE)),
+		add(getArrayWriter(String[].class, (array, i, out, format, ind) -> out.append(STRING_QUOTE
+		                                                                              + escapeString(array[i])
+		                                                                              + STRING_QUOTE)),
 		    STRING_A);
-		add(getArrayWriter(VDFObject[].class, (array, i, out) -> out.append(array[i])), OBJECT_A);
+		add(getArrayWriter(VDFObject[].class,
+		                   (array, i, out, format, ind) -> serializeObject(out, (VDFObject) array[i], format, ind)),
+		    OBJECT_A);
 	}
 
 	private void add(TextSerializer serializer, byte code) {
@@ -84,11 +86,13 @@ class TextWriter {
 
 			out.append(SEPARATOR);
 		}
-		if(obj.size() != 0) out.deleteCharAt(out.length() - 1);
+		if(obj.size() != 0) {
+			out.deleteCharAt(out.length() - 1);
 
-		if(format) {
-			out.append(LF);
-			addIndentation(ind - 1, out);
+			if(format) {
+				out.append(LF);
+				addIndentation(ind - 1, out);
+			}
 		}
 		out.append(CLOSE_OBJECT);
 	}
@@ -109,7 +113,7 @@ class TextWriter {
 					addIndentation(ind, out);
 				}
 
-				elementSerializer.serialize(type.cast(array), i, out);
+				elementSerializer.serialize(type.cast(array), i, out, format, ind);
 			}
 			if(format) {
 				out.append(LF);
@@ -165,7 +169,7 @@ class TextWriter {
 
 	private interface ArrayElementSerializer<T> {
 
-		void serialize(T array, int i, StringBuilder out);
+		void serialize(T array, int i, StringBuilder out, boolean format, int ind);
 
 	}
 
