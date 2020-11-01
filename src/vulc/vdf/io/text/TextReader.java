@@ -33,6 +33,7 @@ import vulc.vdf.io.VDFCodes;
 class TextReader {
 
 	private final ElementDeserializer[] deserializers = new ElementDeserializer[VDFCodes.TYPES];
+	protected StringAnalyzer in;
 
 	protected TextReader() {
 		char[] endOfValue = new char[] {
@@ -42,17 +43,17 @@ class TextReader {
 		    CR, LF
 		};
 
-		add(in -> new BooleanElement(Boolean.valueOf(in.readUntil(endOfValue))), BOOLEAN);
-		add(in -> new ByteElement(in.readNumber(Byte.class, endOfValue, Byte::valueOf)), BYTE);
-		add(in -> new ShortElement(in.readNumber(Short.class, endOfValue, Short::valueOf)), SHORT);
-		add(in -> new IntElement(in.readNumber(Integer.class, endOfValue, Integer::valueOf)), INT);
-		add(in -> new LongElement(in.readNumber(Long.class, endOfValue, Long::valueOf)), LONG);
-		add(in -> new FloatElement(Float.valueOf(in.readUntil(endOfValue))), FLOAT);
-		add(in -> new DoubleElement(Double.valueOf(in.readUntil(endOfValue))), DOUBLE);
-		add(in -> new CharElement(in.readChar()), CHAR);
-		add(in -> new StringElement(in.readString()), STRING);
-		add(in -> deserializeObject(in, new VDFObject()), OBJECT);
-		add(in -> deserializeList(in, new VDFList()), LIST);
+		add(() -> new BooleanElement(Boolean.valueOf(in.readUntil(endOfValue))), BOOLEAN);
+		add(() -> new ByteElement(in.readNumber(Byte.class, endOfValue, Byte::valueOf)), BYTE);
+		add(() -> new ShortElement(in.readNumber(Short.class, endOfValue, Short::valueOf)), SHORT);
+		add(() -> new IntElement(in.readNumber(Integer.class, endOfValue, Integer::valueOf)), INT);
+		add(() -> new LongElement(in.readNumber(Long.class, endOfValue, Long::valueOf)), LONG);
+		add(() -> new FloatElement(Float.valueOf(in.readUntil(endOfValue))), FLOAT);
+		add(() -> new DoubleElement(Double.valueOf(in.readUntil(endOfValue))), DOUBLE);
+		add(() -> new CharElement(in.readChar()), CHAR);
+		add(() -> new StringElement(in.readString()), STRING);
+		add(() -> deserializeObject(new VDFObject()), OBJECT);
+		add(() -> deserializeList(new VDFList()), LIST);
 
 		char[] arrayEndOfValue = new char[] {
 		    CLOSE_ARRAY, SEPARATOR,
@@ -61,48 +62,48 @@ class TextReader {
 		};
 
 		add(getArrayReader(boolean[].class, BooleanArrayElement::new,
-		                   (array, i, in) -> array[i] = Boolean.valueOf(in.readUntil(arrayEndOfValue))),
+		                   (array, i) -> array[i] = Boolean.valueOf(in.readUntil(arrayEndOfValue))),
 		    BOOLEAN_A);
 
 		add(getArrayReader(byte[].class, ByteArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readNumber(Byte.class, arrayEndOfValue, Byte::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(Byte.class, arrayEndOfValue, Byte::valueOf)),
 		    BYTE_A);
 
 		add(getArrayReader(short[].class, ShortArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readNumber(Short.class, arrayEndOfValue, Short::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(Short.class, arrayEndOfValue, Short::valueOf)),
 		    SHORT_A);
 
 		add(getArrayReader(int[].class, IntArrayElement::new,
-		                   (array, i, in) -> array[i] =
+		                   (array, i) -> array[i] =
 		                           in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf)),
 		    INT_A);
 
 		add(getArrayReader(long[].class, LongArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readNumber(Long.class, arrayEndOfValue, Long::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(Long.class, arrayEndOfValue, Long::valueOf)),
 		    LONG_A);
 
 		add(getArrayReader(float[].class, FloatArrayElement::new,
-		                   (array, i, in) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue))),
+		                   (array, i) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue))),
 		    FLOAT_A);
 
 		add(getArrayReader(double[].class, DoubleArrayElement::new,
-		                   (array, i, in) -> array[i] = Double.valueOf(in.readUntil(arrayEndOfValue))),
+		                   (array, i) -> array[i] = Double.valueOf(in.readUntil(arrayEndOfValue))),
 		    DOUBLE_A);
 
 		add(getArrayReader(char[].class, CharArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readChar()),
+		                   (array, i) -> array[i] = in.readChar()),
 		    CHAR_A);
 
 		add(getArrayReader(String[].class, StringArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readString()),
+		                   (array, i) -> array[i] = in.readString()),
 		    STRING_A);
 
 		add(getArrayReader(VDFObject[].class, ObjectArrayElement::new,
-		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject())),
+		                   (array, i) -> array[i] = deserializeObject(new VDFObject())),
 		    OBJECT_A);
 
 		add(getArrayReader(VDFList[].class, ListArrayElement::new,
-		                   (array, i, in) -> array[i] = deserializeList(in, new VDFList())),
+		                   (array, i) -> array[i] = deserializeList(new VDFList())),
 		    LIST_A);
 	}
 
@@ -110,15 +111,7 @@ class TextReader {
 		deserializers[code] = deserializer;
 	}
 
-	protected VDFObject deserializeObject(String in, VDFObject obj) {
-		return deserializeObject(new StringAnalyzer(in), obj);
-	}
-
-	protected VDFList deserializeList(String in, VDFList list) {
-		return deserializeList(new StringAnalyzer(in), list);
-	}
-
-	private VDFObject deserializeObject(StringAnalyzer in, VDFObject obj) {
+	protected VDFObject deserializeObject(VDFObject obj) {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
@@ -133,7 +126,7 @@ class TextReader {
 
 			Byte code = TextCodes.TAG_CODES.get(type);
 			if(code == null) throw new VDFParseException("type '" + type + "' does not exist", in.line);
-			obj.setElement(name, deserializers[code].deserialize(in));
+			obj.setElement(name, deserializers[code].deserialize());
 
 			in.skipWhitespaces();
 
@@ -144,7 +137,7 @@ class TextReader {
 		return obj;
 	}
 
-	private VDFList deserializeList(StringAnalyzer in, VDFList list) {
+	protected VDFList deserializeList(VDFList list) {
 		in.checkToken(OPEN_LIST);
 		while(true) {
 			in.skipWhitespaces();
@@ -157,7 +150,7 @@ class TextReader {
 
 			Byte code = TextCodes.TAG_CODES.get(type);
 			if(code == null) throw new VDFParseException("type '" + type + "' does not exist", in.line);
-			list.addElement(deserializers[code].deserialize(in));
+			list.addElement(deserializers[code].deserialize());
 
 			in.skipWhitespaces();
 
@@ -171,7 +164,7 @@ class TextReader {
 	private <T, E> ElementDeserializer getArrayReader(Class<T> type,
 	                                                  ArrayMaker<T> arrayMaker,
 	                                                  ArrayElementDeserializer<T> elementDeserializer) {
-		return (in) -> {
+		return () -> {
 			in.checkToken(OPEN_ARRAY);
 
 			int length = 8;
@@ -191,7 +184,7 @@ class TextReader {
 					length += 8;
 				}
 
-				elementDeserializer.add(array, i++, in);
+				elementDeserializer.add(array, i++);
 				in.skipWhitespaces();
 
 				char token = in.read();
@@ -207,7 +200,7 @@ class TextReader {
 
 	private interface ElementDeserializer {
 
-		Element deserialize(StringAnalyzer in);
+		Element deserialize();
 
 	}
 
@@ -219,7 +212,7 @@ class TextReader {
 
 	private interface ArrayElementDeserializer<T> {
 
-		void add(T array, int i, StringAnalyzer in);
+		void add(T array, int i);
 
 	}
 

@@ -9,23 +9,30 @@ import vulc.vdf.VDFObject;
 
 public abstract class BinaryIO {
 
-	private static final BinaryReader READER = new BinaryReader();
-	private static final BinaryWriter WRITER = new BinaryWriter();
+	// TODO somehow delete these after use
+	private static BinaryReader reader = new BinaryReader();
+	private static BinaryWriter writer = new BinaryWriter();
+
+	// TODO test all these functions
 
 	public static VDFObject deserialize(DataInputStream in, VDFObject obj) throws IOException {
-		return READER.deserializeObject(in, obj);
+		reader.in = in;
+		return reader.deserializeObject(obj);
 	}
 
 	public static VDFList deserialize(DataInputStream in, VDFList list) throws IOException {
-		return READER.deserializeList(in, list);
+		reader.in = in;
+		return reader.deserializeList(list);
 	}
 
 	public static void serialize(DataOutputStream out, VDFObject obj) throws IOException {
-		WRITER.serializeObject(out, obj);
+		writer.out = out;
+		writer.serializeObject(obj);
 	}
 
 	public static void serialize(DataOutputStream out, VDFList list) throws IOException {
-		WRITER.serializeList(out, list);
+		writer.out = out;
+		writer.serializeList(list);
 	}
 
 }

@@ -5,21 +5,27 @@ import vulc.vdf.VDFObject;
 
 public abstract class TextIO {
 
-	private static final TextReader READER = new TextReader();
-	private static final TextWriter WRITER = new TextWriter();
+	// TODO somehow delete these after use
+	private static TextReader reader = new TextReader();
+	private static TextWriter writer = new TextWriter();
+
+	// TODO test all these functions
 
 	public static VDFObject deserialize(String in, VDFObject obj) {
-		return READER.deserializeObject(in, obj);
+		reader.in = new StringAnalyzer(in);
+		return reader.deserializeObject(obj);
 	}
 
 	public static VDFList deserialize(String in, VDFList obj) {
-		return READER.deserializeList(in, obj);
+		reader.in = new StringAnalyzer(in);
+		return reader.deserializeList(obj);
 	}
 
 	public static String stringify(VDFObject obj, boolean format) {
 		StringBuilder builder = new StringBuilder();
+		writer.out = builder;
 
-		WRITER.serializeObject(builder, obj, format, 0);
+		writer.serializeObject(obj, format, 0);
 		if(format) builder.append(TextTokens.LF);
 
 		return builder.toString();
@@ -27,8 +33,9 @@ public abstract class TextIO {
 
 	public static String stringify(VDFList obj, boolean format) {
 		StringBuilder builder = new StringBuilder();
+		writer.out = builder;
 
-		WRITER.serializeList(builder, obj, format, 0);
+		writer.serializeList(obj, format, 0);
 		if(format) builder.append(TextTokens.LF);
 
 		return builder.toString();

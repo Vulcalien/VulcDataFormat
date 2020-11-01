@@ -34,62 +34,63 @@ import vulc.vdf.io.VDFCodes;
 class BinaryReader {
 
 	private final ElementDeserializer[] deserializers = new ElementDeserializer[VDFCodes.TYPES];
+	protected DataInputStream in;
 
 	protected BinaryReader() {
-		add(in -> new BooleanElement(in.readBoolean()), BOOLEAN);
-		add(in -> new ByteElement(in.readByte()), BYTE);
-		add(in -> new ShortElement(in.readShort()), SHORT);
-		add(in -> new IntElement(in.readInt()), INT);
-		add(in -> new LongElement(in.readLong()), LONG);
-		add(in -> new FloatElement(in.readFloat()), FLOAT);
-		add(in -> new DoubleElement(in.readDouble()), DOUBLE);
-		add(in -> new CharElement(in.readChar()), CHAR);
-		add(in -> new StringElement(in.readUTF()), STRING);
-		add(in -> deserializeObject(in, new VDFObject()), OBJECT);
-		add(in -> deserializeList(in, new VDFList()), LIST);
+		add(() -> new BooleanElement(in.readBoolean()), BOOLEAN);
+		add(() -> new ByteElement(in.readByte()), BYTE);
+		add(() -> new ShortElement(in.readShort()), SHORT);
+		add(() -> new IntElement(in.readInt()), INT);
+		add(() -> new LongElement(in.readLong()), LONG);
+		add(() -> new FloatElement(in.readFloat()), FLOAT);
+		add(() -> new DoubleElement(in.readDouble()), DOUBLE);
+		add(() -> new CharElement(in.readChar()), CHAR);
+		add(() -> new StringElement(in.readUTF()), STRING);
+		add(() -> deserializeObject(new VDFObject()), OBJECT);
+		add(() -> deserializeList(new VDFList()), LIST);
 
 		add(getArrayReader(boolean[].class, BooleanArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readBoolean()),
+		                   (array, i) -> array[i] = in.readBoolean()),
 		    BOOLEAN_A);
 
 		add(getArrayReader(byte[].class, ByteArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readByte()),
+		                   (array, i) -> array[i] = in.readByte()),
 		    BYTE_A);
 
 		add(getArrayReader(short[].class, ShortArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readShort()),
+		                   (array, i) -> array[i] = in.readShort()),
 		    SHORT_A);
 
 		add(getArrayReader(int[].class, IntArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readInt()),
+		                   (array, i) -> array[i] = in.readInt()),
 		    INT_A);
 
 		add(getArrayReader(long[].class, LongArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readLong()),
+		                   (array, i) -> array[i] = in.readLong()),
 		    LONG_A);
 
 		add(getArrayReader(float[].class, FloatArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readFloat()),
+		                   (array, i) -> array[i] = in.readFloat()),
 		    FLOAT_A);
 
 		add(getArrayReader(double[].class, DoubleArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readDouble()),
+		                   (array, i) -> array[i] = in.readDouble()),
 		    DOUBLE_A);
 
 		add(getArrayReader(char[].class, CharArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readChar()),
+		                   (array, i) -> array[i] = in.readChar()),
 		    CHAR_A);
 
 		add(getArrayReader(String[].class, StringArrayElement::new,
-		                   (array, i, in) -> array[i] = in.readUTF()),
+		                   (array, i) -> array[i] = in.readUTF()),
 		    STRING_A);
 
 		add(getArrayReader(VDFObject[].class, ObjectArrayElement::new,
-		                   (array, i, in) -> array[i] = deserializeObject(in, new VDFObject())),
+		                   (array, i) -> array[i] = deserializeObject(new VDFObject())),
 		    OBJECT_A);
 
 		add(getArrayReader(VDFList[].class, ListArrayElement::new,
-		                   (array, i, in) -> array[i] = deserializeList(in, new VDFList())),
+		                   (array, i) -> array[i] = deserializeList(new VDFList())),
 		    LIST_A);
 	}
 
@@ -97,20 +98,20 @@ class BinaryReader {
 		deserializers[code] = deserializer;
 	}
 
-	protected VDFObject deserializeObject(DataInputStream in, VDFObject obj) throws IOException {
+	protected VDFObject deserializeObject(VDFObject obj) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
 			String name = in.readUTF();									// read name
 
-			obj.setElement(name, deserializers[code].deserialize(in));	// deserialize and add element to object
+			obj.setElement(name, deserializers[code].deserialize());	// deserialize and add element to object
 		}
 		return obj;
 	}
 
-	protected VDFList deserializeList(DataInputStream in, VDFList list) throws IOException {
+	protected VDFList deserializeList(VDFList list) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
-			list.addElement(deserializers[code].deserialize(in));		// deserialize and add element to list
+			list.addElement(deserializers[code].deserialize());			// deserialize and add element to list
 		}
 		return list;
 	}
@@ -118,12 +119,12 @@ class BinaryReader {
 	private <T> ElementDeserializer getArrayReader(Class<T> type,
 	                                               ArrayMaker<T> arrayMaker,
 	                                               ArrayElementDeserializer<T> arrayElementDeserializer) {
-		return in -> {
+		return () -> {
 			int length = in.readInt();
 
 			T array = type.cast(Array.newInstance(type.getComponentType(), length));
 			for(int i = 0; i < length; i++) {
-				arrayElementDeserializer.deserialize(array, i, in);
+				arrayElementDeserializer.deserialize(array, i);
 			}
 			return arrayMaker.make(array);
 		};
@@ -131,7 +132,7 @@ class BinaryReader {
 
 	private interface ElementDeserializer {
 
-		Element deserialize(DataInputStream in) throws IOException;
+		Element deserialize() throws IOException;
 
 	}
 
@@ -143,7 +144,7 @@ class BinaryReader {
 
 	private interface ArrayElementDeserializer<T> {
 
-		void deserialize(T array, int i, DataInputStream in) throws IOException;
+		void deserialize(T array, int i) throws IOException;
 
 	}
 
