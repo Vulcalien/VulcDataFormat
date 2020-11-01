@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import vulc.vdf.io.binary.BinaryIO;
@@ -45,10 +44,7 @@ public class VDFObject extends Element {
 	}
 
 	public Element getElement(String name) {
-		Element e = map.get(name);
-
-		if(e == null) throw new NoSuchElementException(name);
-		return e;
+		return map.get(name);
 	}
 
 	public void setElement(String name, Element e) {
