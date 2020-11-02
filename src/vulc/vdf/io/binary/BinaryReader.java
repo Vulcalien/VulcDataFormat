@@ -30,11 +30,11 @@ import vulc.vdf.StringElement;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
+import vulc.vdf.io.VDFReader;
 
-class BinaryReader {
+class BinaryReader extends VDFReader<DataInputStream> {
 
 	private final ElementDeserializer[] deserializers = new ElementDeserializer[VDFCodes.TYPES];
-	protected DataInputStream in;
 
 	protected BinaryReader() {
 		add(() -> new BooleanElement(in.readBoolean()), BOOLEAN);
@@ -98,7 +98,7 @@ class BinaryReader {
 		deserializers[code] = deserializer;
 	}
 
-	protected VDFObject deserializeObject(VDFObject obj) throws IOException {
+	public VDFObject deserializeObject(VDFObject obj) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
 			String name = in.readUTF();									// read name
@@ -108,7 +108,7 @@ class BinaryReader {
 		return obj;
 	}
 
-	protected VDFList deserializeList(VDFList list) throws IOException {
+	public VDFList deserializeList(VDFList list) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
 			list.addElement(deserializers[code].deserialize());			// deserialize and add element to list

@@ -50,8 +50,9 @@ public abstract class TextIO {
 
 		StringBuilder builder = new StringBuilder();
 		writer.out = builder;
+		writer.format = format;
 
-		writer.serializeObject(obj, format, 0);
+		writer.serializeObject(obj);
 		if(format) builder.append(TextTokens.LF);
 
 		if(!reuseIO) writer = null;
@@ -64,8 +65,9 @@ public abstract class TextIO {
 
 		StringBuilder builder = new StringBuilder();
 		writer.out = builder;
+		writer.format = format;
 
-		writer.serializeList(obj, format, 0);
+		writer.serializeList(obj);
 		if(format) builder.append(TextTokens.LF);
 
 		if(!reuseIO) writer = null;

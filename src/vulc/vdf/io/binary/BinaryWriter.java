@@ -19,11 +19,11 @@ import vulc.vdf.StringElement;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
+import vulc.vdf.io.VDFWriter;
 
-class BinaryWriter {
+class BinaryWriter extends VDFWriter<DataOutputStream> {
 
 	private final BinarySerializer[] serializers = new BinarySerializer[VDFCodes.TYPES];
-	protected DataOutputStream out;
 
 	protected BinaryWriter() {
 		add(e -> out.writeBoolean(((BooleanElement) e).value), BOOLEAN);
@@ -55,7 +55,7 @@ class BinaryWriter {
 		serializers[code] = serializer;
 	}
 
-	protected void serializeObject(VDFObject obj) throws IOException {
+	public void serializeObject(VDFObject obj) throws IOException {
 		for(String name : obj.keySet()) {
 			Element e = obj.getElement(name);
 
@@ -69,7 +69,7 @@ class BinaryWriter {
 		out.writeByte(-1);								// write end mark
 	}
 
-	protected void serializeList(VDFList list) throws IOException {
+	public void serializeList(VDFList list) throws IOException {
 		for(Element e : list) {
 			byte code = VDFCodes.get(e.getClass());
 

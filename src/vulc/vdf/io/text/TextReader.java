@@ -29,11 +29,11 @@ import vulc.vdf.StringElement;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
+import vulc.vdf.io.VDFReader;
 
-class TextReader {
+class TextReader extends VDFReader<StringAnalyzer> {
 
 	private final ElementDeserializer[] deserializers = new ElementDeserializer[VDFCodes.TYPES];
-	protected StringAnalyzer in;
 
 	protected TextReader() {
 		char[] endOfValue = new char[] {
@@ -74,8 +74,7 @@ class TextReader {
 		    SHORT_A);
 
 		add(getArrayReader(int[].class, IntArrayElement::new,
-		                   (array, i) -> array[i] =
-		                           in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf)),
 		    INT_A);
 
 		add(getArrayReader(long[].class, LongArrayElement::new,
@@ -111,7 +110,7 @@ class TextReader {
 		deserializers[code] = deserializer;
 	}
 
-	protected VDFObject deserializeObject(VDFObject obj) {
+	public VDFObject deserializeObject(VDFObject obj) {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
@@ -137,7 +136,7 @@ class TextReader {
 		return obj;
 	}
 
-	protected VDFList deserializeList(VDFList list) {
+	public VDFList deserializeList(VDFList list) {
 		in.checkToken(OPEN_LIST);
 		while(true) {
 			in.skipWhitespaces();
