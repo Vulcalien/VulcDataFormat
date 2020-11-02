@@ -9,30 +9,62 @@ import vulc.vdf.VDFObject;
 
 public abstract class BinaryIO {
 
-	// TODO somehow delete these after use
-	private static BinaryReader reader = new BinaryReader();
-	private static BinaryWriter writer = new BinaryWriter();
+	private static BinaryReader reader = null;
+	private static BinaryWriter writer = null;
+
+	private static boolean reuseIO = false;
+
+	public static void setReuseIO(boolean flag) {
+		reuseIO = flag;
+		if(reuseIO) {
+			reader = new BinaryReader();
+			writer = new BinaryWriter();
+		} else {
+			reader = null;
+			writer = null;
+		}
+	}
 
 	// TODO test all these functions
 
 	public static VDFObject deserialize(DataInputStream in, VDFObject obj) throws IOException {
+		if(!reuseIO) reader = new BinaryReader();
+
 		reader.in = in;
-		return reader.deserializeObject(obj);
+		reader.deserializeObject(obj);
+
+		if(!reuseIO) reader = null;
+
+		return obj;
 	}
 
 	public static VDFList deserialize(DataInputStream in, VDFList list) throws IOException {
+		if(!reuseIO) reader = new BinaryReader();
+
 		reader.in = in;
-		return reader.deserializeList(list);
+		reader.deserializeList(list);
+
+		if(!reuseIO) reader = null;
+
+		return list;
 	}
 
 	public static void serialize(DataOutputStream out, VDFObject obj) throws IOException {
+		if(!reuseIO) writer = new BinaryWriter();
+
 		writer.out = out;
 		writer.serializeObject(obj);
+
+		if(!reuseIO) reader = null;
 	}
 
 	public static void serialize(DataOutputStream out, VDFList list) throws IOException {
+		if(!reuseIO) writer = new BinaryWriter();
+
 		writer.out = out;
 		writer.serializeList(list);
+
+		if(!reuseIO) writer = null;
 	}
 
 }

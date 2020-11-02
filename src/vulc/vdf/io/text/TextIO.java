@@ -5,38 +5,70 @@ import vulc.vdf.VDFObject;
 
 public abstract class TextIO {
 
-	// TODO somehow delete these after use
-	private static TextReader reader = new TextReader();
-	private static TextWriter writer = new TextWriter();
+	private static TextReader reader = null;
+	private static TextWriter writer = null;
+
+	private static boolean reuseIO = false;
+
+	public static void setReuseIO(boolean flag) {
+		reuseIO = flag;
+		if(reuseIO) {
+			reader = new TextReader();
+			writer = new TextWriter();
+		} else {
+			reader = null;
+			writer = null;
+		}
+	}
 
 	// TODO test all these functions
 
 	public static VDFObject deserialize(String in, VDFObject obj) {
+		if(!reuseIO) reader = new TextReader();
+
 		reader.in = new StringAnalyzer(in);
-		return reader.deserializeObject(obj);
+		reader.deserializeObject(obj);
+
+		if(!reuseIO) reader = null;
+
+		return obj;
 	}
 
-	public static VDFList deserialize(String in, VDFList obj) {
+	public static VDFList deserialize(String in, VDFList list) {
+		if(!reuseIO) reader = new TextReader();
+
 		reader.in = new StringAnalyzer(in);
-		return reader.deserializeList(obj);
+		reader.deserializeList(list);
+
+		if(!reuseIO) reader = null;
+
+		return list;
 	}
 
 	public static String stringify(VDFObject obj, boolean format) {
+		if(!reuseIO) writer = new TextWriter();
+
 		StringBuilder builder = new StringBuilder();
 		writer.out = builder;
 
 		writer.serializeObject(obj, format, 0);
 		if(format) builder.append(TextTokens.LF);
 
+		if(!reuseIO) writer = null;
+
 		return builder.toString();
 	}
 
 	public static String stringify(VDFList obj, boolean format) {
+		if(!reuseIO) writer = new TextWriter();
+
 		StringBuilder builder = new StringBuilder();
 		writer.out = builder;
 
 		writer.serializeList(obj, format, 0);
 		if(format) builder.append(TextTokens.LF);
+
+		if(!reuseIO) writer = null;
 
 		return builder.toString();
 	}
