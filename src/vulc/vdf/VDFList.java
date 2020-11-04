@@ -175,7 +175,6 @@ public class VDFList extends Element implements Iterable<Element> {
 		addElement(objectElement);
 	}
 
-	// TODO test these
 	public VDFList getList(int i) {
 		return (VDFList) getElement(i);
 	}
@@ -310,7 +309,6 @@ public class VDFList extends Element implements Iterable<Element> {
 		addElement(new ObjectArrayElement(value));
 	}
 
-	// TODO test these
 	public VDFList[] getListArray(int i) {
 		return ((ListArrayElement) getElement(i)).value;
 	}
@@ -324,10 +322,10 @@ public class VDFList extends Element implements Iterable<Element> {
 	}
 
 	// binary IO
-	// TODO untested
 
 	public VDFList deserialize(DataInputStream in) throws IOException {
-		return BinaryIO.deserialize(in, this);
+		BinaryIO.deserialize(in, this);
+		return this;
 	}
 
 	public VDFList deserialize(InputStream in) throws IOException {
@@ -357,7 +355,8 @@ public class VDFList extends Element implements Iterable<Element> {
 	// text IO
 
 	public VDFList parse(String string) {
-		return TextIO.deserialize(string, this);
+		TextIO.deserialize(string, this);
+		return this;
 	}
 
 	public String toString(boolean format) {

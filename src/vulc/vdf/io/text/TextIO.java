@@ -11,6 +11,8 @@ public abstract class TextIO {
 	private static boolean reuseIO = false;
 
 	public static void setReuseIO(boolean flag) {
+		if(flag == reuseIO) return;
+
 		reuseIO = flag;
 		if(reuseIO) {
 			reader = new TextReader();
@@ -21,58 +23,63 @@ public abstract class TextIO {
 		}
 	}
 
-	// TODO test all these functions
+	// deserialize
 
-	public static VDFObject deserialize(String in, VDFObject obj) {
+	private static <T> void deserialize(String in, Deserializer<T> deserializer) {
 		if(!reuseIO) reader = new TextReader();
 
 		reader.in = new StringAnalyzer(in);
-		reader.deserializeObject(obj);
+		deserializer.deserialize(reader);
 
 		if(!reuseIO) reader = null;
-
-		return obj;
 	}
 
-	public static VDFList deserialize(String in, VDFList list) {
-		if(!reuseIO) reader = new TextReader();
+	public static void deserialize(String in, VDFObject obj) {
+		deserialize(in, reader -> reader.deserializeObject(obj));
+	}
 
-		reader.in = new StringAnalyzer(in);
-		reader.deserializeList(list);
+	public static void deserialize(String in, VDFList list) {
+		deserialize(in, reader -> reader.deserializeList(list));
+	}
 
-		if(!reuseIO) reader = null;
+	// serialize
 
-		return list;
+	private static <T> void serialize(StringBuilder out, boolean format, Serializer<T> serializer) {
+		if(!reuseIO) writer = new TextWriter();
+
+		writer.out = out;
+		writer.format = format;
+
+		serializer.serialize(writer);
+		if(format) out.append(TextTokens.LF);
+
+		if(!reuseIO) writer = null;
 	}
 
 	public static String stringify(VDFObject obj, boolean format) {
-		if(!reuseIO) writer = new TextWriter();
-
-		StringBuilder builder = new StringBuilder();
-		writer.out = builder;
-		writer.format = format;
-
-		writer.serializeObject(obj);
-		if(format) builder.append(TextTokens.LF);
-
-		if(!reuseIO) writer = null;
-
-		return builder.toString();
+		StringBuilder out = new StringBuilder();
+		serialize(out, format, writer -> writer.serializeObject(obj));
+		return out.toString();
 	}
 
-	public static String stringify(VDFList obj, boolean format) {
-		if(!reuseIO) writer = new TextWriter();
+	public static String stringify(VDFList list, boolean format) {
+		StringBuilder out = new StringBuilder();
+		serialize(out, format, writer -> writer.serializeList(list));
+		return out.toString();
+	}
 
-		StringBuilder builder = new StringBuilder();
-		writer.out = builder;
-		writer.format = format;
+	// interfaces
 
-		writer.serializeList(obj);
-		if(format) builder.append(TextTokens.LF);
+	private interface Deserializer<T> {
 
-		if(!reuseIO) writer = null;
+		void deserialize(TextReader reader);
 
-		return builder.toString();
+	}
+
+	private interface Serializer<T> {
+
+		void serialize(TextWriter writer);
+
 	}
 
 }

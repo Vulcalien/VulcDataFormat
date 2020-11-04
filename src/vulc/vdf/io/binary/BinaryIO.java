@@ -15,6 +15,8 @@ public abstract class BinaryIO {
 	private static boolean reuseIO = false;
 
 	public static void setReuseIO(boolean flag) {
+		if(flag == reuseIO) return;
+
 		reuseIO = flag;
 		if(reuseIO) {
 			reader = new BinaryReader();
@@ -25,46 +27,56 @@ public abstract class BinaryIO {
 		}
 	}
 
-	// TODO test all these functions
+	// deserialize
 
-	public static VDFObject deserialize(DataInputStream in, VDFObject obj) throws IOException {
+	private static <T> void deserialize(DataInputStream in, Deserializer<T> deserializer) throws IOException {
 		if(!reuseIO) reader = new BinaryReader();
 
 		reader.in = in;
-		reader.deserializeObject(obj);
+		deserializer.deserialize(reader);
 
 		if(!reuseIO) reader = null;
-
-		return obj;
 	}
 
-	public static VDFList deserialize(DataInputStream in, VDFList list) throws IOException {
-		if(!reuseIO) reader = new BinaryReader();
+	public static void deserialize(DataInputStream in, VDFObject obj) throws IOException {
+		deserialize(in, reader -> reader.deserializeObject(obj));
+	}
 
-		reader.in = in;
-		reader.deserializeList(list);
+	public static void deserialize(DataInputStream in, VDFList list) throws IOException {
+		deserialize(in, reader -> reader.deserializeList(list));
+	}
 
-		if(!reuseIO) reader = null;
+	// serialize
 
-		return list;
+	private static <T> void serialize(DataOutputStream out, Serializer<T> serializer) throws IOException {
+		if(!reuseIO) writer = new BinaryWriter();
+
+		writer.out = out;
+		serializer.serialize(writer);
+
+		if(!reuseIO) writer = null;
 	}
 
 	public static void serialize(DataOutputStream out, VDFObject obj) throws IOException {
-		if(!reuseIO) writer = new BinaryWriter();
-
-		writer.out = out;
-		writer.serializeObject(obj);
-
-		if(!reuseIO) reader = null;
+		serialize(out, writer -> writer.serializeObject(obj));
 	}
 
 	public static void serialize(DataOutputStream out, VDFList list) throws IOException {
-		if(!reuseIO) writer = new BinaryWriter();
+		serialize(out, writer -> writer.serializeList(list));
+	}
 
-		writer.out = out;
-		writer.serializeList(list);
+	// interfaces
 
-		if(!reuseIO) writer = null;
+	private interface Deserializer<T> {
+
+		void deserialize(BinaryReader reader) throws IOException;
+
+	}
+
+	private interface Serializer<T> {
+
+		void serialize(BinaryWriter writer) throws IOException;
+
 	}
 
 }

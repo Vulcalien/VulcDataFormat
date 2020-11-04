@@ -145,7 +145,6 @@ public class VDFObject extends Element {
 		setElement(name, objectElement);
 	}
 
-	// TODO test these
 	public VDFList getList(String name) {
 		return (VDFList) getElement(name);
 	}
@@ -236,7 +235,6 @@ public class VDFObject extends Element {
 		setElement(name, new ObjectArrayElement(value));
 	}
 
-	// TODO test these
 	public VDFList[] getListArray(String name) {
 		return ((ListArrayElement) getElement(name)).value;
 	}
@@ -248,7 +246,8 @@ public class VDFObject extends Element {
 	// binary IO
 
 	public VDFObject deserialize(DataInputStream in) throws IOException {
-		return BinaryIO.deserialize(in, this);
+		BinaryIO.deserialize(in, this);
+		return this;
 	}
 
 	public VDFObject deserialize(InputStream in) throws IOException {
@@ -278,7 +277,8 @@ public class VDFObject extends Element {
 	// text IO
 
 	public VDFObject parse(String string) {
-		return TextIO.deserialize(string, this);
+		TextIO.deserialize(string, this);
+		return this;
 	}
 
 	public String toString(boolean format) {
