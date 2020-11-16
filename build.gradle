@@ -7,6 +7,20 @@ defaultTasks 'jar'
 
 sourceSets {
     main.java.srcDirs 'src'
+    test.java.srcDirs 'test'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 task source(type: Jar, dependsOn: classes) {
