@@ -175,7 +175,8 @@ class StringAnalyzer {
 		if(strChar.equals("\\'")) return '\'';
 		if(strChar.equals("\\\"")) return '\"';
 
-		if(strChar.length() != 1) throw new VDFParseException("char error", line);
+		if(strChar.length() != 1) throw new VDFParseException("Unknown escape sequence "
+		                                                      + "'\\" + strChar.charAt(1) + "'", line);
 		return strChar.charAt(0);
 	}
 
