@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
@@ -21,34 +21,71 @@ public class VDFList extends Element implements Iterable<Element> {
 
 	private final ArrayList<Element> list = new ArrayList<Element>();
 
+	/**
+	 * Returns the number of elements in this list.
+	 * 
+	 * @return  the number of elements in this list
+	 * @see     java.util.ArrayList#size()
+	 */
 	public int size() {
 		return list.size();
 	}
 
+	/**
+	 * Returns the element at the specified position in this list.
+	 * 
+	 * <p>This should be avoided if the type is known. For example, if we know that the element at
+	 * position 3 is an {@code IntElement} then {@code getInt(3)} should be preferred, since it
+	 * will return a primitive {@code int} value.
+	 * 
+	 * @param   i  the index of the element to return
+	 * @return  the element at the specified position
+	 * @throws  IndexOutOfBoundsException  if
+	 */
 	public Element getElement(int i) {
 		return list.get(i);
 	}
 
-	public void setElement(int i, Element e) {
+	// TO-DOC
+	public void setElement(int i, Element e) { // TODO add return old value
 		list.set(i, e);
 	}
 
+	/**
+	 * Appends an element to the end of this list.
+	 * 
+	 * @param  e  the element to append
+	 */
+	// TODO don't allow null value for e
 	public void addElement(Element e) {
 		list.add(e);
 	}
 
+	// TO-DOC
+	// TODO add return removed value
 	public void removeElement(int i) {
 		list.remove(i);
 	}
 
+	/**
+	 * Removes all the elements.
+	 * 
+	 * @see  java.util.ArrayList#clear()
+	 */
 	public void clear() {
 		list.clear();
 	}
 
+	/**
+	 * Returns this list as a Java {@code Object}.
+	 * 
+	 * @return  this list
+	 */
 	public Object get() {
 		return this;
 	}
 
+	// TO-DOC
 	public Iterator<Element> iterator() {
 		return list.iterator();
 	}
@@ -323,29 +360,83 @@ public class VDFList extends Element implements Iterable<Element> {
 
 	// binary IO
 
+	/**
+	 * Reads a list from a {@code DataInputStream} and adds the element to this object, without
+	 * removing contained elements.
+	 * 
+	 * @param   in  a data input stream
+	 * @return  this object
+	 * 
+	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  IOException   if an IO error occurs
+	 */
 	public VDFList deserialize(DataInputStream in) throws IOException {
 		BinaryIO.deserialize(in, this);
 		return this;
 	}
 
+	/**
+	 * Reads a list from an {@code InputStream} and adds the element to this object, without
+	 * removing contained elements.
+	 * 
+	 * @param   in  an input stream
+	 * @return  this object
+	 * 
+	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  IOException   if an IO error occurs
+	 * 
+	 * @see     vulc.vdf.VDFList#deserialize(DataInputStream)
+	 */
 	public VDFList deserialize(InputStream in) throws IOException {
 		return deserialize(new DataInputStream(in));
 	}
 
+	/**
+	 * Reads a list from a {@code FileInputStream} and adds the element to this object, without
+	 * removing contained elements.
+	 * 
+	 * @param   file  the file to read
+	 * @return  this object
+	 * 
+	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  IOException   if an IO error occurs
+	 * 
+	 * @see     vulc.vdf.VDFList#deserialize(DataInputStream)
+	 */
 	public VDFList deserialize(File file) throws IOException {
 		try(InputStream in = new BufferedInputStream(new FileInputStream(file))) {
 			return deserialize(in);
 		}
 	}
 
+	/**
+	 * Writes this list to a {@code DataOutputStream}.
+	 * 
+	 * @param   out  a data output stream
+	 * @throws  IOException  if an IO error occurs
+	 */
 	public void serialize(DataOutputStream out) throws IOException {
 		BinaryIO.serialize(out, this);
 	}
 
+	/**
+	 * Writes this list to an {@code OutputStream}.
+	 * 
+	 * @param   out  an output stream
+	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.VDFList#serialize(DataOutputStream)
+	 */
 	public void serialize(OutputStream out) throws IOException {
 		serialize(new DataOutputStream(out));
 	}
 
+	/**
+	 * Writes this list to a {@code FileOutputStream}.
+	 * 
+	 * @param   file  the file to write this list to
+	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.VDFList#serialize(DataOutputStream)
+	 */
 	public void serialize(File file) throws IOException {
 		try(OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
 			serialize(out);
