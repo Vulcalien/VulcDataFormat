@@ -19,6 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,30 +36,80 @@ public class VDFObject extends Element {
 
 	private final HashMap<String, Element> map = new HashMap<String, Element>();
 
+	/**
+	 * Returns the number of elements contained in this object.
+	 * 
+	 * @return the number of elements contained in this object
+	 * @see    java.util.HashMap#size()
+	 */
 	public int size() {
 		return map.size();
 	}
 
+	/**
+	 * Returns a Set of the keys associated with an element in this object.
+	 * 
+	 * @return  a Set of the keys
+	 * @see     java.util.HashMap#keySet()
+	 */
 	public Set<String> keySet() {
 		return map.keySet();
 	}
 
+	/**
+	 * Returns an {@code Element} or {@code null} if the object contains no element associated with
+	 * the specified key.
+	 * 
+	 * <p>This should be avoided if the type is known. For example, if we know that the key 'x' is
+	 * associated to an {@code IntElement} then {@code getInt("x")} should be preferred, since it
+	 * will return a primitive {@code int} value.
+	 * 
+	 * @param   name  the key
+	 * @return  the element associated with the specified key, or null if the object contains no
+	 *          element associated with the specified key
+	 * @see     java.util.HashMap#get(Object)
+	 * @see     vulc.vdf.Element
+	 */
 	public Element getElement(String name) {
 		return map.get(name);
 	}
 
-	public void setElement(String name, Element e) {
+	/**
+	 * Associates the given element with the given name. If this object contained an element
+	 * associated to that name, the old element is replaced.
+	 * 
+	 * @param  name  the key which the element will be associated
+	 * @param  e     the element
+	 * @see    java.util.HashMap#put(Object, Object)
+	 */
+	public void setElement(String name, Element e) { // TODO add return old value
 		map.put(name, e);
 	}
 
-	public void removeElement(String name) {
+	/**
+	 * Removes the element associated with the specified key if present.
+	 * 
+	 * @param  name  the key associated with the element to be removed
+	 * @see    java.util.HashMap#remove(Object)
+	 */
+	public void removeElement(String name) { // TODO add return removed value
 		map.remove(name);
 	}
 
+	/**
+	 * Removes all the elements.
+	 * 
+	 * @see  java.util.HashMap#clear()
+	 */
 	public void clear() {
 		map.clear();
 	}
 
+	/**
+	 * Returns this object.
+	 * 
+	 * @return  this object
+	 */
 	public Object get() {
 		return this;
 	}
@@ -70,6 +121,10 @@ public class VDFObject extends Element {
 	}
 
 	public void setBoolean(String name, boolean value) {
+		// TODO add return old value
+		// something like
+		// return setElement(name, new BooleanElement(value)).value;
+		// should be enought
 		setElement(name, new BooleanElement(value));
 	}
 
@@ -245,29 +300,83 @@ public class VDFObject extends Element {
 
 	// binary IO
 
+	/**
+	 * Reads an object from a {@code DataInputStream} and adds the element to this object, without
+	 * removing contained elements.
+	 * 
+	 * @param   in  a data input stream
+	 * @return  this object
+	 * 
+	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  IOException   if an IO error occurs
+	 */
 	public VDFObject deserialize(DataInputStream in) throws IOException {
 		BinaryIO.deserialize(in, this);
 		return this;
 	}
 
+	/**
+	 * Reads an object from a {@code InputStream} and adds the element to this object, without
+	 * removing contained elements.
+	 * 
+	 * @param   in  an input stream
+	 * @return  this object
+	 * 
+	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  IOException   if an IO error occurs
+	 * 
+	 * @see     vulc.vdf.VDFObject#deserialize(DataInputStream)
+	 */
 	public VDFObject deserialize(InputStream in) throws IOException {
 		return deserialize(new DataInputStream(in));
 	}
 
+	/**
+	 * Reads an object from a {@code FileInputStream} and adds the element to this object, without
+	 * removing contained elements.
+	 * 
+	 * @param   file  the file that will be read
+	 * @return  this object
+	 * 
+	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  IOException   if an IO error occurs
+	 * 
+	 * @see     vulc.vdf.VDFObject#deserialize(DataInputStream)
+	 */
 	public VDFObject deserialize(File file) throws IOException {
 		try(InputStream in = new BufferedInputStream(new FileInputStream(file))) {
 			return deserialize(in);
 		}
 	}
 
+	/**
+	 * Writes an object to a {@code DataOutputStream}.
+	 * 
+	 * @param   out  a data output stream
+	 * @throws  IOException  if an IO error occurs
+	 */
 	public void serialize(DataOutputStream out) throws IOException {
 		BinaryIO.serialize(out, this);
 	}
 
+	/**
+	 * Writes an object to an {@code OutputStream}.
+	 * 
+	 * @param   out  an output stream
+	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.VDFObject#serialize(DataOutputStream)
+	 */
 	public void serialize(OutputStream out) throws IOException {
 		serialize(new DataOutputStream(out));
 	}
 
+	/**
+	 * Writes an object to an {@code OutputStream}.
+	 * 
+	 * @param   file  the file to which the object will be written
+	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.VDFObject#serialize(DataOutputStream)
+	 */
 	public void serialize(File file) throws IOException {
 		try(OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
 			serialize(out);
@@ -275,6 +384,8 @@ public class VDFObject extends Element {
 	}
 
 	// text IO
+
+	// TODO documentation here
 
 	public VDFObject parse(String string) {
 		TextIO.deserialize(string, this);
