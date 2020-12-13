@@ -19,7 +19,7 @@ import vulc.vdf.io.text.TextIO;
 
 public class VDFList extends Element implements Iterable<Element> {
 
-	private final List<Element> list = new ArrayList<Element>();
+	private final ArrayList<Element> list = new ArrayList<Element>();
 
 	public int size() {
 		return list.size();
