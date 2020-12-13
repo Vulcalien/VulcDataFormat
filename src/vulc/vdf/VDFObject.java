@@ -57,16 +57,16 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Returns an {@code Element} or {@code null} if the object contains no element associated with
-	 * the specified key.
+	 * Returns the element associated with the specified key or {@code null} if this object contains
+	 * no element associated with the key.
 	 * 
 	 * <p>This should be avoided if the type is known. For example, if we know that the key 'x' is
 	 * associated to an {@code IntElement} then {@code getInt("x")} should be preferred, since it
 	 * will return a primitive {@code int} value.
 	 * 
 	 * @param   name  the key
-	 * @return  the element associated with the specified key, or null if the object contains no
-	 *          element associated with the specified key
+	 * @return  the element associated with the specified key, or null if this object contains no
+	 *          element associated with the key
 	 * @see     java.util.HashMap#get(Object)
 	 * @see     vulc.vdf.Element
 	 */
@@ -78,18 +78,20 @@ public class VDFObject extends Element {
 	 * Associates the given element with the given name. If this object contained an element
 	 * associated to that name, the old element is replaced.
 	 * 
-	 * @param  name  the key which the element will be associated
+	 * @param  name  the key that will be associated with the element
 	 * @param  e     the element
 	 * @see    java.util.HashMap#put(Object, Object)
 	 */
-	public void setElement(String name, Element e) { // TODO add return old value
+	// TODO add return old value
+	// TODO don't allow null for name and e
+	public void setElement(String name, Element e) {
 		map.put(name, e);
 	}
 
 	/**
 	 * Removes the element associated with the specified key if present.
 	 * 
-	 * @param  name  the key associated with the element to be removed
+	 * @param  name  the key associated with the element to remove
 	 * @see    java.util.HashMap#remove(Object)
 	 */
 	public void removeElement(String name) { // TODO add return removed value
@@ -106,7 +108,7 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Returns this object.
+	 * Returns this object as a Java {@code Object}.
 	 * 
 	 * @return  this object
 	 */
@@ -335,7 +337,7 @@ public class VDFObject extends Element {
 	 * Reads an object from a {@code FileInputStream} and adds the element to this object, without
 	 * removing contained elements.
 	 * 
-	 * @param   file  the file that will be read
+	 * @param   file  the file to read
 	 * @return  this object
 	 * 
 	 * @throws  EOFException  if the stream reaches the end before an object can be read
@@ -350,7 +352,7 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Writes an object to a {@code DataOutputStream}.
+	 * Writes this object to a {@code DataOutputStream}.
 	 * 
 	 * @param   out  a data output stream
 	 * @throws  IOException  if an IO error occurs
@@ -360,7 +362,7 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Writes an object to an {@code OutputStream}.
+	 * Writes this object to an {@code OutputStream}.
 	 * 
 	 * @param   out  an output stream
 	 * @throws  IOException  if an IO error occurs
@@ -371,9 +373,9 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Writes an object to an {@code OutputStream}.
+	 * Writes this object to a {@code FileOutputStream}.
 	 * 
-	 * @param   file  the file to which the object will be written
+	 * @param   file  the file to write this object to
 	 * @throws  IOException  if an IO error occurs
 	 * @see     vulc.vdf.VDFObject#serialize(DataOutputStream)
 	 */
