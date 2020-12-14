@@ -61,8 +61,8 @@ public class VDFObject {
 	 * no element associated with the key.
 	 * 
 	 * <p>This should be avoided if the type is known. For example, if we know that the key 'x' is
-	 * associated to an {@code IntElement} then {@code getInt("x")} should be preferred, since it
-	 * will return a primitive {@code int} value.
+	 * associated with an {@code Integer} element then {@code getInt("x")} should be preferred,
+	 * since it will return a primitive {@code int} value.
 	 * 
 	 * @param   name  the key
 	 * @return  the element associated with the specified key, or null if this object contains no
@@ -75,27 +75,30 @@ public class VDFObject {
 	}
 
 	/**
-	 * Associates the given element with the given name. If this object contained an element
-	 * associated to that name, the old element is replaced.
+	 * Associates the given element with the given key. If this object contained an element
+	 * associated with that key, the old element is replaced.
 	 * 
-	 * @param  name  the key that will be associated with the element
-	 * @param  e     the element to set
-	 * @see    java.util.HashMap#put(Object, Object)
+	 * @param   name  the key that will be associated with the element
+	 * @param   e     the element to set
+	 * @return  the old element associated with the specified key, or null if the key was not
+	 *          associated with any element
+	 * @see     java.util.HashMap#put(Object, Object)
 	 */
-	// TODO don't allow null for name and e
 	public Object setElement(String name, Object e) {
+		if(name == null) throw new NullPointerException();
 		return map.put(name, e);
-	} // TO-DOC add return
+	}
 
 	/**
 	 * Removes the element associated with the specified key if present.
 	 * 
-	 * @param  name  the key associated with the element to remove
-	 * @see    java.util.HashMap#remove(Object)
+	 * @param   name  the key associated with the element to remove
+	 * @return  the removed element, or null if the key was not associated with any element
+	 * @see     java.util.HashMap#remove(Object)
 	 */
 	public Object removeElement(String name) {
 		return map.remove(name);
-	} // TO-DOC add return
+	}
 
 	/**
 	 * Removes all the elements.

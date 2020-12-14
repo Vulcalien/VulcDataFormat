@@ -50,8 +50,8 @@ public class VDFList implements Iterable<Object> {
 	 * Returns the element at the specified position in this list.
 	 * 
 	 * <p>This should be avoided if the type is known. For example, if we know that the element at
-	 * position 3 is an {@code IntElement} then {@code getInt(3)} should be preferred, since it
-	 * will return a primitive {@code int} value.
+	 * position 3 is an {@code Integer} element then {@code getInt(3)} should be preferred, since
+	 * it will return a primitive {@code int} value.
 	 * 
 	 * @param   i  the index of the element to return
 	 * @return  the element at the specified position
@@ -67,19 +67,19 @@ public class VDFList implements Iterable<Object> {
 	 * 
 	 * @param   i  the index of the element to replace
 	 * @param   e  the element to store at the specified position
+	 * @return  the element that was replaced
 	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
 	 * @see     java.util.ArrayList#set(int, Object)
 	 */
 	public Object setElement(int i, Object e) {
 		return list.set(i, e);
-	} // TO-DOC add return
+	}
 
 	/**
 	 * Appends an element to the end of this list.
 	 * 
 	 * @param  e  the element to append
 	 */
-	// TODO don't allow null value for e
 	public void addElement(Object e) {
 		list.add(e);
 	}
@@ -87,13 +87,14 @@ public class VDFList implements Iterable<Object> {
 	/**
 	 * Removes the element at the specified position in this list.
 	 * 
-	 * @param  i  the index of the element to remove
+	 * @param   i  the index of the element to remove
+	 * @return  the removed element
 	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
-	 * @see    java.util.ArrayList#remove(int)
+	 * @see     java.util.ArrayList#remove(int)
 	 */
 	public Object removeElement(int i) {
 		return list.remove(i);
-	} // TO-DOC add return
+	}
 
 	/**
 	 * Removes all the elements.
