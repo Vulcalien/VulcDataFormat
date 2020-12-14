@@ -32,9 +32,9 @@ import java.util.Set;
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
 
-public class VDFObject extends Element {
+public class VDFObject {
 
-	private final HashMap<String, Element> map = new HashMap<String, Element>();
+	private final HashMap<String, Object> map = new HashMap<String, Object>();
 
 	/**
 	 * Returns the number of elements contained in this object.
@@ -70,7 +70,7 @@ public class VDFObject extends Element {
 	 * @see     java.util.HashMap#get(Object)
 	 * @see     vulc.vdf.Element
 	 */
-	public Element getElement(String name) {
+	public Object getElement(String name) {
 		return map.get(name);
 	}
 
@@ -82,11 +82,10 @@ public class VDFObject extends Element {
 	 * @param  e     the element to set
 	 * @see    java.util.HashMap#put(Object, Object)
 	 */
-	// TODO add return old value
 	// TODO don't allow null for name and e
-	public void setElement(String name, Element e) {
-		map.put(name, e);
-	}
+	public Object setElement(String name, Object e) {
+		return map.put(name, e);
+	} // TO-DOC add return
 
 	/**
 	 * Removes the element associated with the specified key if present.
@@ -94,9 +93,9 @@ public class VDFObject extends Element {
 	 * @param  name  the key associated with the element to remove
 	 * @see    java.util.HashMap#remove(Object)
 	 */
-	public void removeElement(String name) { // TODO add return removed value
-		map.remove(name);
-	}
+	public Object removeElement(String name) {
+		return map.remove(name);
+	} // TO-DOC add return
 
 	/**
 	 * Removes all the elements.
@@ -107,197 +106,184 @@ public class VDFObject extends Element {
 		map.clear();
 	}
 
-	/**
-	 * Returns this object as a Java {@code Object}.
-	 * 
-	 * @return  this object
-	 */
-	public Object get() {
-		return this;
-	}
-
 	// getters and setters
 
 	public boolean getBoolean(String name) {
-		return ((BooleanElement) getElement(name)).value;
+		return (Boolean) getElement(name);
 	}
 
-	public void setBoolean(String name, boolean value) {
-		// TODO add return old value
-		// something like
-		// return setElement(name, new BooleanElement(value)).value;
-		// should be enought
-		setElement(name, new BooleanElement(value));
+	public Object setBoolean(String name, boolean value) {
+		return setElement(name, value);
 	}
 
 	public byte getByte(String name) {
-		return ((ByteElement) getElement(name)).value;
+		return (Byte) getElement(name);
 	}
 
-	public void setByte(String name, byte value) {
-		setElement(name, new ByteElement(value));
+	public Object setByte(String name, byte value) {
+		return setElement(name, value);
 	}
 
 	public short getShort(String name) {
-		return ((ShortElement) getElement(name)).value;
+		return (Short) getElement(name);
 	}
 
-	public void setShort(String name, short value) {
-		setElement(name, new ShortElement(value));
+	public Object setShort(String name, short value) {
+		return setElement(name, value);
 	}
 
 	public int getInt(String name) {
-		return ((IntElement) getElement(name)).value;
+		return (Integer) getElement(name);
 	}
 
-	public void setInt(String name, int value) {
-		setElement(name, new IntElement(value));
+	public Object setInt(String name, int value) {
+		return setElement(name, value);
 	}
 
 	public long getLong(String name) {
-		return ((LongElement) getElement(name)).value;
+		return (Long) getElement(name);
 	}
 
-	public void setLong(String name, long value) {
-		setElement(name, new LongElement(value));
+	public Object setLong(String name, long value) {
+		return setElement(name, value);
 	}
 
 	public float getFloat(String name) {
-		return ((FloatElement) getElement(name)).value;
+		return (Float) getElement(name);
 	}
 
-	public void setFloat(String name, float value) {
-		setElement(name, new FloatElement(value));
+	public Object setFloat(String name, float value) {
+		return setElement(name, value);
 	}
 
 	public double getDouble(String name) {
-		return ((DoubleElement) getElement(name)).value;
+		return (Double) getElement(name);
 	}
 
-	public void setDouble(String name, double value) {
-		setElement(name, new DoubleElement(value));
+	public Object setDouble(String name, double value) {
+		return setElement(name, value);
 	}
 
 	public char getChar(String name) {
-		return ((CharElement) getElement(name)).value;
+		return (Character) getElement(name);
 	}
 
-	public void setChar(String name, char value) {
-		setElement(name, new CharElement(value));
+	public Object setChar(String name, char value) {
+		return setElement(name, value);
 	}
 
 	public String getString(String name) {
-		return ((StringElement) getElement(name)).value;
+		return (String) getElement(name);
 	}
 
-	public void setString(String name, String value) {
-		setElement(name, new StringElement(value));
+	public Object setString(String name, String value) {
+		return setElement(name, value);
 	}
 
 	public VDFObject getObject(String name) {
 		return (VDFObject) getElement(name);
 	}
 
-	public void setObject(String name, VDFObject objectElement) {
-		setElement(name, objectElement);
+	public Object setObject(String name, VDFObject objectElement) {
+		return setElement(name, objectElement);
 	}
 
 	public VDFList getList(String name) {
 		return (VDFList) getElement(name);
 	}
 
-	public void setList(String name, VDFList listElement) {
-		setElement(name, listElement);
+	public Object setList(String name, VDFList listElement) {
+		return setElement(name, listElement);
 	}
 
 	// arrays
 
 	public boolean[] getBooleanArray(String name) {
-		return ((BooleanArrayElement) getElement(name)).value;
+		return (boolean[]) getElement(name);
 	}
 
-	public void setBooleanArray(String name, boolean[] value) {
-		setElement(name, new BooleanArrayElement(value));
+	public Object setBooleanArray(String name, boolean[] value) {
+		return setElement(name, value);
 	}
 
 	public byte[] getByteArray(String name) {
-		return ((ByteArrayElement) getElement(name)).value;
+		return (byte[]) getElement(name);
 	}
 
-	public void setByteArray(String name, byte[] value) {
-		setElement(name, new ByteArrayElement(value));
+	public Object setByteArray(String name, byte[] value) {
+		return setElement(name, value);
 	}
 
 	public short[] getShortArray(String name) {
-		return ((ShortArrayElement) getElement(name)).value;
+		return (short[]) getElement(name);
 	}
 
-	public void setShortArray(String name, short[] value) {
-		setElement(name, new ShortArrayElement(value));
+	public Object setShortArray(String name, short[] value) {
+		return setElement(name, value);
 	}
 
 	public int[] getIntArray(String name) {
-		return ((IntArrayElement) getElement(name)).value;
+		return (int[]) getElement(name);
 	}
 
-	public void setIntArray(String name, int[] value) {
-		setElement(name, new IntArrayElement(value));
+	public Object setIntArray(String name, int[] value) {
+		return setElement(name, value);
 	}
 
 	public long[] getLongArray(String name) {
-		return ((LongArrayElement) getElement(name)).value;
+		return (long[]) getElement(name);
 	}
 
-	public void setLongArray(String name, long[] value) {
-		setElement(name, new LongArrayElement(value));
+	public Object setLongArray(String name, long[] value) {
+		return setElement(name, value);
 	}
 
 	public float[] getFloatArray(String name) {
-		return ((FloatArrayElement) getElement(name)).value;
+		return (float[]) getElement(name);
 	}
 
-	public void setFloatArray(String name, float[] value) {
-		setElement(name, new FloatArrayElement(value));
+	public Object setFloatArray(String name, float[] value) {
+		return setElement(name, value);
 	}
 
 	public double[] getDoubleArray(String name) {
-		return ((DoubleArrayElement) getElement(name)).value;
+		return (double[]) getElement(name);
 	}
 
-	public void setDoubleArray(String name, double[] value) {
-		setElement(name, new DoubleArrayElement(value));
+	public Object setDoubleArray(String name, double[] value) {
+		return setElement(name, value);
 	}
 
 	public char[] getCharArray(String name) {
-		return ((CharArrayElement) getElement(name)).value;
+		return (char[]) getElement(name);
 	}
 
-	public void setCharArray(String name, char[] value) {
-		setElement(name, new CharArrayElement(value));
+	public Object setCharArray(String name, char[] value) {
+		return setElement(name, value);
 	}
 
 	public String[] getStringArray(String name) {
-		return ((StringArrayElement) getElement(name)).value;
+		return (String[]) getElement(name);
 	}
 
-	public void setStringArray(String name, String[] value) {
-		setElement(name, new StringArrayElement(value));
+	public Object setStringArray(String name, String[] value) {
+		return setElement(name, value);
 	}
 
 	public VDFObject[] getObjectArray(String name) {
-		return ((ObjectArrayElement) getElement(name)).value;
+		return (VDFObject[]) getElement(name);
 	}
 
-	public void setObjectArray(String name, VDFObject[] value) {
-		setElement(name, new ObjectArrayElement(value));
+	public Object setObjectArray(String name, VDFObject[] value) {
+		return setElement(name, value);
 	}
 
 	public VDFList[] getListArray(String name) {
-		return ((ListArrayElement) getElement(name)).value;
+		return (VDFList[]) getElement(name);
 	}
 
-	public void setListArray(String name, VDFList[] value) {
-		setElement(name, new ListArrayElement(value));
+	public Object setListArray(String name, VDFList[] value) {
+		return setElement(name, value);
 	}
 
 	// binary IO

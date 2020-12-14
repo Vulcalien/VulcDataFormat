@@ -118,7 +118,7 @@ class TestVDFObject {
 	}
 
 	// returns: error message or null if o0 equals o1
-	private String compare(Element e0, Element e1, String name) {
+	private String compare(Object e0, Object e1, String name) {
 		if(e0.getClass() != e1.getClass()) return name + ": types are different";
 
 		if(e0 instanceof VDFObject) {
@@ -126,7 +126,7 @@ class TestVDFObject {
 			VDFObject obj1 = (VDFObject) e1;
 
 			for(String key : obj0.keySet()) {
-				Element v0, v1;
+				Object v0, v1;
 				try {
 					v0 = obj0.getElement(key);
 					v1 = obj1.getElement(key);
@@ -148,28 +148,25 @@ class TestVDFObject {
 				if(result != null) return result;
 			}
 		} else {
-			Object v0 = e0.get();
-			Object v1 = e1.get();
+			if(e0.getClass().isArray()) {
+				int len = Array.getLength(e0);
 
-			if(v0.getClass().isArray()) {
-				int len = Array.getLength(v0);
+				if(Array.getLength(e1) != len) return name + ": array length is different";
 
-				if(Array.getLength(v1) != len) return name + ": array length is different";
-
-				if(Element.class.isAssignableFrom(v0.getClass().getComponentType())) { // if it's an array of elements
+				if(Object.class.isAssignableFrom(e0.getClass().getComponentType())) { // if it's an array of elements
 					for(int i = 0; i < len; i++) {
-						String result = compare((Element) Array.get(v0, i),
-						                        (Element) Array.get(v1, i),
+						String result = compare(Array.get(e0, i),
+						                        Array.get(e1, i),
 						                        name + "[" + i + "]");
 						if(result != null) return result;
 					}
 				} else {
 					for(int i = 0; i < len; i++) {
-						if(!Array.get(v0, i).equals(Array.get(v1, i))) return name + "[" + i + "]" + " is different";
+						if(!Array.get(e0, i).equals(Array.get(e1, i))) return name + "[" + i + "]" + " is different";
 					}
 				}
 			} else {
-				if(!v0.equals(v1)) return name + " is different";
+				if(!e0.equals(e1)) return name + " is different";
 			}
 		}
 		return null;

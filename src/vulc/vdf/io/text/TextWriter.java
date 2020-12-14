@@ -5,16 +5,6 @@ import static vulc.vdf.io.text.TextTokens.*;
 
 import java.lang.reflect.Array;
 
-import vulc.vdf.BooleanElement;
-import vulc.vdf.ByteElement;
-import vulc.vdf.CharElement;
-import vulc.vdf.DoubleElement;
-import vulc.vdf.Element;
-import vulc.vdf.FloatElement;
-import vulc.vdf.IntElement;
-import vulc.vdf.LongElement;
-import vulc.vdf.ShortElement;
-import vulc.vdf.StringElement;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
@@ -28,15 +18,15 @@ class TextWriter extends VDFWriter<StringBuilder> {
 	private int indentation = 0;
 
 	protected TextWriter() {
-		add(e -> out.append(((BooleanElement) e).value), BOOLEAN);
-		add(e -> out.append(((ByteElement) e).value), BYTE);
-		add(e -> out.append(((ShortElement) e).value), SHORT);
-		add(e -> out.append(((IntElement) e).value), INT);
-		add(e -> out.append(((LongElement) e).value), LONG);
-		add(e -> out.append(((FloatElement) e).value), FLOAT);
-		add(e -> out.append(((DoubleElement) e).value), DOUBLE);
-		add(e -> out.append(CHAR_QUOTE + escapeChar(((CharElement) e).value) + CHAR_QUOTE), CHAR);
-		add(e -> out.append(STRING_QUOTE + escapeString(((StringElement) e).value) + STRING_QUOTE), STRING);
+		add(e -> out.append(e), BOOLEAN);
+		add(e -> out.append(e), BYTE);
+		add(e -> out.append(e), SHORT);
+		add(e -> out.append(e), INT);
+		add(e -> out.append(e), LONG);
+		add(e -> out.append(e), FLOAT);
+		add(e -> out.append(e), DOUBLE);
+		add(e -> out.append(CHAR_QUOTE + escapeChar((Character) e) + CHAR_QUOTE), CHAR);
+		add(e -> out.append(STRING_QUOTE + escapeString((String) e) + STRING_QUOTE), STRING);
 		add(e -> serializeObject((VDFObject) e), OBJECT);
 		add(e -> serializeList((VDFList) e), LIST);
 
@@ -68,7 +58,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 
 		indentation++;
 		for(String name : obj.keySet()) {
-			Element e = obj.getElement(name);
+			Object e = obj.getElement(name);
 
 			if(format) {
 				out.append(LF);
@@ -105,7 +95,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		out.append(OPEN_LIST);
 
 		indentation++;
-		for(Element e : list) {
+		for(Object e : list) {
 			if(format) {
 				out.append(LF);
 				addIndentation();
@@ -133,11 +123,10 @@ class TextWriter extends VDFWriter<StringBuilder> {
 	}
 
 	private <T> TextSerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
-		return e -> {
+		return array -> {
 			out.append(OPEN_ARRAY);
 
 			indentation++;
-			Object array = e.get();
 			int length = Array.getLength(array);
 			for(int i = 0; i < length; i++) {
 				if(i != 0) out.append(SEPARATOR);
@@ -199,7 +188,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 
 	private interface TextSerializer {
 
-		void serialize(Element e);
+		void serialize(Object e);
 
 	}
 

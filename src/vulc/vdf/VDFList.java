@@ -32,9 +32,9 @@ import java.util.Iterator;
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
 
-public class VDFList extends Element implements Iterable<Element> {
+public class VDFList implements Iterable<Object> {
 
-	private final ArrayList<Element> list = new ArrayList<Element>();
+	private final ArrayList<Object> list = new ArrayList<Object>();
 
 	/**
 	 * Returns the number of elements in this list.
@@ -58,7 +58,7 @@ public class VDFList extends Element implements Iterable<Element> {
 	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
 	 * @see     java.util.ArrayList#get(int)
 	 */
-	public Element getElement(int i) {
+	public Object getElement(int i) {
 		return list.get(i);
 	}
 
@@ -70,9 +70,9 @@ public class VDFList extends Element implements Iterable<Element> {
 	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
 	 * @see     java.util.ArrayList#set(int, Object)
 	 */
-	public void setElement(int i, Element e) { // TODO add return old value
-		list.set(i, e);
-	}
+	public Object setElement(int i, Object e) {
+		return list.set(i, e);
+	} // TO-DOC add return
 
 	/**
 	 * Appends an element to the end of this list.
@@ -80,7 +80,7 @@ public class VDFList extends Element implements Iterable<Element> {
 	 * @param  e  the element to append
 	 */
 	// TODO don't allow null value for e
-	public void addElement(Element e) {
+	public void addElement(Object e) {
 		list.add(e);
 	}
 
@@ -91,10 +91,9 @@ public class VDFList extends Element implements Iterable<Element> {
 	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
 	 * @see    java.util.ArrayList#remove(int)
 	 */
-	// TODO add return removed value
-	public void removeElement(int i) {
-		list.remove(i);
-	}
+	public Object removeElement(int i) {
+		return list.remove(i);
+	} // TO-DOC add return
 
 	/**
 	 * Removes all the elements.
@@ -106,15 +105,6 @@ public class VDFList extends Element implements Iterable<Element> {
 	}
 
 	/**
-	 * Returns this list as a Java {@code Object}.
-	 * 
-	 * @return  this list
-	 */
-	public Object get() {
-		return this;
-	}
-
-	/**
 	 * Returns an iterator over the elements in this list in proper sequence.
 	 * 
 	 * <p>The iterator is fail-fast.
@@ -123,126 +113,126 @@ public class VDFList extends Element implements Iterable<Element> {
 	 * @see     java.util.Iterator
 	 * @see     java.util.ArrayList#iterator()
 	 */
-	public Iterator<Element> iterator() {
+	public Iterator<Object> iterator() {
 		return list.iterator();
 	}
 
 	// getters and setters
 
 	public boolean getBoolean(int i) {
-		return ((BooleanElement) getElement(i)).value;
+		return (Boolean) getElement(i);
 	}
 
-	public void setBoolean(int i, boolean value) {
-		setElement(i, new BooleanElement(value));
+	public Object setBoolean(int i, boolean value) {
+		return setElement(i, value);
 	}
 
 	public void addBoolean(boolean value) {
-		addElement(new BooleanElement(value));
+		addElement(value);
 	}
 
 	public byte getByte(int i) {
-		return ((ByteElement) getElement(i)).value;
+		return (Byte) getElement(i);
 	}
 
-	public void setByte(int i, byte value) {
-		setElement(i, new ByteElement(value));
+	public Object setByte(int i, byte value) {
+		return setElement(i, value);
 	}
 
 	public void addByte(byte value) {
-		addElement(new ByteElement(value));
+		addElement(value);
 	}
 
 	public short getShort(int i) {
-		return ((ShortElement) getElement(i)).value;
+		return (Short) getElement(i);
 	}
 
-	public void setShort(int i, short value) {
-		setElement(i, new ShortElement(value));
+	public Object setShort(int i, short value) {
+		return setElement(i, value);
 	}
 
 	public void addShort(short value) {
-		addElement(new ShortElement(value));
+		addElement(value);
 	}
 
 	public int getInt(int i) {
-		return ((IntElement) getElement(i)).value;
+		return (Integer) getElement(i);
 	}
 
-	public void setInt(int i, int value) {
-		setElement(i, new IntElement(value));
+	public Object setInt(int i, int value) {
+		return setElement(i, value);
 	}
 
 	public void addInt(int value) {
-		addElement(new IntElement(value));
+		addElement(value);
 	}
 
 	public long getLong(int i) {
-		return ((LongElement) getElement(i)).value;
+		return (Long) getElement(i);
 	}
 
-	public void setLong(int i, long value) {
-		setElement(i, new LongElement(value));
+	public Object setLong(int i, long value) {
+		return setElement(i, value);
 	}
 
 	public void addLong(long value) {
-		addElement(new LongElement(value));
+		addElement(value);
 	}
 
 	public float getFloat(int i) {
-		return ((FloatElement) getElement(i)).value;
+		return (Float) getElement(i);
 	}
 
-	public void setFloat(int i, float value) {
-		setElement(i, new FloatElement(value));
+	public Object setFloat(int i, float value) {
+		return setElement(i, value);
 	}
 
 	public void addFloat(float value) {
-		addElement(new FloatElement(value));
+		addElement(value);
 	}
 
 	public double getDouble(int i) {
-		return ((DoubleElement) getElement(i)).value;
+		return (Double) getElement(i);
 	}
 
-	public void setDouble(int i, double value) {
-		setElement(i, new DoubleElement(value));
+	public Object setDouble(int i, double value) {
+		return setElement(i, value);
 	}
 
 	public void addDouble(double value) {
-		addElement(new DoubleElement(value));
+		addElement(value);
 	}
 
 	public char getChar(int i) {
-		return ((CharElement) getElement(i)).value;
+		return (Character) getElement(i);
 	}
 
-	public void setChar(int i, char value) {
-		setElement(i, new CharElement(value));
+	public Object setChar(int i, char value) {
+		return setElement(i, value);
 	}
 
 	public void addChar(char value) {
-		addElement(new CharElement(value));
+		addElement(value);
 	}
 
 	public String getString(int i) {
-		return ((StringElement) getElement(i)).value;
+		return (String) getElement(i);
 	}
 
-	public void setString(int i, String value) {
-		setElement(i, new StringElement(value));
+	public Object setString(int i, String value) {
+		return setElement(i, value);
 	}
 
 	public void addString(String value) {
-		addElement(new StringElement(value));
+		addElement(value);
 	}
 
 	public VDFObject getObject(int i) {
 		return (VDFObject) getElement(i);
 	}
 
-	public void setObject(int i, VDFObject objectElement) {
-		setElement(i, objectElement);
+	public Object setObject(int i, VDFObject objectElement) {
+		return setElement(i, objectElement);
 	}
 
 	public void addObject(VDFObject objectElement) {
@@ -253,8 +243,8 @@ public class VDFList extends Element implements Iterable<Element> {
 		return (VDFList) getElement(i);
 	}
 
-	public void setList(int i, VDFList listElement) {
-		setElement(i, listElement);
+	public Object setList(int i, VDFList listElement) {
+		return setElement(i, listElement);
 	}
 
 	public void addList(VDFList listElement) {
@@ -264,135 +254,135 @@ public class VDFList extends Element implements Iterable<Element> {
 	// arrays
 
 	public boolean[] getBooleanArray(int i) {
-		return ((BooleanArrayElement) getElement(i)).value;
+		return (boolean[]) getElement(i);
 	}
 
-	public void setBooleanArray(int i, boolean[] value) {
-		setElement(i, new BooleanArrayElement(value));
+	public Object setBooleanArray(int i, boolean[] value) {
+		return setElement(i, value);
 	}
 
 	public void addBooleanArray(boolean[] value) {
-		addElement(new BooleanArrayElement(value));
+		addElement(value);
 	}
 
 	public byte[] getByteArray(int i) {
-		return ((ByteArrayElement) getElement(i)).value;
+		return (byte[]) getElement(i);
 	}
 
-	public void setByteArray(int i, byte[] value) {
-		setElement(i, new ByteArrayElement(value));
+	public Object setByteArray(int i, byte[] value) {
+		return setElement(i, value);
 	}
 
 	public void addByteArray(byte[] value) {
-		addElement(new ByteArrayElement(value));
+		addElement(value);
 	}
 
 	public short[] getShortArray(int i) {
-		return ((ShortArrayElement) getElement(i)).value;
+		return (short[]) getElement(i);
 	}
 
-	public void setShortArray(int i, short[] value) {
-		setElement(i, new ShortArrayElement(value));
+	public Object setShortArray(int i, short[] value) {
+		return setElement(i, value);
 	}
 
 	public void addShortArray(short[] value) {
-		addElement(new ShortArrayElement(value));
+		addElement(value);
 	}
 
 	public int[] getIntArray(int i) {
-		return ((IntArrayElement) getElement(i)).value;
+		return (int[]) getElement(i);
 	}
 
-	public void setIntArray(int i, int[] value) {
-		setElement(i, new IntArrayElement(value));
+	public Object setIntArray(int i, int[] value) {
+		return setElement(i, value);
 	}
 
 	public void addIntArray(int[] value) {
-		addElement(new IntArrayElement(value));
+		addElement(value);
 	}
 
 	public long[] getLongArray(int i) {
-		return ((LongArrayElement) getElement(i)).value;
+		return (long[]) getElement(i);
 	}
 
-	public void setLongArray(int i, long[] value) {
-		setElement(i, new LongArrayElement(value));
+	public Object setLongArray(int i, long[] value) {
+		return setElement(i, value);
 	}
 
 	public void addLongArray(long[] value) {
-		addElement(new LongArrayElement(value));
+		addElement(value);
 	}
 
 	public float[] getFloatArray(int i) {
-		return ((FloatArrayElement) getElement(i)).value;
+		return (float[]) getElement(i);
 	}
 
-	public void setFloatArray(int i, float[] value) {
-		setElement(i, new FloatArrayElement(value));
+	public Object setFloatArray(int i, float[] value) {
+		return setElement(i, value);
 	}
 
 	public void addFloatArray(float[] value) {
-		addElement(new FloatArrayElement(value));
+		addElement(value);
 	}
 
 	public double[] getDoubleArray(int i) {
-		return ((DoubleArrayElement) getElement(i)).value;
+		return (double[]) getElement(i);
 	}
 
-	public void setDoubleArray(int i, double[] value) {
-		setElement(i, new DoubleArrayElement(value));
+	public Object setDoubleArray(int i, double[] value) {
+		return setElement(i, value);
 	}
 
 	public void addDoubleArray(double[] value) {
-		addElement(new DoubleArrayElement(value));
+		addElement(value);
 	}
 
 	public char[] getCharArray(int i) {
-		return ((CharArrayElement) getElement(i)).value;
+		return (char[]) getElement(i);
 	}
 
-	public void setCharArray(int i, char[] value) {
-		setElement(i, new CharArrayElement(value));
+	public Object setCharArray(int i, char[] value) {
+		return setElement(i, value);
 	}
 
 	public void addCharArray(char[] value) {
-		addElement(new CharArrayElement(value));
+		addElement(value);
 	}
 
 	public String[] getStringArray(int i) {
-		return ((StringArrayElement) getElement(i)).value;
+		return (String[]) getElement(i);
 	}
 
-	public void setStringArray(int i, String[] value) {
-		setElement(i, new StringArrayElement(value));
+	public Object setStringArray(int i, String[] value) {
+		return setElement(i, value);
 	}
 
 	public void addStringArray(String[] value) {
-		addElement(new StringArrayElement(value));
+		addElement(value);
 	}
 
 	public VDFObject[] getObjectArray(int i) {
-		return ((ObjectArrayElement) getElement(i)).value;
+		return (VDFObject[]) getElement(i);
 	}
 
-	public void setObjectArray(int i, VDFObject[] value) {
-		setElement(i, new ObjectArrayElement(value));
+	public Object setObjectArray(int i, VDFObject[] value) {
+		return setElement(i, value);
 	}
 
 	public void addObjectArray(VDFObject[] value) {
-		addElement(new ObjectArrayElement(value));
+		addElement(value);
 	}
 
 	public VDFList[] getListArray(int i) {
-		return ((ListArrayElement) getElement(i)).value;
+		return (VDFList[]) getElement(i);
 	}
 
-	public void setListArray(int i, VDFList[] value) {
-		setElement(i, new ListArrayElement(value));
+	public Object setListArray(int i, VDFList[] value) {
+		return setElement(i, value);
 	}
 
 	public void addListArray(VDFList[] value) {
-		addElement(new ListArrayElement(value));
+		addElement(value);
 	}
 
 	// binary IO

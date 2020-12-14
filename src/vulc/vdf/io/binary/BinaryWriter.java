@@ -6,16 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 
-import vulc.vdf.BooleanElement;
-import vulc.vdf.ByteElement;
-import vulc.vdf.CharElement;
-import vulc.vdf.DoubleElement;
-import vulc.vdf.Element;
-import vulc.vdf.FloatElement;
-import vulc.vdf.IntElement;
-import vulc.vdf.LongElement;
-import vulc.vdf.ShortElement;
-import vulc.vdf.StringElement;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
@@ -26,15 +16,15 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 	private final BinarySerializer[] serializers = new BinarySerializer[VDFCodes.TYPES];
 
 	protected BinaryWriter() {
-		add(e -> out.writeBoolean(((BooleanElement) e).value), BOOLEAN);
-		add(e -> out.writeByte(((ByteElement) e).value), BYTE);
-		add(e -> out.writeShort(((ShortElement) e).value), SHORT);
-		add(e -> out.writeInt(((IntElement) e).value), INT);
-		add(e -> out.writeLong(((LongElement) e).value), LONG);
-		add(e -> out.writeFloat(((FloatElement) e).value), FLOAT);
-		add(e -> out.writeDouble(((DoubleElement) e).value), DOUBLE);
-		add(e -> out.writeChar(((CharElement) e).value), CHAR);
-		add(e -> out.writeUTF(((StringElement) e).value), STRING);
+		add(e -> out.writeBoolean((Boolean) e), BOOLEAN);
+		add(e -> out.writeByte((Byte) e), BYTE);
+		add(e -> out.writeShort((Short) e), SHORT);
+		add(e -> out.writeInt((Integer) e), INT);
+		add(e -> out.writeLong((Long) e), LONG);
+		add(e -> out.writeFloat((Float) e), FLOAT);
+		add(e -> out.writeDouble((Double) e), DOUBLE);
+		add(e -> out.writeChar((Character) e), CHAR);
+		add(e -> out.writeUTF((String) e), STRING);
 		add(e -> serializeObject((VDFObject) e), OBJECT);
 		add(e -> serializeList((VDFList) e), LIST);
 
@@ -57,7 +47,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 
 	public void serializeObject(VDFObject obj) throws IOException {
 		for(String name : obj.keySet()) {
-			Element e = obj.getElement(name);
+			Object e = obj.getElement(name);
 
 			byte code = VDFCodes.get(e.getClass());
 
@@ -70,7 +60,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 	}
 
 	public void serializeList(VDFList list) throws IOException {
-		for(Element e : list) {
+		for(Object e : list) {
 			byte code = VDFCodes.get(e.getClass());
 
 			out.writeByte(code);						// write code
@@ -80,8 +70,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 	}
 
 	private <T> BinarySerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
-		return e -> {
-			Object array = e.get();
+		return array -> {
 			int length = Array.getLength(array);
 
 			out.writeInt(length);
@@ -93,7 +82,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 
 	private interface BinarySerializer {
 
-		void serialize(Element e) throws IOException;
+		void serialize(Object e) throws IOException;
 
 	}
 

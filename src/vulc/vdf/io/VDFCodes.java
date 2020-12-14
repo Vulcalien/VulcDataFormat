@@ -2,26 +2,6 @@ package vulc.vdf.io;
 
 import java.util.HashMap;
 
-import vulc.vdf.BooleanArrayElement;
-import vulc.vdf.BooleanElement;
-import vulc.vdf.ByteArrayElement;
-import vulc.vdf.ByteElement;
-import vulc.vdf.CharArrayElement;
-import vulc.vdf.CharElement;
-import vulc.vdf.DoubleArrayElement;
-import vulc.vdf.DoubleElement;
-import vulc.vdf.FloatArrayElement;
-import vulc.vdf.FloatElement;
-import vulc.vdf.IntArrayElement;
-import vulc.vdf.IntElement;
-import vulc.vdf.ListArrayElement;
-import vulc.vdf.LongArrayElement;
-import vulc.vdf.LongElement;
-import vulc.vdf.ObjectArrayElement;
-import vulc.vdf.ShortArrayElement;
-import vulc.vdf.ShortElement;
-import vulc.vdf.StringArrayElement;
-import vulc.vdf.StringElement;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 
@@ -56,29 +36,29 @@ public abstract class VDFCodes {
 	private static final HashMap<Class<?>, Byte> CODES = new HashMap<Class<?>, Byte>();
 
 	static {
-		CODES.put(BooleanElement.class, BOOLEAN);
-		CODES.put(ByteElement.class, BYTE);
-		CODES.put(ShortElement.class, SHORT);
-		CODES.put(IntElement.class, INT);
-		CODES.put(LongElement.class, LONG);
-		CODES.put(FloatElement.class, FLOAT);
-		CODES.put(DoubleElement.class, DOUBLE);
-		CODES.put(CharElement.class, CHAR);
-		CODES.put(StringElement.class, STRING);
+		CODES.put(Boolean.class, BOOLEAN);
+		CODES.put(Byte.class, BYTE);
+		CODES.put(Short.class, SHORT);
+		CODES.put(Integer.class, INT);
+		CODES.put(Long.class, LONG);
+		CODES.put(Float.class, FLOAT);
+		CODES.put(Double.class, DOUBLE);
+		CODES.put(Character.class, CHAR);
+		CODES.put(String.class, STRING);
 		CODES.put(VDFObject.class, OBJECT);
 		CODES.put(VDFList.class, LIST);
 
-		CODES.put(BooleanArrayElement.class, BOOLEAN_A);
-		CODES.put(ByteArrayElement.class, BYTE_A);
-		CODES.put(ShortArrayElement.class, SHORT_A);
-		CODES.put(IntArrayElement.class, INT_A);
-		CODES.put(LongArrayElement.class, LONG_A);
-		CODES.put(FloatArrayElement.class, FLOAT_A);
-		CODES.put(DoubleArrayElement.class, DOUBLE_A);
-		CODES.put(CharArrayElement.class, CHAR_A);
-		CODES.put(StringArrayElement.class, STRING_A);
-		CODES.put(ObjectArrayElement.class, OBJECT_A);
-		CODES.put(ListArrayElement.class, LIST_A);
+		CODES.put(boolean[].class, BOOLEAN_A);
+		CODES.put(byte[].class, BYTE_A);
+		CODES.put(short[].class, SHORT_A);
+		CODES.put(int[].class, INT_A);
+		CODES.put(long[].class, LONG_A);
+		CODES.put(float[].class, FLOAT_A);
+		CODES.put(double[].class, DOUBLE_A);
+		CODES.put(char[].class, CHAR_A);
+		CODES.put(String[].class, STRING_A);
+		CODES.put(VDFObject[].class, OBJECT_A);
+		CODES.put(VDFList[].class, LIST_A);
 	}
 
 	public static byte get(Object key) {

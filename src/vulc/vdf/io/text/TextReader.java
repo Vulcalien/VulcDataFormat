@@ -5,27 +5,6 @@ import static vulc.vdf.io.text.TextTokens.*;
 
 import java.lang.reflect.Array;
 
-import vulc.vdf.BooleanArrayElement;
-import vulc.vdf.BooleanElement;
-import vulc.vdf.ByteArrayElement;
-import vulc.vdf.ByteElement;
-import vulc.vdf.CharArrayElement;
-import vulc.vdf.CharElement;
-import vulc.vdf.DoubleArrayElement;
-import vulc.vdf.DoubleElement;
-import vulc.vdf.Element;
-import vulc.vdf.FloatArrayElement;
-import vulc.vdf.FloatElement;
-import vulc.vdf.IntArrayElement;
-import vulc.vdf.IntElement;
-import vulc.vdf.ListArrayElement;
-import vulc.vdf.LongArrayElement;
-import vulc.vdf.LongElement;
-import vulc.vdf.ObjectArrayElement;
-import vulc.vdf.ShortArrayElement;
-import vulc.vdf.ShortElement;
-import vulc.vdf.StringArrayElement;
-import vulc.vdf.StringElement;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 import vulc.vdf.io.VDFCodes;
@@ -43,15 +22,15 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		    CR, LF
 		};
 
-		add(() -> new BooleanElement(Boolean.valueOf(in.readUntil(endOfValue))), BOOLEAN);
-		add(() -> new ByteElement(in.readNumber(Byte.class, endOfValue, Byte::valueOf)), BYTE);
-		add(() -> new ShortElement(in.readNumber(Short.class, endOfValue, Short::valueOf)), SHORT);
-		add(() -> new IntElement(in.readNumber(Integer.class, endOfValue, Integer::valueOf)), INT);
-		add(() -> new LongElement(in.readNumber(Long.class, endOfValue, Long::valueOf)), LONG);
-		add(() -> new FloatElement(Float.valueOf(in.readUntil(endOfValue))), FLOAT);
-		add(() -> new DoubleElement(Double.valueOf(in.readUntil(endOfValue))), DOUBLE);
-		add(() -> new CharElement(in.readChar()), CHAR);
-		add(() -> new StringElement(in.readString()), STRING);
+		add(() -> Boolean.valueOf(in.readUntil(endOfValue)), BOOLEAN);
+		add(() -> in.readNumber(Byte.class, endOfValue, Byte::valueOf), BYTE);
+		add(() -> in.readNumber(Short.class, endOfValue, Short::valueOf), SHORT);
+		add(() -> in.readNumber(Integer.class, endOfValue, Integer::valueOf), INT);
+		add(() -> in.readNumber(Long.class, endOfValue, Long::valueOf), LONG);
+		add(() -> Float.valueOf(in.readUntil(endOfValue)), FLOAT);
+		add(() -> Double.valueOf(in.readUntil(endOfValue)), DOUBLE);
+		add(() -> in.readChar(), CHAR);
+		add(() -> in.readString(), STRING);
 		add(() -> deserializeObject(new VDFObject()), OBJECT);
 		add(() -> deserializeList(new VDFList()), LIST);
 
@@ -61,48 +40,41 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		    CR, LF
 		};
 
-		add(getArrayReader(boolean[].class, BooleanArrayElement::new,
-		                   (array, i) -> array[i] = Boolean.valueOf(in.readUntil(arrayEndOfValue))),
+		add(getArrayReader(boolean[].class, (array, i) -> array[i] = Boolean.valueOf(in.readUntil(arrayEndOfValue))),
 		    BOOLEAN_A);
 
-		add(getArrayReader(byte[].class, ByteArrayElement::new,
+		add(getArrayReader(byte[].class,
 		                   (array, i) -> array[i] = in.readNumber(Byte.class, arrayEndOfValue, Byte::valueOf)),
 		    BYTE_A);
 
-		add(getArrayReader(short[].class, ShortArrayElement::new,
+		add(getArrayReader(short[].class,
 		                   (array, i) -> array[i] = in.readNumber(Short.class, arrayEndOfValue, Short::valueOf)),
 		    SHORT_A);
 
-		add(getArrayReader(int[].class, IntArrayElement::new,
+		add(getArrayReader(int[].class,
 		                   (array, i) -> array[i] = in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf)),
 		    INT_A);
 
-		add(getArrayReader(long[].class, LongArrayElement::new,
+		add(getArrayReader(long[].class,
 		                   (array, i) -> array[i] = in.readNumber(Long.class, arrayEndOfValue, Long::valueOf)),
 		    LONG_A);
 
-		add(getArrayReader(float[].class, FloatArrayElement::new,
-		                   (array, i) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue))),
+		add(getArrayReader(float[].class, (array, i) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue))),
 		    FLOAT_A);
 
-		add(getArrayReader(double[].class, DoubleArrayElement::new,
-		                   (array, i) -> array[i] = Double.valueOf(in.readUntil(arrayEndOfValue))),
+		add(getArrayReader(double[].class, (array, i) -> array[i] = Double.valueOf(in.readUntil(arrayEndOfValue))),
 		    DOUBLE_A);
 
-		add(getArrayReader(char[].class, CharArrayElement::new,
-		                   (array, i) -> array[i] = in.readChar()),
+		add(getArrayReader(char[].class, (array, i) -> array[i] = in.readChar()),
 		    CHAR_A);
 
-		add(getArrayReader(String[].class, StringArrayElement::new,
-		                   (array, i) -> array[i] = in.readString()),
+		add(getArrayReader(String[].class, (array, i) -> array[i] = in.readString()),
 		    STRING_A);
 
-		add(getArrayReader(VDFObject[].class, ObjectArrayElement::new,
-		                   (array, i) -> array[i] = deserializeObject(new VDFObject())),
+		add(getArrayReader(VDFObject[].class, (array, i) -> array[i] = deserializeObject(new VDFObject())),
 		    OBJECT_A);
 
-		add(getArrayReader(VDFList[].class, ListArrayElement::new,
-		                   (array, i) -> array[i] = deserializeList(new VDFList())),
+		add(getArrayReader(VDFList[].class, (array, i) -> array[i] = deserializeList(new VDFList())),
 		    LIST_A);
 	}
 
@@ -161,7 +133,6 @@ class TextReader extends VDFReader<StringAnalyzer> {
 	}
 
 	private <T, E> ElementDeserializer getArrayReader(Class<T> type,
-	                                                  ArrayMaker<T> arrayMaker,
 	                                                  ArrayElementDeserializer<T> elementDeserializer) {
 		return () -> {
 			in.checkToken(OPEN_ARRAY);
@@ -183,7 +154,7 @@ class TextReader extends VDFReader<StringAnalyzer> {
 					length += 8;
 				}
 
-				elementDeserializer.add(array, i++);
+				elementDeserializer.deserialize(array, i++);
 				in.skipWhitespaces();
 
 				char token = in.read();
@@ -193,25 +164,19 @@ class TextReader extends VDFReader<StringAnalyzer> {
 
 			T result = type.cast(Array.newInstance(type.getComponentType(), i));
 			System.arraycopy(array, 0, result, 0, i);
-			return arrayMaker.make(result);
+			return result;
 		};
 	}
 
 	private interface ElementDeserializer {
 
-		Element deserialize();
-
-	}
-
-	private interface ArrayMaker<T> {
-
-		Element make(T array);
+		Object deserialize();
 
 	}
 
 	private interface ArrayElementDeserializer<T> {
 
-		void add(T array, int i);
+		void deserialize(T array, int i);
 
 	}
 
