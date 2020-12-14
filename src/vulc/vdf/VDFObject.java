@@ -79,7 +79,7 @@ public class VDFObject extends Element {
 	 * associated to that name, the old element is replaced.
 	 * 
 	 * @param  name  the key that will be associated with the element
-	 * @param  e     the element
+	 * @param  e     the element to set
 	 * @see    java.util.HashMap#put(Object, Object)
 	 */
 	// TODO add return old value

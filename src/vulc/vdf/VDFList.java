@@ -40,13 +40,21 @@ public class VDFList extends Element implements Iterable<Element> {
 	 * 
 	 * @param   i  the index of the element to return
 	 * @return  the element at the specified position
-	 * @throws  IndexOutOfBoundsException  if
+	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
+	 * @see     java.util.ArrayList#get(int)
 	 */
 	public Element getElement(int i) {
 		return list.get(i);
 	}
 
-	// TO-DOC
+	/**
+	 * Replaces the element at the specified position in this list with the specified element.
+	 * 
+	 * @param   i  the index of the element to replace
+	 * @param   e  the element to store at the specified position
+	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
+	 * @see     java.util.ArrayList#set(int, Object)
+	 */
 	public void setElement(int i, Element e) { // TODO add return old value
 		list.set(i, e);
 	}
@@ -61,7 +69,13 @@ public class VDFList extends Element implements Iterable<Element> {
 		list.add(e);
 	}
 
-	// TO-DOC
+	/**
+	 * Removes the element at the specified position in this list.
+	 * 
+	 * @param  i  the index of the element to remove
+	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
+	 * @see    java.util.ArrayList#remove(int)
+	 */
 	// TODO add return removed value
 	public void removeElement(int i) {
 		list.remove(i);
@@ -85,7 +99,15 @@ public class VDFList extends Element implements Iterable<Element> {
 		return this;
 	}
 
-	// TO-DOC
+	/**
+	 * Returns an iterator over the elements in this list in proper sequence.
+	 * 
+	 * <p>The iterator is fail-fast.
+	 * 
+	 * @return  an iterator over the elements in this list in proper sequence
+	 * @see     java.util.Iterator
+	 * @see     java.util.ArrayList#iterator()
+	 */
 	public Iterator<Element> iterator() {
 		return list.iterator();
 	}
