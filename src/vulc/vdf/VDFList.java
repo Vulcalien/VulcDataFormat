@@ -383,13 +383,13 @@ public class VDFList extends Element implements Iterable<Element> {
 	// binary IO
 
 	/**
-	 * Reads a list from a {@code DataInputStream} and adds the element to this object, without
+	 * Reads a list from a {@code DataInputStream} and adds the elements to this list, without
 	 * removing contained elements.
 	 * 
 	 * @param   in  a data input stream
-	 * @return  this object
+	 * @return  this list
 	 * 
-	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  EOFException  if the stream reaches the end before a list can be read
 	 * @throws  IOException   if an IO error occurs
 	 */
 	public VDFList deserialize(DataInputStream in) throws IOException {
@@ -398,13 +398,13 @@ public class VDFList extends Element implements Iterable<Element> {
 	}
 
 	/**
-	 * Reads a list from an {@code InputStream} and adds the element to this object, without
+	 * Reads a list from an {@code InputStream} and adds the elements to this list, without
 	 * removing contained elements.
 	 * 
 	 * @param   in  an input stream
-	 * @return  this object
+	 * @return  this list
 	 * 
-	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  EOFException  if the stream reaches the end before a list can be read
 	 * @throws  IOException   if an IO error occurs
 	 * 
 	 * @see     vulc.vdf.VDFList#deserialize(DataInputStream)
@@ -414,13 +414,13 @@ public class VDFList extends Element implements Iterable<Element> {
 	}
 
 	/**
-	 * Reads a list from a {@code FileInputStream} and adds the element to this object, without
-	 * removing contained elements.
+	 * Reads a list from a file and adds the elements to this list, without removing contained
+	 * elements.
 	 * 
 	 * @param   file  the file to read
-	 * @return  this object
+	 * @return  this list
 	 * 
-	 * @throws  EOFException  if the stream reaches the end before an object can be read
+	 * @throws  EOFException  if the stream reaches the end before a list can be read
 	 * @throws  IOException   if an IO error occurs
 	 * 
 	 * @see     vulc.vdf.VDFList#deserialize(DataInputStream)
@@ -453,7 +453,7 @@ public class VDFList extends Element implements Iterable<Element> {
 	}
 
 	/**
-	 * Writes this list to a {@code FileOutputStream}.
+	 * Writes this list to a file.
 	 * 
 	 * @param   file  the file to write this list to
 	 * @throws  IOException  if an IO error occurs
@@ -467,15 +467,39 @@ public class VDFList extends Element implements Iterable<Element> {
 
 	// text IO
 
+	/**
+	 * Reads a list from a {@code String} and adds the elements to this list, without removing
+	 * contained elements.
+	 * 
+	 * @param   string  the text to parse
+	 * @return  this list
+	 */
 	public VDFList parse(String string) {
 		TextIO.deserialize(string, this);
 		return this;
 	}
 
+	/**
+	 * Returns a string representation of this list.
+	 * The flag {@code format} states if the string should be formatted or not.
+	 * 
+	 * <p>{@code toString()} can be used instead of {@code toString(false)}.
+	 * 
+	 * @param   format  a flag stating if the output string should be formatted or not
+	 *                  (true = formatted, false = unformatted)
+	 * @return  a string representation of this list
+	 */
 	public String toString(boolean format) {
 		return TextIO.stringify(this, format);
 	}
 
+	/**
+	 * Returns an unformatted string representation of this list.
+	 * This method is equivalent to {@code toString(false)}.
+	 * 
+	 * @return  an unformatted string representation of this list
+	 * @see     vulc.vdf.VDFList#toString(boolean)
+	 */
 	public String toString() {
 		return toString(false);
 	}

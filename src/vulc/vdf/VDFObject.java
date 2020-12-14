@@ -303,8 +303,11 @@ public class VDFObject extends Element {
 	// binary IO
 
 	/**
-	 * Reads an object from a {@code DataInputStream} and adds the element to this object, without
-	 * removing contained elements.
+	 * Reads an object from a {@code DataInputStream} and adds the elements, each associated with
+	 * its key, to this object.
+	 * 
+	 * <p>This method does not empty this object, but it may replace an old value if a new value
+	 * associated with the same key is found.
 	 * 
 	 * @param   in  a data input stream
 	 * @return  this object
@@ -318,8 +321,11 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Reads an object from a {@code InputStream} and adds the element to this object, without
-	 * removing contained elements.
+	 * Reads an object from a {@code InputStream} and adds the elements, each associated with its
+	 * key, to this object.
+	 * 
+	 * <p>This method does not empty this object, but it may replace an old value if a new value
+	 * associated with the same key is found.
 	 * 
 	 * @param   in  an input stream
 	 * @return  this object
@@ -334,8 +340,11 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Reads an object from a {@code FileInputStream} and adds the element to this object, without
-	 * removing contained elements.
+	 * Reads an object from a file and adds the elements, each associated with its key, to this
+	 * object.
+	 * 
+	 * <p>This method does not empty this object, but it may replace an old value if a new value
+	 * associated with the same key is found.
 	 * 
 	 * @param   file  the file to read
 	 * @return  this object
@@ -373,7 +382,7 @@ public class VDFObject extends Element {
 	}
 
 	/**
-	 * Writes this object to a {@code FileOutputStream}.
+	 * Writes this object to a file.
 	 * 
 	 * @param   file  the file to write this object to
 	 * @throws  IOException  if an IO error occurs
@@ -387,17 +396,42 @@ public class VDFObject extends Element {
 
 	// text IO
 
-	// TODO documentation here
-
+	/**
+	 * Reads an object from a {@code String} and adds the elements, each associated with its key,
+	 * to this object.
+	 * 
+	 * <p>This method does not empty this object, but it may replace an old value if a new value
+	 * associated with the same key is found.
+	 * 
+	 * @param   string  the text to parse
+	 * @return  this object
+	 */
 	public VDFObject parse(String string) {
 		TextIO.deserialize(string, this);
 		return this;
 	}
 
+	/**
+	 * Returns a string representation of this object.
+	 * The flag {@code format} states if the string should be formatted or not.
+	 * 
+	 * <p>{@code toString()} can be used instead of {@code toString(false)}.
+	 * 
+	 * @param   format  a flag stating if the output string should be formatted or not
+	 *                  (true = formatted, false = unformatted)
+	 * @return  a string representation of this object
+	 */
 	public String toString(boolean format) {
 		return TextIO.stringify(this, format);
 	}
 
+	/**
+	 * Returns an unformatted string representation of this object.
+	 * This method is equivalent to {@code toString(false)}.
+	 * 
+	 * @return  an unformatted string representation of this object
+	 * @see     vulc.vdf.VDFObject#toString(boolean)
+	 */
 	public String toString() {
 		return toString(false);
 	}
