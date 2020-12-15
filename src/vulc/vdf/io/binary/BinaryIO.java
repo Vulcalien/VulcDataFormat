@@ -7,7 +7,10 @@ import java.io.IOException;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 
-public abstract class BinaryIO {
+public final class BinaryIO {
+
+	private BinaryIO() {
+	}
 
 	private static BinaryReader reader = null;
 	private static BinaryWriter writer = null;

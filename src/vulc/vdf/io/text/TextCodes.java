@@ -4,7 +4,10 @@ import static vulc.vdf.io.VDFCodes.*;
 
 import java.util.HashMap;
 
-abstract class TextCodes {
+final class TextCodes {
+
+	private TextCodes() {
+	}
 
 	protected static final String[] TAGS = new String[TYPES];
 	protected static final HashMap<String, Byte> TAG_CODES = new HashMap<String, Byte>();

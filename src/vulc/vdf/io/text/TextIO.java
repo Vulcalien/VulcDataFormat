@@ -3,7 +3,10 @@ package vulc.vdf.io.text;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 
-public abstract class TextIO {
+public final class TextIO {
+
+	private TextIO() {
+	}
 
 	private static TextReader reader = null;
 	private static TextWriter writer = null;
