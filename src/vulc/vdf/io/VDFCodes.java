@@ -5,7 +5,17 @@ import java.util.HashMap;
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 
-public abstract class VDFCodes {
+/**
+ * This utility class contains the codes for all VDF types and the number of types.
+ * The function {@code get(Class<?> type)} returns the type code associated with a class that
+ * represents a VDF type.
+ * 
+ * @author Vulcalien
+ */
+public final class VDFCodes {
+
+	private VDFCodes() {
+	}
 
 	public static final byte TYPES = 22;
 
@@ -61,8 +71,14 @@ public abstract class VDFCodes {
 		CODES.put(VDFList[].class, LIST_A);
 	}
 
-	public static byte get(Object key) {
-		return CODES.get(key);
+	/**
+	 * Returns the VDF type code.
+	 * 
+	 * @param   type  the class representing a VDF type
+	 * @return  the VDF type code, or null if the specified class does not represent a VDF type
+	 */
+	public static byte get(Class<?> type) {
+		return CODES.get(type);
 	}
 
 }
