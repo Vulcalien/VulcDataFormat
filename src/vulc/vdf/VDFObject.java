@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
 
 import vulc.vdf.io.binary.BinaryIO;
@@ -65,8 +66,8 @@ public class VDFObject {
 	 * since it will return a primitive {@code int} value.
 	 * 
 	 * @param   name  the key
-	 * @return  the element associated with the specified key, or null if this object contains no
-	 *          element associated with the key
+	 * @return  the element associated with the specified key, or {@code null} if this object
+	 *          contains no element associated with the key
 	 * @see     java.util.HashMap#get(Object)
 	 * @see     vulc.vdf.Element
 	 */
@@ -80,8 +81,8 @@ public class VDFObject {
 	 * 
 	 * @param   name  the key that will be associated with the element
 	 * @param   e     the element to set
-	 * @return  the old element associated with the specified key, or null if the key was not
-	 *          associated with any element
+	 * @return  the old element associated with the specified key, or {@code null} if the key was
+	 *          not associated with any element
 	 * @see     java.util.HashMap#put(Object, Object)
 	 */
 	public Object setElement(String name, Object e) {
@@ -93,7 +94,7 @@ public class VDFObject {
 	 * Removes the element associated with the specified key if present.
 	 * 
 	 * @param   name  the key associated with the element to remove
-	 * @return  the removed element, or null if the key was not associated with any element
+	 * @return  the removed element, or {@code null} if the key was not associated with any element
 	 * @see     java.util.HashMap#remove(Object)
 	 */
 	public Object removeElement(String name) {
@@ -407,7 +408,7 @@ public class VDFObject {
 	 * <p>{@code toString()} can be used instead of {@code toString(false)}.
 	 * 
 	 * @param   format  a flag stating if the output string should be formatted or not
-	 *                  (true = formatted, false = unformatted)
+	 *                  ({@code true} = formatted, {@code false} = unformatted)
 	 * @return  a string representation of this object
 	 */
 	public String toString(boolean format) {
@@ -423,6 +424,37 @@ public class VDFObject {
 	 */
 	public String toString() {
 		return toString(false);
+	}
+
+	/**
+	 * Compares this {@code VDFObject} to the given {@code Object}.
+	 * 
+	 * <p>This object and the given {@code Object} are equal if all of the following are true:
+	 * <ul>
+	 * <li>the given object is an instance of {@code VDFObject}
+	 * <li>this object's size is equal to the other object's size
+	 * <li>both objects contain equal elements associated with the same key
+	 * </ul>
+	 * 
+	 * @param   obj  the object to compare
+	 * @return  {@code true} if this object and the given one are equal; {@code false} otherwise
+	 */
+	public boolean equals(Object obj) {
+		if(obj instanceof VDFObject) {
+			VDFObject toCompare = (VDFObject) obj;
+
+			if(this.size() != toCompare.size()) {
+				return false; // the objects have different size
+			}
+
+			for(String name : this.keySet()) {
+				if(!Objects.deepEquals(this.getElement(name), toCompare.getElement(name))) {
+					return false; // two elements associated with the same key are not equal
+				}
+			}
+			return true; // the two objects have the same size and each of their elements is equal
+		}
+		return false; // 'obj' is not a VDFObject
 	}
 
 }

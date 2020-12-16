@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
@@ -492,7 +493,7 @@ public class VDFList implements Iterable<Object> {
 	 * <p>{@code toString()} can be used instead of {@code toString(false)}.
 	 * 
 	 * @param   format  a flag stating if the output string should be formatted or not
-	 *                  (true = formatted, false = unformatted)
+	 *                  ({@code true} = formatted, {@code false} = unformatted)
 	 * @return  a string representation of this list
 	 */
 	public String toString(boolean format) {
@@ -508,6 +509,38 @@ public class VDFList implements Iterable<Object> {
 	 */
 	public String toString() {
 		return toString(false);
+	}
+
+	/**
+	 * Compares this {@code VDFList} to the given {@code Object}.
+	 * 
+	 * <p>This list and the given {@code Object} are equal if all of the following are true:
+	 * <ul>
+	 * <li>the given object is an instance of {@code VDFList}
+	 * <li>this list's size is equal to the other list's size
+	 * <li>both lists contain equal elements
+	 * </ul>
+	 * 
+	 * @param   obj  the object to compare
+	 * @return  {@code true} if this list and the given one are equal; {@code false} otherwise
+	 */
+	public boolean equals(Object obj) {
+		if(obj instanceof VDFList) {
+			VDFList toCompare = (VDFList) obj;
+
+			if(this.size() != toCompare.size()) {
+				return false; // the lists have different size
+			}
+
+			int size = this.size();
+			for(int i = 0; i < size; i++) {
+				if(!Objects.deepEquals(this.getElement(i), toCompare.getElement(i))) {
+					return false; // two elements at the same position are not equal
+				}
+			}
+			return true; // the two lists have the same size and each of their elements is equal
+		}
+		return false; // 'obj' is not a VDFList
 	}
 
 }
