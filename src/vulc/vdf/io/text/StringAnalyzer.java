@@ -23,11 +23,13 @@ class StringAnalyzer {
 			line++;
 		} else if(avoidComments && c == '/') {
 			char next = next();
+			boolean foundComment = true;
 			if(next == '/') skipComment(false);
-			if(next == '*') skipComment(true);
+			else if(next == '*') skipComment(true);
+			else foundComment = false;
 
 			// read the char that should be returned
-			c = read();
+			if(foundComment) c = read();
 		}
 		return c;
 	}
@@ -87,8 +89,12 @@ class StringAnalyzer {
 		if(multiline) {
 			boolean maybeClose = false;
 			for(char c = read(); true; c = read()) {
-				if(c == '*') maybeClose = true;
-				else if(maybeClose && c == '/') break;
+				if(c == '*') {
+					maybeClose = true; // a '*' was found: next iteration check if there is a '/'
+				} else if(maybeClose) {
+					if(c == '/') break; // close the comment
+					else maybeClose = false; // the previous '*' was not meant to close the comment
+				}
 			}
 		} else {
 			for(char c = read(); true; c = read()) {
