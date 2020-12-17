@@ -56,7 +56,8 @@ public class VDFList implements Iterable<Object> {
 	 * 
 	 * @param   i  the index of the element to return
 	 * @return  the element at the specified position
-	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
+	 * @throws  IndexOutOfBoundsException  if the index is out of bounds
+	 *          (<tt>i &lt; 0 or i &gt;= size()</tt>)
 	 * @see     java.util.ArrayList#get(int)
 	 */
 	public Object getElement(int i) {
@@ -69,7 +70,8 @@ public class VDFList implements Iterable<Object> {
 	 * @param   i  the index of the element to replace
 	 * @param   e  the element to store at the specified position
 	 * @return  the element that was replaced
-	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
+	 * @throws  IndexOutOfBoundsException  if the index is out of bounds
+	 *          (<tt>i &lt; 0 or i &gt;= size()</tt>)
 	 * @see     java.util.ArrayList#set(int, Object)
 	 */
 	public Object setElement(int i, Object e) {
@@ -90,7 +92,8 @@ public class VDFList implements Iterable<Object> {
 	 * 
 	 * @param   i  the index of the element to remove
 	 * @return  the removed element
-	 * @throws  IndexOutOfBoundsException  if the index is out of bounds (i < 0 or i >= size())
+	 * @throws  IndexOutOfBoundsException  if the index is out of bounds
+	 *          (<tt>i &lt; 0 or i &gt;= size()</tt>)
 	 * @see     java.util.ArrayList#remove(int)
 	 */
 	public Object removeElement(int i) {
