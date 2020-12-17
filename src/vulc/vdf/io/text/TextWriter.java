@@ -45,8 +45,8 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		                                                            + escapeString(array[i])
 		                                                            + STRING_QUOTE)),
 		    STRING_A);
-		add(getArrayWriter(VDFObject[].class, (array, i) -> serializeObject((VDFObject) array[i])), OBJECT_A);
-		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList((VDFList) array[i])), LIST_A);
+		add(getArrayWriter(VDFObject[].class, (array, i) -> serializeObject(array[i])), OBJECT_A);
+		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList(array[i])), LIST_A);
 	}
 
 	private void add(TextSerializer serializer, byte code) {
