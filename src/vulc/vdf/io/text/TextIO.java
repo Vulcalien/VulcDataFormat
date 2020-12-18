@@ -11,6 +11,9 @@ public final class TextIO {
 	private TextIO() {
 	}
 
+	/** This string is used for indentation. Its value can be changed. */
+	public static String indentationChars = "\t";
+
 	private static TextReader reader = null;
 	private static TextWriter writer = null;
 

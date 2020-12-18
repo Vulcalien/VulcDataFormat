@@ -182,7 +182,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 
 	private void addIndentation() {
 		for(int i = 0; i < indentation; i++) {
-			out.append(TAB);
+			out.append(TextIO.indentationChars);
 		}
 	}
 
