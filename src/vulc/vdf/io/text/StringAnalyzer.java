@@ -39,11 +39,6 @@ class StringAnalyzer {
 		return string.charAt(mark);
 	}
 
-	protected void unread() {
-		mark--;
-		if(next() == LF) line--;
-	}
-
 	private void checkCanRead(int i) {
 		if(i >= string.length()) throw new VDFParseException("End of string", line);
 	}
@@ -59,25 +54,26 @@ class StringAnalyzer {
 	protected String readUntil(char... until) {
 		StringBuilder result = new StringBuilder();
 
-		read_for:
-		for(char c = read(); true; c = read()) {
+		read_loop:
+		while(true) {
+			char c = next();
 			for(char u : until) {
-				if(u == c) break read_for;
+				if(u == c) break read_loop;
 			}
 
 			result.append(c);
+			read();
 		}
-		unread();
-
 		return result.toString();
 	}
 
 	protected void skipWhitespaces() {
-		for(char c = read(); true; c = read()) {
+		while(true) {
+			char c = next();
 			if(c != WHITESPACE && c != TAB
 			   && c != CR && c != LF) break;
+			read();
 		}
-		unread();
 	}
 
 	private void skipComment(boolean multiline) {
