@@ -34,6 +34,7 @@ import java.util.Set;
 
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
+import vulc.vdf.io.text.VDFParseException;
 
 /**
  * An instance of this class represents a VDF object, "<i>a structure that contains unordered
@@ -396,7 +397,19 @@ public class VDFObject {
 
 	// text IO
 
-	// TO-DOC
+	/**
+	 * Reads an object from a {@code Reader} and adds the elements, each associated with its key,
+	 * to this object.
+	 * 
+	 * <p>This method does not empty this object, but it may replace an old value if a new value
+	 * associated with the same key is found.
+	 * 
+	 * @param   reader  the reader
+	 * @return  this object
+	 * 
+	 * @throws  IOException  if an IO error occurs
+	 * @throws  VDFParseException  if the file could not be parsed properly
+	 */
 	public VDFObject parse(Reader reader) throws IOException {
 		TextIO.deserialize(reader, this);
 		return this;

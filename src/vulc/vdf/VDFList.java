@@ -34,6 +34,7 @@ import java.util.Objects;
 
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
+import vulc.vdf.io.text.VDFParseException;
 
 /**
  * An instance of this class represents a VDF list, "<i>a structure that contains ordered
@@ -487,7 +488,16 @@ public class VDFList implements Iterable<Object> {
 
 	// text IO
 
-	// TO-DOC
+	/**
+	 * Reads a list from a {@code Reader} and adds the elements to this list, without removing
+	 * contained elements.
+	 * 
+	 * @param   reader  the reader
+	 * @return  this list
+	 * 
+	 * @throws  IOException  if an IO error occurs
+	 * @throws  VDFParseException  if the file could not be parsed properly
+	 */
 	public VDFList parse(Reader reader) throws IOException {
 		TextIO.deserialize(reader, this);
 		return this;
