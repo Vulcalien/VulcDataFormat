@@ -26,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
@@ -33,6 +35,14 @@ import java.util.Objects;
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
 
+/**
+ * An instance of this class represents a VDF list, "<i>a structure that contains ordered
+ * elements</i>"
+ * 
+ * <p>TO-DOC
+ * 
+ * @author Vulcalien
+ */
 public class VDFList implements Iterable<Object> {
 
 	private final ArrayList<Object> list = new ArrayList<Object>();
@@ -477,16 +487,26 @@ public class VDFList implements Iterable<Object> {
 
 	// text IO
 
+	// TO-DOC
+	public VDFList parse(Reader reader) throws IOException {
+		TextIO.deserialize(reader, this);
+		return this;
+	}
+
 	/**
 	 * Reads a list from a {@code String} and adds the elements to this list, without removing
 	 * contained elements.
 	 * 
 	 * @param   string  the text to parse
 	 * @return  this list
+	 * @see     vulc.vdf.VDFList#parse(Reader)
 	 */
 	public VDFList parse(String string) {
-		TextIO.deserialize(string, this);
-		return this;
+		try {
+			return parse(new StringReader(string));
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

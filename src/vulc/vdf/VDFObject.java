@@ -26,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
@@ -33,6 +35,14 @@ import java.util.Set;
 import vulc.vdf.io.binary.BinaryIO;
 import vulc.vdf.io.text.TextIO;
 
+/**
+ * An instance of this class represents a VDF object, "<i>a structure that contains unordered
+ * key-value pairs</i>".
+ * 
+ * <p>TO-DOC
+ * 
+ * @author Vulcalien
+ */
 public class VDFObject {
 
 	private final HashMap<String, Object> map = new HashMap<String, Object>();
@@ -386,6 +396,12 @@ public class VDFObject {
 
 	// text IO
 
+	// TO-DOC
+	public VDFObject parse(Reader reader) throws IOException {
+		TextIO.deserialize(reader, this);
+		return this;
+	}
+
 	/**
 	 * Reads an object from a {@code String} and adds the elements, each associated with its key,
 	 * to this object.
@@ -395,10 +411,14 @@ public class VDFObject {
 	 * 
 	 * @param   string  the text to parse
 	 * @return  this object
+	 * @see     vulc.vdf.VDFObject#parse(Reader)
 	 */
 	public VDFObject parse(String string) {
-		TextIO.deserialize(string, this);
-		return this;
+		try {
+			return parse(new StringReader(string));
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

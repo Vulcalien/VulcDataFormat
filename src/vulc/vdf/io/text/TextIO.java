@@ -1,5 +1,8 @@
 package vulc.vdf.io.text;
 
+import java.io.IOException;
+import java.io.Reader;
+
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
 
@@ -28,7 +31,7 @@ public final class TextIO {
 
 	// deserialize
 
-	private static <T> void deserialize(String in, Deserializer<T> deserializer) {
+	private static <T> void deserialize(Reader in, Deserializer<T> deserializer) throws IOException {
 		if(!reuseIO) reader = new TextReader();
 
 		reader.in = new StringAnalyzer(in);
@@ -37,11 +40,11 @@ public final class TextIO {
 		if(!reuseIO) reader = null;
 	}
 
-	public static void deserialize(String in, VDFObject obj) {
+	public static void deserialize(Reader in, VDFObject obj) throws IOException {
 		deserialize(in, reader -> reader.deserializeObject(obj));
 	}
 
-	public static void deserialize(String in, VDFList list) {
+	public static void deserialize(Reader in, VDFList list) throws IOException {
 		deserialize(in, reader -> reader.deserializeList(list));
 	}
 
@@ -75,7 +78,7 @@ public final class TextIO {
 
 	private interface Deserializer<T> {
 
-		void deserialize(TextReader reader);
+		void deserialize(TextReader reader) throws IOException;
 
 	}
 

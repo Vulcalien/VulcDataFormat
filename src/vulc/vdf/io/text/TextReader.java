@@ -3,6 +3,7 @@ package vulc.vdf.io.text;
 import static vulc.vdf.io.VDFCodes.*;
 import static vulc.vdf.io.text.TextTokens.*;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 
 import vulc.vdf.VDFList;
@@ -82,7 +83,7 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		deserializers[code] = deserializer;
 	}
 
-	public VDFObject deserializeObject(VDFObject obj) {
+	public VDFObject deserializeObject(VDFObject obj) throws IOException {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
@@ -108,7 +109,7 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		return obj;
 	}
 
-	public VDFList deserializeList(VDFList list) {
+	public VDFList deserializeList(VDFList list) throws IOException {
 		in.checkToken(OPEN_LIST);
 		while(true) {
 			in.skipWhitespaces();
@@ -170,13 +171,13 @@ class TextReader extends VDFReader<StringAnalyzer> {
 
 	private interface ElementDeserializer {
 
-		Object deserialize();
+		Object deserialize() throws IOException;
 
 	}
 
 	private interface ArrayElementDeserializer<T> {
 
-		void deserialize(T array, int i);
+		void deserialize(T array, int i) throws IOException;
 
 	}
 

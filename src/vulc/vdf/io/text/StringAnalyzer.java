@@ -2,22 +2,29 @@ package vulc.vdf.io.text;
 
 import static vulc.vdf.io.text.TextTokens.*;
 
+import java.io.IOException;
+import java.io.Reader;
+
 class StringAnalyzer {
 
-	private final String string;
+	private final Reader reader;
 
-	private int mark = 0;
+	private int pos = 0;
+	private int bufferEnd = 0;
+	private final char[] buffer = new char[8192];
+
 	protected int line = 1;
 
 	private boolean avoidComments = true;
 
-	protected StringAnalyzer(String string) {
-		this.string = string;
+	protected StringAnalyzer(Reader reader) {
+		this.reader = reader;
 	}
 
-	protected char read() {
-		checkCanRead(mark);
-		char c = string.charAt(mark++);
+	// reads and consumes the next character from buffer
+	protected char read() throws IOException {
+		checkCanRead();
+		char c = buffer[pos++];
 
 		if(c == LF) {
 			line++;
@@ -34,16 +41,21 @@ class StringAnalyzer {
 		return c;
 	}
 
-	protected char next() {
-		checkCanRead(mark);
-		return string.charAt(mark);
+	// reads the next character from the buffer but does not consume it
+	protected char next() throws IOException {
+		checkCanRead();
+		return buffer[pos];
 	}
 
-	private void checkCanRead(int i) {
-		if(i >= string.length()) throw new VDFParseException("End of string", line);
+	private void checkCanRead() throws IOException {
+		if(pos >= bufferEnd) {
+			pos = 0;
+			bufferEnd = reader.read(buffer);
+			if(bufferEnd == -1) throw new VDFParseException("Cannot read more characters", line);
+		}
 	}
 
-	protected boolean readIf(char c) {
+	protected boolean readIf(char c) throws IOException {
 		if(next() == c) {
 			read();
 			return true;
@@ -51,7 +63,7 @@ class StringAnalyzer {
 		return false;
 	}
 
-	protected String readUntil(char... until) {
+	protected String readUntil(char... until) throws IOException {
 		StringBuilder result = new StringBuilder();
 
 		read_loop:
@@ -67,7 +79,7 @@ class StringAnalyzer {
 		return result.toString();
 	}
 
-	protected void skipWhitespaces() {
+	protected void skipWhitespaces() throws IOException {
 		while(true) {
 			char c = next();
 			if(c != WHITESPACE && c != TAB
@@ -76,7 +88,7 @@ class StringAnalyzer {
 		}
 	}
 
-	private void skipComment(boolean multiline) {
+	private void skipComment(boolean multiline) throws IOException {
 		avoidComments = false;
 
 		// consume second character of the comment, (// -> /), (/* -> *)
@@ -100,7 +112,7 @@ class StringAnalyzer {
 		avoidComments = true;
 	}
 
-	protected void checkToken(char token) {
+	protected void checkToken(char token) throws IOException {
 		skipWhitespaces();
 		if(read() != token) missingToken(token);
 	}
@@ -109,7 +121,7 @@ class StringAnalyzer {
 		throw new VDFParseException("token '" + token + "' expected", line);
 	}
 
-	protected <T> T readNumber(Class<T> type, char[] endOfValue, NumberReader<T> reader) {
+	protected <T> T readNumber(Class<T> type, char[] endOfValue, NumberReader<T> reader) throws IOException {
 		String string = readUntil(endOfValue);
 
 		int radix = 10;
@@ -129,7 +141,7 @@ class StringAnalyzer {
 		return reader.read(string, radix);
 	}
 
-	protected char readChar() {
+	protected char readChar() throws IOException {
 		StringBuilder result = new StringBuilder();
 
 		checkToken(CHAR_QUOTE);
@@ -148,7 +160,7 @@ class StringAnalyzer {
 		}
 	}
 
-	protected String readString() {
+	protected String readString() throws IOException {
 		StringBuilder result = new StringBuilder();
 
 		checkToken(STRING_QUOTE);
