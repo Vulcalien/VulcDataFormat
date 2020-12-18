@@ -91,7 +91,9 @@ class TextReader extends VDFReader<StringAnalyzer> {
 			if(in.readIf(CLOSE_OBJECT)) break;
 			if(in.readIf(SEPARATOR)) continue;
 
-			String type = in.readUntil(WHITESPACE, TAB, CR, LF, STRING_QUOTE).toLowerCase();
+			String type = in.readUntil(WHITESPACE, TAB, CR, LF,
+			                           STRING_QUOTE) // int"..."
+			                .toLowerCase();
 			String name = in.readString();
 			in.checkToken(ASSIGN);
 			in.skipWhitespaces();
@@ -117,7 +119,10 @@ class TextReader extends VDFReader<StringAnalyzer> {
 			if(in.readIf(CLOSE_LIST)) break;
 			if(in.readIf(SEPARATOR)) continue;
 
-			String type = in.readUntil(WHITESPACE, TAB, CR, LF).toLowerCase();
+			// TODO allow array value after type, without spaces
+			String type = in.readUntil(WHITESPACE, TAB, CR, LF,
+			                           CHAR_QUOTE, STRING_QUOTE) // char'c' or string"str"
+			                .toLowerCase();
 			in.skipWhitespaces();
 
 			Byte code = TextCodes.TAG_CODES.get(type);
