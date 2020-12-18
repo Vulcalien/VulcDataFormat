@@ -14,6 +14,9 @@ public final class TextIO {
 	/** This string is used for indentation. Its value can be changed. */
 	public static String indentationChars = "\t";
 
+	/** This string is used as 'end of line'. Its value can be changed. */
+	public static String endOfLine = "\n";
+
 	private static TextReader reader = null;
 	private static TextWriter writer = null;
 

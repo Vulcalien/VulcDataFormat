@@ -61,7 +61,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			Object e = obj.getElement(name);
 
 			if(format) {
-				out.append(LF);
+				out.append(TextIO.endOfLine);
 				addIndentation();
 			}
 
@@ -84,7 +84,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			out.deleteCharAt(out.length() - 1);
 
 			if(format) {
-				out.append(LF);
+				out.append(TextIO.endOfLine);
 				addIndentation();
 			}
 		}
@@ -97,7 +97,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 		indentation++;
 		for(Object e : list) {
 			if(format) {
-				out.append(LF);
+				out.append(TextIO.endOfLine);
 				addIndentation();
 			}
 
@@ -115,7 +115,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			out.deleteCharAt(out.length() - 1);
 
 			if(format) {
-				out.append(LF);
+				out.append(TextIO.endOfLine);
 				addIndentation();
 			}
 		}
@@ -132,7 +132,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 				if(i != 0) out.append(SEPARATOR);
 
 				if(format) {
-					out.append(LF);
+					out.append(TextIO.endOfLine);
 					addIndentation();
 				}
 
@@ -141,7 +141,7 @@ class TextWriter extends VDFWriter<StringBuilder> {
 			indentation--;
 
 			if(format) {
-				out.append(LF);
+				out.append(TextIO.endOfLine);
 				addIndentation();
 			}
 			out.append(CLOSE_ARRAY);
