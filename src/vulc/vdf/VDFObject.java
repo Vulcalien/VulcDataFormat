@@ -414,8 +414,8 @@ public class VDFObject {
 	 * @see     vulc.vdf.VDFObject#parse(Reader)
 	 */
 	public VDFObject parse(String string) {
-		try {
-			return parse(new StringReader(string));
+		try(Reader reader = new StringReader(string)) {
+			return parse(reader);
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}

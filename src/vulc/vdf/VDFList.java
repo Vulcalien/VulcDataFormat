@@ -502,8 +502,8 @@ public class VDFList implements Iterable<Object> {
 	 * @see     vulc.vdf.VDFList#parse(Reader)
 	 */
 	public VDFList parse(String string) {
-		try {
-			return parse(new StringReader(string));
+		try(Reader reader = new StringReader(string)) {
+			return parse(reader);
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
