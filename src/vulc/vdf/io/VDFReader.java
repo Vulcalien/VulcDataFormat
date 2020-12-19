@@ -14,9 +14,9 @@ public abstract class VDFReader<T> {
 		deserializers[code] = deserializer;
 	}
 
-	public abstract VDFObject deserializeObject(VDFObject obj) throws Exception;
+	public abstract VDFObject deserializeObject(VDFObject obj) throws IOException;
 
-	public abstract VDFList deserializeList(VDFList list) throws Exception;
+	public abstract VDFList deserializeList(VDFList list) throws IOException;
 
 	protected abstract <K> ElementDeserializer getArrayReader(Class<K> type, ArrayElementDeserializer<K> deserializer);
 

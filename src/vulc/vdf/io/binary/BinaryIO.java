@@ -34,11 +34,13 @@ public final class BinaryIO {
 
 	private static <T> void deserialize(DataInputStream in, Deserializer<T> deserializer) throws IOException {
 		if(!reuseIO) reader = new BinaryReader();
-
 		reader.in = in;
+
 		deserializer.deserialize(reader);
 
+		// TODO test
 		if(!reuseIO) reader = null;
+		else reader.in = null;
 	}
 
 	public static void deserialize(DataInputStream in, VDFObject obj) throws IOException {
@@ -53,11 +55,13 @@ public final class BinaryIO {
 
 	private static <T> void serialize(DataOutputStream out, Serializer<T> serializer) throws IOException {
 		if(!reuseIO) writer = new BinaryWriter();
-
 		writer.out = out;
+
 		serializer.serialize(writer);
 
+		// TODO test
 		if(!reuseIO) writer = null;
+		else writer.out = null;
 	}
 
 	public static void serialize(DataOutputStream out, VDFObject obj) throws IOException {

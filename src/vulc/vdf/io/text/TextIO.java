@@ -40,11 +40,13 @@ public final class TextIO {
 
 	private static <T> void deserialize(Reader in, Deserializer<T> deserializer) throws IOException {
 		if(!reuseIO) reader = new TextReader();
-
 		reader.in = new StringAnalyzer(in);
+
 		deserializer.deserialize(reader);
 
+		// TODO test
 		if(!reuseIO) reader = null;
+		else reader.in = null;
 	}
 
 	public static void deserialize(Reader in, VDFObject obj) throws IOException {
@@ -59,14 +61,15 @@ public final class TextIO {
 
 	private static <T> void serialize(Writer out, boolean format, Serializer<T> serializer) throws IOException {
 		if(!reuseIO) writer = new TextWriter();
-
 		writer.out = out;
 		writer.format = format;
 
 		serializer.serialize(writer);
 		if(format) out.append(endOfLine);
 
+		// TODO test
 		if(!reuseIO) writer = null;
+		else writer.out = null;
 	}
 
 	public static void serialize(Writer out, VDFObject obj, boolean format) throws IOException {
