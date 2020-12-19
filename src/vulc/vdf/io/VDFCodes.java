@@ -75,8 +75,8 @@ public final class VDFCodes {
 	 * Returns the VDF type code.
 	 * 
 	 * @param   type  the class representing a VDF type
-	 * @return  the VDF type code, or {@code null} if the specified class does not represent a VDF
-	 *          type
+	 * @return  the VDF type code
+	 * @throws  NullPointerException  if the specified class does not represent a VDF type
 	 */
 	public static byte get(Class<?> type) {
 		return CODES.get(type);
