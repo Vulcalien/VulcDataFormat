@@ -76,40 +76,40 @@ public class VDFObject {
 	 * associated with an {@code Integer} element then {@code getInt("x")} should be preferred,
 	 * since it will return a primitive {@code int} value.
 	 * 
-	 * @param   name  the key
+	 * @param   key  the key
 	 * @return  the element associated with the specified key, or {@code null} if this object
 	 *          contains no element associated with the key
 	 * @see     java.util.HashMap#get(Object)
 	 * @see     vulc.vdf.Element
 	 */
-	public Object getElement(String name) {
-		return map.get(name);
+	public Object getElement(String key) {
+		return map.get(key);
 	}
 
 	/**
 	 * Associates the given element with the given key. If this object contained an element
 	 * associated with that key, the old element is replaced.
 	 * 
-	 * @param   name  the key that will be associated with the element
+	 * @param   key  the key that will be associated with the element
 	 * @param   e     the element to set
 	 * @return  the old element associated with the specified key, or {@code null} if the key was
 	 *          not associated with any element
 	 * @see     java.util.HashMap#put(Object, Object)
 	 */
-	public Object setElement(String name, Object e) {
-		if(name == null) throw new NullPointerException();
-		return map.put(name, e);
+	public Object setElement(String key, Object e) {
+		if(key == null) throw new NullPointerException();
+		return map.put(key, e);
 	}
 
 	/**
 	 * Removes the element associated with the specified key if present.
 	 * 
-	 * @param   name  the key associated with the element to remove
+	 * @param   key  the key associated with the element to remove
 	 * @return  the removed element, or {@code null} if the key was not associated with any element
 	 * @see     java.util.HashMap#remove(Object)
 	 */
-	public Object removeElement(String name) {
-		return map.remove(name);
+	public Object removeElement(String key) {
+		return map.remove(key);
 	}
 
 	/**
@@ -123,182 +123,182 @@ public class VDFObject {
 
 	// getters and setters
 
-	public boolean getBoolean(String name) {
-		return (Boolean) getElement(name);
+	public boolean getBoolean(String key) {
+		return (Boolean) getElement(key);
 	}
 
-	public Object setBoolean(String name, boolean value) {
-		return setElement(name, value);
+	public Object setBoolean(String key, boolean value) {
+		return setElement(key, value);
 	}
 
-	public byte getByte(String name) {
-		return (Byte) getElement(name);
+	public byte getByte(String key) {
+		return (Byte) getElement(key);
 	}
 
-	public Object setByte(String name, byte value) {
-		return setElement(name, value);
+	public Object setByte(String key, byte value) {
+		return setElement(key, value);
 	}
 
-	public short getShort(String name) {
-		return (Short) getElement(name);
+	public short getShort(String key) {
+		return (Short) getElement(key);
 	}
 
-	public Object setShort(String name, short value) {
-		return setElement(name, value);
+	public Object setShort(String key, short value) {
+		return setElement(key, value);
 	}
 
-	public int getInt(String name) {
-		return (Integer) getElement(name);
+	public int getInt(String key) {
+		return (Integer) getElement(key);
 	}
 
-	public Object setInt(String name, int value) {
-		return setElement(name, value);
+	public Object setInt(String key, int value) {
+		return setElement(key, value);
 	}
 
-	public long getLong(String name) {
-		return (Long) getElement(name);
+	public long getLong(String key) {
+		return (Long) getElement(key);
 	}
 
-	public Object setLong(String name, long value) {
-		return setElement(name, value);
+	public Object setLong(String key, long value) {
+		return setElement(key, value);
 	}
 
-	public float getFloat(String name) {
-		return (Float) getElement(name);
+	public float getFloat(String key) {
+		return (Float) getElement(key);
 	}
 
-	public Object setFloat(String name, float value) {
-		return setElement(name, value);
+	public Object setFloat(String key, float value) {
+		return setElement(key, value);
 	}
 
-	public double getDouble(String name) {
-		return (Double) getElement(name);
+	public double getDouble(String key) {
+		return (Double) getElement(key);
 	}
 
-	public Object setDouble(String name, double value) {
-		return setElement(name, value);
+	public Object setDouble(String key, double value) {
+		return setElement(key, value);
 	}
 
-	public char getChar(String name) {
-		return (Character) getElement(name);
+	public char getChar(String key) {
+		return (Character) getElement(key);
 	}
 
-	public Object setChar(String name, char value) {
-		return setElement(name, value);
+	public Object setChar(String key, char value) {
+		return setElement(key, value);
 	}
 
-	public String getString(String name) {
-		return (String) getElement(name);
+	public String getString(String key) {
+		return (String) getElement(key);
 	}
 
-	public Object setString(String name, String value) {
-		return setElement(name, value);
+	public Object setString(String key, String value) {
+		return setElement(key, value);
 	}
 
-	public VDFObject getObject(String name) {
-		return (VDFObject) getElement(name);
+	public VDFObject getObject(String key) {
+		return (VDFObject) getElement(key);
 	}
 
-	public Object setObject(String name, VDFObject objectElement) {
-		return setElement(name, objectElement);
+	public Object setObject(String key, VDFObject objectElement) {
+		return setElement(key, objectElement);
 	}
 
-	public VDFList getList(String name) {
-		return (VDFList) getElement(name);
+	public VDFList getList(String key) {
+		return (VDFList) getElement(key);
 	}
 
-	public Object setList(String name, VDFList listElement) {
-		return setElement(name, listElement);
+	public Object setList(String key, VDFList listElement) {
+		return setElement(key, listElement);
 	}
 
 	// arrays
 
-	public boolean[] getBooleanArray(String name) {
-		return (boolean[]) getElement(name);
+	public boolean[] getBooleanArray(String key) {
+		return (boolean[]) getElement(key);
 	}
 
-	public Object setBooleanArray(String name, boolean[] value) {
-		return setElement(name, value);
+	public Object setBooleanArray(String key, boolean[] value) {
+		return setElement(key, value);
 	}
 
-	public byte[] getByteArray(String name) {
-		return (byte[]) getElement(name);
+	public byte[] getByteArray(String key) {
+		return (byte[]) getElement(key);
 	}
 
-	public Object setByteArray(String name, byte[] value) {
-		return setElement(name, value);
+	public Object setByteArray(String key, byte[] value) {
+		return setElement(key, value);
 	}
 
-	public short[] getShortArray(String name) {
-		return (short[]) getElement(name);
+	public short[] getShortArray(String key) {
+		return (short[]) getElement(key);
 	}
 
-	public Object setShortArray(String name, short[] value) {
-		return setElement(name, value);
+	public Object setShortArray(String key, short[] value) {
+		return setElement(key, value);
 	}
 
-	public int[] getIntArray(String name) {
-		return (int[]) getElement(name);
+	public int[] getIntArray(String key) {
+		return (int[]) getElement(key);
 	}
 
-	public Object setIntArray(String name, int[] value) {
-		return setElement(name, value);
+	public Object setIntArray(String key, int[] value) {
+		return setElement(key, value);
 	}
 
-	public long[] getLongArray(String name) {
-		return (long[]) getElement(name);
+	public long[] getLongArray(String key) {
+		return (long[]) getElement(key);
 	}
 
-	public Object setLongArray(String name, long[] value) {
-		return setElement(name, value);
+	public Object setLongArray(String key, long[] value) {
+		return setElement(key, value);
 	}
 
-	public float[] getFloatArray(String name) {
-		return (float[]) getElement(name);
+	public float[] getFloatArray(String key) {
+		return (float[]) getElement(key);
 	}
 
-	public Object setFloatArray(String name, float[] value) {
-		return setElement(name, value);
+	public Object setFloatArray(String key, float[] value) {
+		return setElement(key, value);
 	}
 
-	public double[] getDoubleArray(String name) {
-		return (double[]) getElement(name);
+	public double[] getDoubleArray(String key) {
+		return (double[]) getElement(key);
 	}
 
-	public Object setDoubleArray(String name, double[] value) {
-		return setElement(name, value);
+	public Object setDoubleArray(String key, double[] value) {
+		return setElement(key, value);
 	}
 
-	public char[] getCharArray(String name) {
-		return (char[]) getElement(name);
+	public char[] getCharArray(String key) {
+		return (char[]) getElement(key);
 	}
 
-	public Object setCharArray(String name, char[] value) {
-		return setElement(name, value);
+	public Object setCharArray(String key, char[] value) {
+		return setElement(key, value);
 	}
 
-	public String[] getStringArray(String name) {
-		return (String[]) getElement(name);
+	public String[] getStringArray(String key) {
+		return (String[]) getElement(key);
 	}
 
-	public Object setStringArray(String name, String[] value) {
-		return setElement(name, value);
+	public Object setStringArray(String key, String[] value) {
+		return setElement(key, value);
 	}
 
-	public VDFObject[] getObjectArray(String name) {
-		return (VDFObject[]) getElement(name);
+	public VDFObject[] getObjectArray(String key) {
+		return (VDFObject[]) getElement(key);
 	}
 
-	public Object setObjectArray(String name, VDFObject[] value) {
-		return setElement(name, value);
+	public Object setObjectArray(String key, VDFObject[] value) {
+		return setElement(key, value);
 	}
 
-	public VDFList[] getListArray(String name) {
-		return (VDFList[]) getElement(name);
+	public VDFList[] getListArray(String key) {
+		return (VDFList[]) getElement(key);
 	}
 
-	public Object setListArray(String name, VDFList[] value) {
-		return setElement(name, value);
+	public Object setListArray(String key, VDFList[] value) {
+		return setElement(key, value);
 	}
 
 	// binary IO
@@ -498,8 +498,8 @@ public class VDFObject {
 				return false; // the objects have different size
 			}
 
-			for(String name : this.keySet()) {
-				if(!Objects.deepEquals(this.getElement(name), toCompare.getElement(name))) {
+			for(String key : this.keySet()) {
+				if(!Objects.deepEquals(this.getElement(key), toCompare.getElement(key))) {
 					return false; // two elements associated with the same key are not equal
 				}
 			}

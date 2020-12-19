@@ -40,18 +40,18 @@ class BinaryReader extends VDFReader<DataInputStream> {
 
 	public VDFObject deserializeObject(VDFObject obj) throws IOException {
 		byte code;
-		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
-			String name = in.readUTF();									// read name
+		while((code = in.readByte()) != -1) {                       // read code, until end mark (-1) is found
+			String key = in.readUTF();                              // read key
 
-			obj.setElement(name, deserializers[code].deserialize());	// deserialize and add element to object
+			obj.setElement(key, deserializers[code].deserialize()); // deserialize and add element to object
 		}
 		return obj;
 	}
 
 	public VDFList deserializeList(VDFList list) throws IOException {
 		byte code;
-		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
-			list.addElement(deserializers[code].deserialize());			// deserialize and add element to list
+		while((code = in.readByte()) != -1) {                           // read code, until end mark (-1) is found
+			list.addElement(deserializers[code].deserialize());         // deserialize and add element to list
 		}
 		return list;
 	}

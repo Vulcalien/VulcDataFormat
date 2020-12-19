@@ -54,8 +54,8 @@ class TextWriter extends VDFWriter<Writer> {
 
 		indentation++;
 		boolean isFirst = true;
-		for(String name : obj.keySet()) {
-			Object e = obj.getElement(name);
+		for(String key : obj.keySet()) {
+			Object e = obj.getElement(key);
 
 			if(!isFirst) {
 				out.append(SEPARATOR);
@@ -73,7 +73,7 @@ class TextWriter extends VDFWriter<Writer> {
 			out.append(TextCodes.TAGS[code]);
 			if(format) out.append(WHITESPACE);
 
-			out.append(STRING_QUOTE + escapeString(name) + STRING_QUOTE);
+			out.append(STRING_QUOTE + escapeString(key) + STRING_QUOTE);
 
 			out.append(ASSIGN);
 			if(format) out.append(WHITESPACE);

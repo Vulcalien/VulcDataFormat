@@ -40,13 +40,13 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 	}
 
 	public void serializeObject(VDFObject obj) throws IOException {
-		for(String name : obj.keySet()) {
-			Object e = obj.getElement(name);
+		for(String key : obj.keySet()) {
+			Object e = obj.getElement(key);
 
 			byte code = VDFCodes.get(e.getClass());
 
 			out.writeByte(code);						// write code
-			out.writeUTF(name);							// write name
+			out.writeUTF(key);							// write key
 
 			serializers[code].serialize(e);				// serialize
 		}

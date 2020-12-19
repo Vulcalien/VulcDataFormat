@@ -85,12 +85,12 @@ class TextReader extends VDFReader<StringAnalyzer> {
 			if(in.readIf(SEPARATOR)) continue;
 
 			byte type = in.readType();
-			String name = in.readString();
+			String key = in.readString();
 
 			in.checkToken(ASSIGN);
 
 			in.skipWhitespaces();
-			obj.setElement(name, deserializers[type].deserialize());
+			obj.setElement(key, deserializers[type].deserialize());
 			in.skipWhitespaces();
 
 			char token = in.read();
