@@ -8,12 +8,9 @@ import java.lang.reflect.Array;
 
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
-import vulc.vdf.io.VDFCodes;
 import vulc.vdf.io.VDFReader;
 
 class BinaryReader extends VDFReader<DataInputStream> {
-
-	private final ElementDeserializer[] deserializers = new ElementDeserializer[VDFCodes.TYPES];
 
 	protected BinaryReader() {
 		add(() -> in.readBoolean(), BOOLEAN);
@@ -41,10 +38,6 @@ class BinaryReader extends VDFReader<DataInputStream> {
 		add(getArrayReader(VDFList[].class, (array, i) -> array[i] = deserializeList(new VDFList())), LIST_A);
 	}
 
-	private void add(ElementDeserializer deserializer, byte code) {
-		deserializers[code] = deserializer;
-	}
-
 	public VDFObject deserializeObject(VDFObject obj) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {							// read code, until end mark (-1) is found
@@ -63,29 +56,16 @@ class BinaryReader extends VDFReader<DataInputStream> {
 		return list;
 	}
 
-	private <T> ElementDeserializer getArrayReader(Class<T> type,
-	                                               ArrayElementDeserializer<T> arrayElementDeserializer) {
+	protected <K> ElementDeserializer getArrayReader(Class<K> type, ArrayElementDeserializer<K> deserializer) {
 		return () -> {
 			int length = in.readInt();
 
-			T array = type.cast(Array.newInstance(type.getComponentType(), length));
+			K array = type.cast(Array.newInstance(type.getComponentType(), length));
 			for(int i = 0; i < length; i++) {
-				arrayElementDeserializer.deserialize(array, i);
+				deserializer.deserialize(array, i);
 			}
 			return array;
 		};
-	}
-
-	private interface ElementDeserializer {
-
-		Object deserialize() throws IOException;
-
-	}
-
-	private interface ArrayElementDeserializer<T> {
-
-		void deserialize(T array, int i) throws IOException;
-
 	}
 
 }

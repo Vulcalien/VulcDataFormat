@@ -14,8 +14,6 @@ import vulc.vdf.io.VDFWriter;
 
 class TextWriter extends VDFWriter<Writer> {
 
-	private final TextSerializer[] serializers = new TextSerializer[VDFCodes.TYPES];
-
 	protected boolean format = false;
 	private int indentation = 0;
 
@@ -49,10 +47,6 @@ class TextWriter extends VDFWriter<Writer> {
 		    STRING_A);
 		add(getArrayWriter(VDFObject[].class, (array, i) -> serializeObject(array[i])), OBJECT_A);
 		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList(array[i])), LIST_A);
-	}
-
-	private void add(TextSerializer serializer, byte code) {
-		serializers[code] = serializer;
 	}
 
 	public void serializeObject(VDFObject obj) throws IOException {
@@ -128,7 +122,7 @@ class TextWriter extends VDFWriter<Writer> {
 		out.append(CLOSE_LIST);
 	}
 
-	private <T> TextSerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
+	protected <K> ElementSerializer getArrayWriter(Class<K> type, ArrayElementSerializer<K> serializer) {
 		return array -> {
 			out.append(OPEN_ARRAY);
 
@@ -142,7 +136,7 @@ class TextWriter extends VDFWriter<Writer> {
 					addIndentation();
 				}
 
-				elementSerializer.serialize(type.cast(array), i);
+				serializer.serialize(type.cast(array), i);
 			}
 			indentation--;
 
@@ -190,18 +184,6 @@ class TextWriter extends VDFWriter<Writer> {
 		for(int i = 0; i < indentation; i++) {
 			out.append(TextIO.indentationChars);
 		}
-	}
-
-	private interface TextSerializer {
-
-		void serialize(Object e) throws IOException;
-
-	}
-
-	private interface ArrayElementSerializer<T> {
-
-		void serialize(T array, int i) throws IOException;
-
 	}
 
 }

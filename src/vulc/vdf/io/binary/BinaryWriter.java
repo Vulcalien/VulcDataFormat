@@ -13,8 +13,6 @@ import vulc.vdf.io.VDFWriter;
 
 class BinaryWriter extends VDFWriter<DataOutputStream> {
 
-	private final BinarySerializer[] serializers = new BinarySerializer[VDFCodes.TYPES];
-
 	protected BinaryWriter() {
 		add(e -> out.writeBoolean((Boolean) e), BOOLEAN);
 		add(e -> out.writeByte((Byte) e), BYTE);
@@ -41,10 +39,6 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList(array[i])), LIST_A);
 	}
 
-	private void add(BinarySerializer serializer, byte code) {
-		serializers[code] = serializer;
-	}
-
 	public void serializeObject(VDFObject obj) throws IOException {
 		for(String name : obj.keySet()) {
 			Object e = obj.getElement(name);
@@ -69,27 +63,15 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 		out.writeByte(-1);								// write end mark
 	}
 
-	private <T> BinarySerializer getArrayWriter(Class<T> type, ArrayElementSerializer<T> elementSerializer) {
+	protected <K> ElementSerializer getArrayWriter(Class<K> type, ArrayElementSerializer<K> serializer) {
 		return array -> {
 			int length = Array.getLength(array);
 
 			out.writeInt(length);
 			for(int i = 0; i < length; i++) {
-				elementSerializer.serialize(type.cast(array), i);
+				serializer.serialize(type.cast(array), i);
 			}
 		};
-	}
-
-	private interface BinarySerializer {
-
-		void serialize(Object e) throws IOException;
-
-	}
-
-	private interface ArrayElementSerializer<T> {
-
-		void serialize(T array, int i) throws IOException;
-
 	}
 
 }

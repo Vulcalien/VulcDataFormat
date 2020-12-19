@@ -8,12 +8,9 @@ import java.lang.reflect.Array;
 
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
-import vulc.vdf.io.VDFCodes;
 import vulc.vdf.io.VDFReader;
 
 class TextReader extends VDFReader<StringAnalyzer> {
-
-	private final ElementDeserializer[] deserializers = new ElementDeserializer[VDFCodes.TYPES];
 
 	protected TextReader() {
 		char[] endOfValue = new char[] {
@@ -79,10 +76,6 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		    LIST_A);
 	}
 
-	private void add(ElementDeserializer deserializer, byte code) {
-		deserializers[code] = deserializer;
-	}
-
 	public VDFObject deserializeObject(VDFObject obj) throws IOException {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
@@ -138,13 +131,12 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		return list;
 	}
 
-	private <T, E> ElementDeserializer getArrayReader(Class<T> type,
-	                                                  ArrayElementDeserializer<T> elementDeserializer) {
+	protected <K> ElementDeserializer getArrayReader(Class<K> type, ArrayElementDeserializer<K> deserializer) {
 		return () -> {
 			in.checkToken(OPEN_ARRAY);
 
 			int length = 8;
-			T array = type.cast(Array.newInstance(type.getComponentType(), length));
+			K array = type.cast(Array.newInstance(type.getComponentType(), length));
 
 			int i = 0;
 			while(true) {
@@ -154,13 +146,13 @@ class TextReader extends VDFReader<StringAnalyzer> {
 				if(in.readIf(SEPARATOR)) continue;
 
 				if(i == length) {
-					T newArray = type.cast(Array.newInstance(type.getComponentType(), length + 8));
+					K newArray = type.cast(Array.newInstance(type.getComponentType(), length + 8));
 					System.arraycopy(array, 0, newArray, 0, length);
 					array = newArray;
 					length += 8;
 				}
 
-				elementDeserializer.deserialize(array, i++);
+				deserializer.deserialize(array, i++);
 				in.skipWhitespaces();
 
 				char token = in.read();
@@ -168,22 +160,10 @@ class TextReader extends VDFReader<StringAnalyzer> {
 				if(token != SEPARATOR) in.missingToken(SEPARATOR);
 			}
 
-			T result = type.cast(Array.newInstance(type.getComponentType(), i));
+			K result = type.cast(Array.newInstance(type.getComponentType(), i));
 			System.arraycopy(array, 0, result, 0, i);
 			return result;
 		};
-	}
-
-	private interface ElementDeserializer {
-
-		Object deserialize() throws IOException;
-
-	}
-
-	private interface ArrayElementDeserializer<T> {
-
-		void deserialize(T array, int i) throws IOException;
-
 	}
 
 }
