@@ -38,7 +38,6 @@ public final class BinaryIO {
 
 		deserializer.deserialize(reader);
 
-		// TODO test
 		if(!reuseIO) reader = null;
 		else reader.in = null;
 	}
@@ -59,7 +58,6 @@ public final class BinaryIO {
 
 		serializer.serialize(writer);
 
-		// TODO test
 		if(!reuseIO) writer = null;
 		else writer.out = null;
 	}

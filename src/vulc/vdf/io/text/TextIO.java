@@ -44,7 +44,6 @@ public final class TextIO {
 
 		deserializer.deserialize(reader);
 
-		// TODO test
 		if(!reuseIO) reader = null;
 		else reader.in = null;
 	}
@@ -67,7 +66,6 @@ public final class TextIO {
 		serializer.serialize(writer);
 		if(format) out.append(endOfLine);
 
-		// TODO test
 		if(!reuseIO) writer = null;
 		else writer.out = null;
 	}

@@ -21,15 +21,11 @@ public abstract class VDFReader<T> {
 	protected abstract <K> ElementDeserializer getArrayReader(Class<K> type, ArrayElementDeserializer<K> deserializer);
 
 	protected interface ElementDeserializer {
-
 		Object deserialize() throws IOException;
-
 	}
 
 	protected interface ArrayElementDeserializer<T> {
-
 		void deserialize(T array, int i) throws IOException;
-
 	}
 
 }

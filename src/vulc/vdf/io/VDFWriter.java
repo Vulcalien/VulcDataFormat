@@ -21,15 +21,11 @@ public abstract class VDFWriter<T> {
 	protected abstract <K> ElementSerializer getArrayWriter(Class<K> type, ArrayElementSerializer<K> serializer);
 
 	protected interface ElementSerializer {
-
 		void serialize(Object e) throws IOException;
-
 	}
 
 	protected interface ArrayElementSerializer<K> {
-
 		void serialize(K array, int i) throws IOException;
-
 	}
 
 }
