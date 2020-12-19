@@ -9,9 +9,8 @@ class StringAnalyzer {
 
 	private final Reader reader;
 
+	private final StringBuilder buffer = new StringBuilder();
 	private int pos = 0;
-	private int bufferEnd = 0;
-	private final char[] buffer = new char[8192];
 
 	protected int line = 1;
 
@@ -24,42 +23,65 @@ class StringAnalyzer {
 	// reads and consumes the next character from buffer
 	protected char read() throws IOException {
 		checkCanRead();
-		char c = buffer[pos++];
+
+		int initialPos = pos;
+		char c = buffer.charAt(pos++);
 
 		if(c == LF) {
 			line++;
 		} else if(avoidComments && c == '/') {
-			char next = next();
-			boolean foundComment = true;
-			if(next == '/') skipComment(false);
-			else if(next == '*') skipComment(true);
-			else foundComment = false;
+			checkCanRead();
+			char next = buffer.charAt(pos++);
 
-			// read the char that should be returned
-			if(foundComment) c = read();
+			char replacingChar = 0;
+			boolean foundComment = true;
+			if(next == '/') {
+				replacingChar = LF;
+				skipComment(false);
+			} else if(next == '*') {
+				replacingChar = WHITESPACE;
+				skipComment(true);
+			} else {
+				foundComment = false;
+				unread();
+			}
+
+			if(foundComment) {
+				// delete the comment stored in the buffer
+				pos = initialPos;
+				buffer.setLength(pos);
+
+				buffer.append(replacingChar);
+				c = replacingChar;
+				pos++;
+			}
 		}
 		return c;
 	}
 
-	// reads the next character from the buffer but does not consume it
-	protected char next() throws IOException {
-		checkCanRead();
-		return buffer[pos];
+	private void unread() {
+		pos--;
+		if(buffer.charAt(pos) == LF) line--;
+	}
+
+	protected void releaseBuffer() {
+		pos = 0;
+		buffer.setLength(0);
 	}
 
 	private void checkCanRead() throws IOException {
-		if(pos >= bufferEnd) {
-			pos = 0;
-			bufferEnd = reader.read(buffer);
-			if(bufferEnd == -1) throw new VDFParseException("Cannot read more characters", line);
+		if(pos >= buffer.length()) {
+			int c = reader.read();
+			if(c == -1) throw new VDFParseException("Cannot read more characters", line);
+			buffer.append((char) c);
 		}
 	}
 
 	protected boolean readIf(char c) throws IOException {
-		if(next() == c) {
-			read();
+		if(read() == c) {
 			return true;
 		}
+		unread();
 		return false;
 	}
 
@@ -68,31 +90,31 @@ class StringAnalyzer {
 
 		read_loop:
 		while(true) {
-			char c = next();
+			char c = read();
 			for(char u : until) {
-				if(u == c) break read_loop;
+				if(u == c) {
+					unread();
+					break read_loop;
+				}
 			}
-
 			result.append(c);
-			read();
 		}
 		return result.toString();
 	}
 
 	protected void skipWhitespaces() throws IOException {
 		while(true) {
-			char c = next();
+			char c = read();
 			if(c != WHITESPACE && c != TAB
-			   && c != CR && c != LF) break;
-			read();
+			   && c != CR && c != LF) {
+				unread();
+				break;
+			}
 		}
 	}
 
 	private void skipComment(boolean multiline) throws IOException {
 		avoidComments = false;
-
-		// consume second character of the comment, (// -> /), (/* -> *)
-		read();
 
 		if(multiline) {
 			boolean maybeClose = false;
@@ -106,7 +128,9 @@ class StringAnalyzer {
 			}
 		} else {
 			for(char c = read(); true; c = read()) {
-				if(c == LF) break;
+				if(c == LF) {
+					break;
+				}
 			}
 		}
 		avoidComments = true;

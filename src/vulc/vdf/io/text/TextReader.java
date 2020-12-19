@@ -100,6 +100,8 @@ class TextReader extends VDFReader<StringAnalyzer> {
 			char token = in.read();
 			if(token == CLOSE_OBJECT) break;
 			if(token != SEPARATOR) in.missingToken(SEPARATOR);
+
+			in.releaseBuffer(); // after reading an element, release cache
 		}
 		return obj;
 	}
@@ -127,6 +129,8 @@ class TextReader extends VDFReader<StringAnalyzer> {
 			char token = in.read();
 			if(token == CLOSE_LIST) break;
 			if(token != SEPARATOR) in.missingToken(SEPARATOR);
+
+			in.releaseBuffer(); // after reading an element, release cache
 		}
 		return list;
 	}
