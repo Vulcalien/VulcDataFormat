@@ -42,8 +42,6 @@ import vulc.vdf.io.text.VDFParseException;
  * An instance of this class represents a VDF list, "<i>a structure that contains ordered
  * elements</i>"
  * 
- * <p>TO-DOC
- * 
  * @author Vulcalien
  */
 public class VDFList implements Iterable<Object> {
@@ -494,7 +492,7 @@ public class VDFList implements Iterable<Object> {
 	 * Reads a list from a {@code Reader} and adds the elements to this list, without removing
 	 * contained elements.
 	 * 
-	 * @param   in  the reader
+	 * @param   in  a reader
 	 * @return  this list
 	 * 
 	 * @throws  IOException  if an IO error occurs
@@ -521,7 +519,14 @@ public class VDFList implements Iterable<Object> {
 		}
 	}
 
-	// TO-DOC
+	/**
+	 * Writes this list to a {@code Writer}.
+	 * 
+	 * @param   out  a writer
+	 * @param   format  a flag stating if the output should be formatted or not
+	 *                  ({@code true} = formatted, {@code false} = unformatted)
+	 * @throws  IOException  if an IO error occurs
+	 */
 	public void write(Writer out, boolean format) throws IOException {
 		TextIO.serialize(out, this, format);
 	}

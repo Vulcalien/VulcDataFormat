@@ -42,8 +42,6 @@ import vulc.vdf.io.text.VDFParseException;
  * An instance of this class represents a VDF object, "<i>a structure that contains unordered
  * key-value pairs</i>".
  * 
- * <p>TO-DOC
- * 
  * @author Vulcalien
  */
 public class VDFObject {
@@ -406,7 +404,7 @@ public class VDFObject {
 	 * <p>This method does not empty this object, but it may replace an old value if a new value
 	 * associated with the same key is found.
 	 * 
-	 * @param   in  the reader
+	 * @param   in  a reader
 	 * @return  this object
 	 * 
 	 * @throws  IOException  if an IO error occurs
@@ -436,7 +434,14 @@ public class VDFObject {
 		}
 	}
 
-	// TO-DOC
+	/**
+	 * Writes this object to a {@code Writer}.
+	 * 
+	 * @param   out  a writer
+	 * @param   format  a flag stating if the output should be formatted or not
+	 *                  ({@code true} = formatted, {@code false} = unformatted)
+	 * @throws  IOException  if an IO error occurs
+	 */
 	public void write(Writer out, boolean format) throws IOException {
 		TextIO.serialize(out, this, format);
 	}
