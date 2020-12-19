@@ -2,6 +2,7 @@ package vulc.vdf.io.text;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 
 import vulc.vdf.VDFList;
 import vulc.vdf.VDFObject;
@@ -56,28 +57,24 @@ public final class TextIO {
 
 	// serialize
 
-	private static <T> void serialize(StringBuilder out, boolean format, Serializer<T> serializer) {
+	private static <T> void serialize(Writer out, boolean format, Serializer<T> serializer) throws IOException {
 		if(!reuseIO) writer = new TextWriter();
 
 		writer.out = out;
 		writer.format = format;
 
 		serializer.serialize(writer);
-		if(format) out.append(TextTokens.LF);
+		if(format) out.append(endOfLine);
 
 		if(!reuseIO) writer = null;
 	}
 
-	public static String stringify(VDFObject obj, boolean format) {
-		StringBuilder out = new StringBuilder();
+	public static void serialize(Writer out, VDFObject obj, boolean format) throws IOException {
 		serialize(out, format, writer -> writer.serializeObject(obj));
-		return out.toString();
 	}
 
-	public static String stringify(VDFList list, boolean format) {
-		StringBuilder out = new StringBuilder();
+	public static void serialize(Writer out, VDFList list, boolean format) throws IOException {
 		serialize(out, format, writer -> writer.serializeList(list));
-		return out.toString();
 	}
 
 	// interfaces
@@ -90,7 +87,7 @@ public final class TextIO {
 
 	private interface Serializer<T> {
 
-		void serialize(TextWriter writer);
+		void serialize(TextWriter writer) throws IOException;
 
 	}
 

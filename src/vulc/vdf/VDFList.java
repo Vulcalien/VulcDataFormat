@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
@@ -492,14 +494,14 @@ public class VDFList implements Iterable<Object> {
 	 * Reads a list from a {@code Reader} and adds the elements to this list, without removing
 	 * contained elements.
 	 * 
-	 * @param   reader  the reader
+	 * @param   in  the reader
 	 * @return  this list
 	 * 
 	 * @throws  IOException  if an IO error occurs
 	 * @throws  VDFParseException  if the file could not be parsed properly
 	 */
-	public VDFList parse(Reader reader) throws IOException {
-		TextIO.deserialize(reader, this);
+	public VDFList parse(Reader in) throws IOException {
+		TextIO.deserialize(in, this);
 		return this;
 	}
 
@@ -512,11 +514,16 @@ public class VDFList implements Iterable<Object> {
 	 * @see     vulc.vdf.VDFList#parse(Reader)
 	 */
 	public VDFList parse(String string) {
-		try(Reader reader = new StringReader(string)) {
-			return parse(reader);
+		try(StringReader in = new StringReader(string)) {
+			return parse(in);
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	// TO-DOC
+	public void write(Writer out, boolean format) throws IOException {
+		TextIO.serialize(out, this, format);
 	}
 
 	/**
@@ -528,9 +535,15 @@ public class VDFList implements Iterable<Object> {
 	 * @param   format  a flag stating if the output string should be formatted or not
 	 *                  ({@code true} = formatted, {@code false} = unformatted)
 	 * @return  a string representation of this list
+	 * @see     vulc.vdf.VDFList#write(Writer, boolean)
 	 */
 	public String toString(boolean format) {
-		return TextIO.stringify(this, format);
+		try(StringWriter out = new StringWriter()) {
+			write(out, format);
+			return out.toString();
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
@@ -404,14 +406,14 @@ public class VDFObject {
 	 * <p>This method does not empty this object, but it may replace an old value if a new value
 	 * associated with the same key is found.
 	 * 
-	 * @param   reader  the reader
+	 * @param   in  the reader
 	 * @return  this object
 	 * 
 	 * @throws  IOException  if an IO error occurs
 	 * @throws  VDFParseException  if the file could not be parsed properly
 	 */
-	public VDFObject parse(Reader reader) throws IOException {
-		TextIO.deserialize(reader, this);
+	public VDFObject parse(Reader in) throws IOException {
+		TextIO.deserialize(in, this);
 		return this;
 	}
 
@@ -427,11 +429,16 @@ public class VDFObject {
 	 * @see     vulc.vdf.VDFObject#parse(Reader)
 	 */
 	public VDFObject parse(String string) {
-		try(Reader reader = new StringReader(string)) {
-			return parse(reader);
+		try(StringReader in = new StringReader(string)) {
+			return parse(in);
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	// TO-DOC
+	public void write(Writer out, boolean format) throws IOException {
+		TextIO.serialize(out, this, format);
 	}
 
 	/**
@@ -443,9 +450,15 @@ public class VDFObject {
 	 * @param   format  a flag stating if the output string should be formatted or not
 	 *                  ({@code true} = formatted, {@code false} = unformatted)
 	 * @return  a string representation of this object
+	 * @see     vulc.vdf.VDFObject#write(Writer, boolean)
 	 */
 	public String toString(boolean format) {
-		return TextIO.stringify(this, format);
+		try(StringWriter out = new StringWriter()) {
+			write(out, format);
+			return out.toString();
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
