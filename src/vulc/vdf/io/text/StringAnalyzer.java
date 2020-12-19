@@ -11,8 +11,7 @@ class StringAnalyzer {
 
 	private final StringBuilder buffer = new StringBuilder();
 	private int pos = 0;
-
-	protected int line = 1;
+	private int line = 1;
 
 	private boolean avoidComments = true;
 
@@ -100,6 +99,16 @@ class StringAnalyzer {
 			result.append(c);
 		}
 		return result.toString();
+	}
+
+	protected byte readType() throws IOException {
+		// TODO allow array value after type, without spaces
+		String type = readUntil(WHITESPACE, TAB, CR, LF,
+		                        CHAR_QUOTE, STRING_QUOTE).toLowerCase();
+
+		Byte code = TextCodes.TAG_CODES.get(type);
+		if(code == null) throw new VDFParseException("type '" + type + "' does not exist", line);
+		return code;
 	}
 
 	protected void skipWhitespaces() throws IOException {

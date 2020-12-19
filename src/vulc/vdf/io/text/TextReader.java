@@ -84,17 +84,13 @@ class TextReader extends VDFReader<StringAnalyzer> {
 			if(in.readIf(CLOSE_OBJECT)) break;
 			if(in.readIf(SEPARATOR)) continue;
 
-			String type = in.readUntil(WHITESPACE, TAB, CR, LF,
-			                           STRING_QUOTE) // int"..."
-			                .toLowerCase();
+			byte type = in.readType();
 			String name = in.readString();
+
 			in.checkToken(ASSIGN);
+
 			in.skipWhitespaces();
-
-			Byte code = TextCodes.TAG_CODES.get(type);
-			if(code == null) throw new VDFParseException("type '" + type + "' does not exist", in.line);
-			obj.setElement(name, deserializers[code].deserialize());
-
+			obj.setElement(name, deserializers[type].deserialize());
 			in.skipWhitespaces();
 
 			char token = in.read();
@@ -114,16 +110,10 @@ class TextReader extends VDFReader<StringAnalyzer> {
 			if(in.readIf(CLOSE_LIST)) break;
 			if(in.readIf(SEPARATOR)) continue;
 
-			// TODO allow array value after type, without spaces
-			String type = in.readUntil(WHITESPACE, TAB, CR, LF,
-			                           CHAR_QUOTE, STRING_QUOTE) // char'c' or string"str"
-			                .toLowerCase();
+			byte type = in.readType();
+
 			in.skipWhitespaces();
-
-			Byte code = TextCodes.TAG_CODES.get(type);
-			if(code == null) throw new VDFParseException("type '" + type + "' does not exist", in.line);
-			list.addElement(deserializers[code].deserialize());
-
+			list.addElement(deserializers[type].deserialize());
 			in.skipWhitespaces();
 
 			char token = in.read();
