@@ -21,10 +21,10 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		};
 
 		add(() -> Boolean.valueOf(in.readUntil(endOfValue)), BOOLEAN);
-		add(() -> in.readNumber(Byte.class, endOfValue, Byte::valueOf), BYTE);
-		add(() -> in.readNumber(Short.class, endOfValue, Short::valueOf), SHORT);
-		add(() -> in.readNumber(Integer.class, endOfValue, Integer::valueOf), INT);
-		add(() -> in.readNumber(Long.class, endOfValue, Long::valueOf), LONG);
+		add(() -> in.readNumber(endOfValue, Byte::valueOf), BYTE);
+		add(() -> in.readNumber(endOfValue, Short::valueOf), SHORT);
+		add(() -> in.readNumber(endOfValue, Integer::valueOf), INT);
+		add(() -> in.readNumber(endOfValue, Long::valueOf), LONG);
 		add(() -> Float.valueOf(in.readUntil(endOfValue)), FLOAT);
 		add(() -> Double.valueOf(in.readUntil(endOfValue)), DOUBLE);
 		add(() -> in.readChar(), CHAR);
@@ -42,19 +42,19 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		    BOOLEAN_A);
 
 		add(getArrayReader(byte[].class,
-		                   (array, i) -> array[i] = in.readNumber(Byte.class, arrayEndOfValue, Byte::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(arrayEndOfValue, Byte::valueOf)),
 		    BYTE_A);
 
 		add(getArrayReader(short[].class,
-		                   (array, i) -> array[i] = in.readNumber(Short.class, arrayEndOfValue, Short::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(arrayEndOfValue, Short::valueOf)),
 		    SHORT_A);
 
 		add(getArrayReader(int[].class,
-		                   (array, i) -> array[i] = in.readNumber(Integer.class, arrayEndOfValue, Integer::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(arrayEndOfValue, Integer::valueOf)),
 		    INT_A);
 
 		add(getArrayReader(long[].class,
-		                   (array, i) -> array[i] = in.readNumber(Long.class, arrayEndOfValue, Long::valueOf)),
+		                   (array, i) -> array[i] = in.readNumber(arrayEndOfValue, Long::valueOf)),
 		    LONG_A);
 
 		add(getArrayReader(float[].class, (array, i) -> array[i] = Float.valueOf(in.readUntil(arrayEndOfValue))),

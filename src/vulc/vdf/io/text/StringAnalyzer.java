@@ -121,7 +121,7 @@ class StringAnalyzer {
 		throw new VDFParseException("token '" + token + "' expected", line);
 	}
 
-	protected <T> T readNumber(Class<T> type, char[] endOfValue, NumberReader<T> reader) throws IOException {
+	protected <T> T readNumber(char[] endOfValue, NumberReader<T> reader) throws IOException {
 		String string = readUntil(endOfValue);
 
 		int radix = 10;
