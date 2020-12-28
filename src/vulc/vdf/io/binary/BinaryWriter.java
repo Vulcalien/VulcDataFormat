@@ -39,7 +39,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList(array[i])), LIST_A);
 	}
 
-	public void serializeObject(VDFObject obj) throws IOException {
+	private void serializeObject(VDFObject obj) throws IOException {
 		for(String key : obj.keySet()) {
 			Object e = obj.getElement(key);
 
@@ -53,7 +53,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 		out.writeByte(-1);								// write end mark
 	}
 
-	public void serializeList(VDFList list) throws IOException {
+	private void serializeList(VDFList list) throws IOException {
 		for(Object e : list) {
 			byte code = VDFCodes.get(e.getClass());
 

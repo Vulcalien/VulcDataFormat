@@ -2,9 +2,6 @@ package vulc.vdf.io;
 
 import java.io.IOException;
 
-import vulc.vdf.VDFList;
-import vulc.vdf.VDFObject;
-
 public abstract class VDFWriter<T> {
 
 	public T out;
@@ -14,9 +11,10 @@ public abstract class VDFWriter<T> {
 		serializers[code] = serializer;
 	}
 
-	public abstract void serializeObject(VDFObject obj) throws Exception;
-
-	public abstract void serializeList(VDFList list) throws Exception;
+	public void serialize(Object element) throws IOException {
+		byte code = VDFCodes.get(element.getClass());
+		serializers[code].serialize(element);
+	}
 
 	protected abstract <K> ElementSerializer getArrayWriter(Class<K> type, ArrayElementSerializer<K> serializer);
 

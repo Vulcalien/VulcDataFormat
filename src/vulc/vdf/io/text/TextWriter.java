@@ -49,7 +49,7 @@ class TextWriter extends VDFWriter<Writer> {
 		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList(array[i])), LIST_A);
 	}
 
-	public void serializeObject(VDFObject obj) throws IOException {
+	private void serializeObject(VDFObject obj) throws IOException {
 		out.append(OPEN_OBJECT);
 
 		indentation++;
@@ -89,7 +89,7 @@ class TextWriter extends VDFWriter<Writer> {
 		out.append(CLOSE_OBJECT);
 	}
 
-	public void serializeList(VDFList list) throws IOException {
+	private void serializeList(VDFList list) throws IOException {
 		out.append(OPEN_LIST);
 
 		indentation++;

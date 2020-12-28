@@ -52,22 +52,14 @@ public final class BinaryIO {
 
 	// serialize
 
-	private static <T> void serialize(DataOutputStream out, Serializer<T> serializer) throws IOException {
+	public static void serialize(DataOutputStream out, Object element) throws IOException {
 		if(!reuseIO) writer = new BinaryWriter();
 		writer.out = out;
 
-		serializer.serialize(writer);
+		writer.serialize(element);
 
 		if(!reuseIO) writer = null;
 		else writer.out = null;
-	}
-
-	public static void serialize(DataOutputStream out, VDFObject obj) throws IOException {
-		serialize(out, writer -> writer.serializeObject(obj));
-	}
-
-	public static void serialize(DataOutputStream out, VDFList list) throws IOException {
-		serialize(out, writer -> writer.serializeList(list));
 	}
 
 	// interfaces
@@ -75,12 +67,6 @@ public final class BinaryIO {
 	private interface Deserializer<T> {
 
 		void deserialize(BinaryReader reader) throws IOException;
-
-	}
-
-	private interface Serializer<T> {
-
-		void serialize(BinaryWriter writer) throws IOException;
 
 	}
 

@@ -58,24 +58,16 @@ public final class TextIO {
 
 	// serialize
 
-	private static <T> void serialize(Writer out, boolean format, Serializer<T> serializer) throws IOException {
+	public static void serialize(Writer out, Object element, boolean format) throws IOException {
 		if(!reuseIO) writer = new TextWriter();
 		writer.out = out;
 		writer.format = format;
 
-		serializer.serialize(writer);
+		writer.serialize(element);
 		if(format) out.append(endOfLine);
 
 		if(!reuseIO) writer = null;
 		else writer.out = null;
-	}
-
-	public static void serialize(Writer out, VDFObject obj, boolean format) throws IOException {
-		serialize(out, format, writer -> writer.serializeObject(obj));
-	}
-
-	public static void serialize(Writer out, VDFList list, boolean format) throws IOException {
-		serialize(out, format, writer -> writer.serializeList(list));
 	}
 
 	// interfaces
@@ -83,12 +75,6 @@ public final class TextIO {
 	private interface Deserializer<T> {
 
 		void deserialize(TextReader reader) throws IOException;
-
-	}
-
-	private interface Serializer<T> {
-
-		void serialize(TextWriter writer) throws IOException;
 
 	}
 
