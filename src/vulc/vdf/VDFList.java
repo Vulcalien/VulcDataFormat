@@ -31,6 +31,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -92,10 +93,21 @@ public class VDFList implements Iterable<Object> {
 	/**
 	 * Appends an element to the end of this list.
 	 * 
-	 * @param  e  the element to append
+	 * @param  e  the element to add
+	 * @see    java.util.ArrayList#add(Object)
 	 */
 	public void addElement(Object e) {
 		list.add(e);
+	}
+
+	/**
+	 * Appends all the elements in the given list to the end of this list.
+	 * 
+	 * @param  list  the list containing the elements to add
+	 * @see    java.util.ArrayList#addAll(Collection)
+	 */
+	public void addAll(VDFList list) {
+		this.list.addAll(list.list);
 	}
 
 	/**

@@ -31,6 +31,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -99,6 +100,16 @@ public class VDFObject {
 	public Object setElement(String key, Object e) {
 		if(key == null) throw new NullPointerException();
 		return map.put(key, e);
+	}
+
+	/**
+	 * TO-DOC
+	 * 
+	 * @param  object
+	 * @see    java.util.HashMap#putAll(Map)
+	 */
+	public void setAll(VDFObject object) {
+		this.map.putAll(object.map);
 	}
 
 	/**
