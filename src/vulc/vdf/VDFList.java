@@ -151,132 +151,132 @@ public class VDFList implements Iterable<Object> {
 		return (Boolean) getElement(i);
 	}
 
-	public Object setBoolean(int i, boolean value) {
-		return setElement(i, value);
+	public Object setBoolean(int i, boolean element) {
+		return setElement(i, element);
 	}
 
-	public void addBoolean(boolean value) {
-		addElement(value);
+	public void addBoolean(boolean element) {
+		addElement(element);
 	}
 
 	public byte getByte(int i) {
 		return (Byte) getElement(i);
 	}
 
-	public Object setByte(int i, byte value) {
-		return setElement(i, value);
+	public Object setByte(int i, byte element) {
+		return setElement(i, element);
 	}
 
-	public void addByte(byte value) {
-		addElement(value);
+	public void addByte(byte element) {
+		addElement(element);
 	}
 
 	public short getShort(int i) {
 		return (Short) getElement(i);
 	}
 
-	public Object setShort(int i, short value) {
-		return setElement(i, value);
+	public Object setShort(int i, short element) {
+		return setElement(i, element);
 	}
 
-	public void addShort(short value) {
-		addElement(value);
+	public void addShort(short element) {
+		addElement(element);
 	}
 
 	public int getInt(int i) {
 		return (Integer) getElement(i);
 	}
 
-	public Object setInt(int i, int value) {
-		return setElement(i, value);
+	public Object setInt(int i, int element) {
+		return setElement(i, element);
 	}
 
-	public void addInt(int value) {
-		addElement(value);
+	public void addInt(int element) {
+		addElement(element);
 	}
 
 	public long getLong(int i) {
 		return (Long) getElement(i);
 	}
 
-	public Object setLong(int i, long value) {
-		return setElement(i, value);
+	public Object setLong(int i, long element) {
+		return setElement(i, element);
 	}
 
-	public void addLong(long value) {
-		addElement(value);
+	public void addLong(long element) {
+		addElement(element);
 	}
 
 	public float getFloat(int i) {
 		return (Float) getElement(i);
 	}
 
-	public Object setFloat(int i, float value) {
-		return setElement(i, value);
+	public Object setFloat(int i, float element) {
+		return setElement(i, element);
 	}
 
-	public void addFloat(float value) {
-		addElement(value);
+	public void addFloat(float element) {
+		addElement(element);
 	}
 
 	public double getDouble(int i) {
 		return (Double) getElement(i);
 	}
 
-	public Object setDouble(int i, double value) {
-		return setElement(i, value);
+	public Object setDouble(int i, double element) {
+		return setElement(i, element);
 	}
 
-	public void addDouble(double value) {
-		addElement(value);
+	public void addDouble(double element) {
+		addElement(element);
 	}
 
 	public char getChar(int i) {
 		return (Character) getElement(i);
 	}
 
-	public Object setChar(int i, char value) {
-		return setElement(i, value);
+	public Object setChar(int i, char element) {
+		return setElement(i, element);
 	}
 
-	public void addChar(char value) {
-		addElement(value);
+	public void addChar(char element) {
+		addElement(element);
 	}
 
 	public String getString(int i) {
 		return (String) getElement(i);
 	}
 
-	public Object setString(int i, String value) {
-		return setElement(i, value);
+	public Object setString(int i, String element) {
+		return setElement(i, element);
 	}
 
-	public void addString(String value) {
-		addElement(value);
+	public void addString(String element) {
+		addElement(element);
 	}
 
 	public VDFObject getObject(int i) {
 		return (VDFObject) getElement(i);
 	}
 
-	public Object setObject(int i, VDFObject objectElement) {
-		return setElement(i, objectElement);
+	public Object setObject(int i, VDFObject element) {
+		return setElement(i, element);
 	}
 
-	public void addObject(VDFObject objectElement) {
-		addElement(objectElement);
+	public void addObject(VDFObject element) {
+		addElement(element);
 	}
 
 	public VDFList getList(int i) {
 		return (VDFList) getElement(i);
 	}
 
-	public Object setList(int i, VDFList listElement) {
-		return setElement(i, listElement);
+	public Object setList(int i, VDFList element) {
+		return setElement(i, element);
 	}
 
-	public void addList(VDFList listElement) {
-		addElement(listElement);
+	public void addList(VDFList element) {
+		addElement(element);
 	}
 
 	// arrays
@@ -285,132 +285,132 @@ public class VDFList implements Iterable<Object> {
 		return (boolean[]) getElement(i);
 	}
 
-	public Object setBooleanArray(int i, boolean[] value) {
-		return setElement(i, value);
+	public Object setBooleanArray(int i, boolean[] element) {
+		return setElement(i, element);
 	}
 
-	public void addBooleanArray(boolean[] value) {
-		addElement(value);
+	public void addBooleanArray(boolean[] element) {
+		addElement(element);
 	}
 
 	public byte[] getByteArray(int i) {
 		return (byte[]) getElement(i);
 	}
 
-	public Object setByteArray(int i, byte[] value) {
-		return setElement(i, value);
+	public Object setByteArray(int i, byte[] element) {
+		return setElement(i, element);
 	}
 
-	public void addByteArray(byte[] value) {
-		addElement(value);
+	public void addByteArray(byte[] element) {
+		addElement(element);
 	}
 
 	public short[] getShortArray(int i) {
 		return (short[]) getElement(i);
 	}
 
-	public Object setShortArray(int i, short[] value) {
-		return setElement(i, value);
+	public Object setShortArray(int i, short[] element) {
+		return setElement(i, element);
 	}
 
-	public void addShortArray(short[] value) {
-		addElement(value);
+	public void addShortArray(short[] element) {
+		addElement(element);
 	}
 
 	public int[] getIntArray(int i) {
 		return (int[]) getElement(i);
 	}
 
-	public Object setIntArray(int i, int[] value) {
-		return setElement(i, value);
+	public Object setIntArray(int i, int[] element) {
+		return setElement(i, element);
 	}
 
-	public void addIntArray(int[] value) {
-		addElement(value);
+	public void addIntArray(int[] element) {
+		addElement(element);
 	}
 
 	public long[] getLongArray(int i) {
 		return (long[]) getElement(i);
 	}
 
-	public Object setLongArray(int i, long[] value) {
-		return setElement(i, value);
+	public Object setLongArray(int i, long[] element) {
+		return setElement(i, element);
 	}
 
-	public void addLongArray(long[] value) {
-		addElement(value);
+	public void addLongArray(long[] element) {
+		addElement(element);
 	}
 
 	public float[] getFloatArray(int i) {
 		return (float[]) getElement(i);
 	}
 
-	public Object setFloatArray(int i, float[] value) {
-		return setElement(i, value);
+	public Object setFloatArray(int i, float[] element) {
+		return setElement(i, element);
 	}
 
-	public void addFloatArray(float[] value) {
-		addElement(value);
+	public void addFloatArray(float[] element) {
+		addElement(element);
 	}
 
 	public double[] getDoubleArray(int i) {
 		return (double[]) getElement(i);
 	}
 
-	public Object setDoubleArray(int i, double[] value) {
-		return setElement(i, value);
+	public Object setDoubleArray(int i, double[] element) {
+		return setElement(i, element);
 	}
 
-	public void addDoubleArray(double[] value) {
-		addElement(value);
+	public void addDoubleArray(double[] element) {
+		addElement(element);
 	}
 
 	public char[] getCharArray(int i) {
 		return (char[]) getElement(i);
 	}
 
-	public Object setCharArray(int i, char[] value) {
-		return setElement(i, value);
+	public Object setCharArray(int i, char[] element) {
+		return setElement(i, element);
 	}
 
-	public void addCharArray(char[] value) {
-		addElement(value);
+	public void addCharArray(char[] element) {
+		addElement(element);
 	}
 
 	public String[] getStringArray(int i) {
 		return (String[]) getElement(i);
 	}
 
-	public Object setStringArray(int i, String[] value) {
-		return setElement(i, value);
+	public Object setStringArray(int i, String[] element) {
+		return setElement(i, element);
 	}
 
-	public void addStringArray(String[] value) {
-		addElement(value);
+	public void addStringArray(String[] element) {
+		addElement(element);
 	}
 
 	public VDFObject[] getObjectArray(int i) {
 		return (VDFObject[]) getElement(i);
 	}
 
-	public Object setObjectArray(int i, VDFObject[] value) {
-		return setElement(i, value);
+	public Object setObjectArray(int i, VDFObject[] element) {
+		return setElement(i, element);
 	}
 
-	public void addObjectArray(VDFObject[] value) {
-		addElement(value);
+	public void addObjectArray(VDFObject[] element) {
+		addElement(element);
 	}
 
 	public VDFList[] getListArray(int i) {
 		return (VDFList[]) getElement(i);
 	}
 
-	public Object setListArray(int i, VDFList[] value) {
-		return setElement(i, value);
+	public Object setListArray(int i, VDFList[] element) {
+		return setElement(i, element);
 	}
 
-	public void addListArray(VDFList[] value) {
-		addElement(value);
+	public void addListArray(VDFList[] element) {
+		addElement(element);
 	}
 
 	// binary IO

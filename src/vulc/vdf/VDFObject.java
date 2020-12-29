@@ -140,88 +140,88 @@ public class VDFObject {
 		return (Boolean) getElement(key);
 	}
 
-	public Object setBoolean(String key, boolean value) {
-		return setElement(key, value);
+	public Object setBoolean(String key, boolean element) {
+		return setElement(key, element);
 	}
 
 	public byte getByte(String key) {
 		return (Byte) getElement(key);
 	}
 
-	public Object setByte(String key, byte value) {
-		return setElement(key, value);
+	public Object setByte(String key, byte element) {
+		return setElement(key, element);
 	}
 
 	public short getShort(String key) {
 		return (Short) getElement(key);
 	}
 
-	public Object setShort(String key, short value) {
-		return setElement(key, value);
+	public Object setShort(String key, short element) {
+		return setElement(key, element);
 	}
 
 	public int getInt(String key) {
 		return (Integer) getElement(key);
 	}
 
-	public Object setInt(String key, int value) {
-		return setElement(key, value);
+	public Object setInt(String key, int element) {
+		return setElement(key, element);
 	}
 
 	public long getLong(String key) {
 		return (Long) getElement(key);
 	}
 
-	public Object setLong(String key, long value) {
-		return setElement(key, value);
+	public Object setLong(String key, long element) {
+		return setElement(key, element);
 	}
 
 	public float getFloat(String key) {
 		return (Float) getElement(key);
 	}
 
-	public Object setFloat(String key, float value) {
-		return setElement(key, value);
+	public Object setFloat(String key, float element) {
+		return setElement(key, element);
 	}
 
 	public double getDouble(String key) {
 		return (Double) getElement(key);
 	}
 
-	public Object setDouble(String key, double value) {
-		return setElement(key, value);
+	public Object setDouble(String key, double element) {
+		return setElement(key, element);
 	}
 
 	public char getChar(String key) {
 		return (Character) getElement(key);
 	}
 
-	public Object setChar(String key, char value) {
-		return setElement(key, value);
+	public Object setChar(String key, char element) {
+		return setElement(key, element);
 	}
 
 	public String getString(String key) {
 		return (String) getElement(key);
 	}
 
-	public Object setString(String key, String value) {
-		return setElement(key, value);
+	public Object setString(String key, String element) {
+		return setElement(key, element);
 	}
 
 	public VDFObject getObject(String key) {
 		return (VDFObject) getElement(key);
 	}
 
-	public Object setObject(String key, VDFObject objectElement) {
-		return setElement(key, objectElement);
+	public Object setObject(String key, VDFObject element) {
+		return setElement(key, element);
 	}
 
 	public VDFList getList(String key) {
 		return (VDFList) getElement(key);
 	}
 
-	public Object setList(String key, VDFList listElement) {
-		return setElement(key, listElement);
+	public Object setList(String key, VDFList element) {
+		return setElement(key, element);
 	}
 
 	// arrays
@@ -230,88 +230,88 @@ public class VDFObject {
 		return (boolean[]) getElement(key);
 	}
 
-	public Object setBooleanArray(String key, boolean[] value) {
-		return setElement(key, value);
+	public Object setBooleanArray(String key, boolean[] element) {
+		return setElement(key, element);
 	}
 
 	public byte[] getByteArray(String key) {
 		return (byte[]) getElement(key);
 	}
 
-	public Object setByteArray(String key, byte[] value) {
-		return setElement(key, value);
+	public Object setByteArray(String key, byte[] element) {
+		return setElement(key, element);
 	}
 
 	public short[] getShortArray(String key) {
 		return (short[]) getElement(key);
 	}
 
-	public Object setShortArray(String key, short[] value) {
-		return setElement(key, value);
+	public Object setShortArray(String key, short[] element) {
+		return setElement(key, element);
 	}
 
 	public int[] getIntArray(String key) {
 		return (int[]) getElement(key);
 	}
 
-	public Object setIntArray(String key, int[] value) {
-		return setElement(key, value);
+	public Object setIntArray(String key, int[] element) {
+		return setElement(key, element);
 	}
 
 	public long[] getLongArray(String key) {
 		return (long[]) getElement(key);
 	}
 
-	public Object setLongArray(String key, long[] value) {
-		return setElement(key, value);
+	public Object setLongArray(String key, long[] element) {
+		return setElement(key, element);
 	}
 
 	public float[] getFloatArray(String key) {
 		return (float[]) getElement(key);
 	}
 
-	public Object setFloatArray(String key, float[] value) {
-		return setElement(key, value);
+	public Object setFloatArray(String key, float[] element) {
+		return setElement(key, element);
 	}
 
 	public double[] getDoubleArray(String key) {
 		return (double[]) getElement(key);
 	}
 
-	public Object setDoubleArray(String key, double[] value) {
-		return setElement(key, value);
+	public Object setDoubleArray(String key, double[] element) {
+		return setElement(key, element);
 	}
 
 	public char[] getCharArray(String key) {
 		return (char[]) getElement(key);
 	}
 
-	public Object setCharArray(String key, char[] value) {
-		return setElement(key, value);
+	public Object setCharArray(String key, char[] element) {
+		return setElement(key, element);
 	}
 
 	public String[] getStringArray(String key) {
 		return (String[]) getElement(key);
 	}
 
-	public Object setStringArray(String key, String[] value) {
-		return setElement(key, value);
+	public Object setStringArray(String key, String[] element) {
+		return setElement(key, element);
 	}
 
 	public VDFObject[] getObjectArray(String key) {
 		return (VDFObject[]) getElement(key);
 	}
 
-	public Object setObjectArray(String key, VDFObject[] value) {
-		return setElement(key, value);
+	public Object setObjectArray(String key, VDFObject[] element) {
+		return setElement(key, element);
 	}
 
 	public VDFList[] getListArray(String key) {
 		return (VDFList[]) getElement(key);
 	}
 
-	public Object setListArray(String key, VDFList[] value) {
-		return setElement(key, value);
+	public Object setListArray(String key, VDFList[] element) {
+		return setElement(key, element);
 	}
 
 	// binary IO
