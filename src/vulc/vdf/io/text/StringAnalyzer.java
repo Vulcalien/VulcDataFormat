@@ -102,7 +102,6 @@ class StringAnalyzer {
 	}
 
 	protected byte readType() throws IOException {
-		// TODO allow array value after type, without spaces
 		String type = readUntil(WHITESPACE, TAB, CR, LF,
 		                        CHAR_QUOTE, STRING_QUOTE).toLowerCase();
 

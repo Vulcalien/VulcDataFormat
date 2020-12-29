@@ -77,7 +77,7 @@ public class VDFObject {
 	 * associated with an {@code Integer} element then {@code getInt("x")} should be preferred,
 	 * since it will return a primitive {@code int} value.
 	 * 
-	 * @param   key  the key
+	 * @param   key  the key associated with the element to return
 	 * @return  the element associated with the specified key, or {@code null} if this object
 	 *          contains no element associated with the key
 	 * @see     java.util.HashMap#get(Object)
@@ -91,8 +91,8 @@ public class VDFObject {
 	 * Associates the given element with the given key. If this object contained an element
 	 * associated with that key, the old element is replaced.
 	 * 
-	 * @param   key  the key that will be associated with the element
-	 * @param   e     the element to set
+	 * @param   key  the key to associate with the element
+	 * @param   e    the element to associate with the key
 	 * @return  the old element associated with the specified key, or {@code null} if the key was
 	 *          not associated with any element
 	 * @see     java.util.HashMap#put(Object, Object)
@@ -103,9 +103,11 @@ public class VDFObject {
 	}
 
 	/**
-	 * TO-DOC
+	 * Copies all of the associations from the given object to this object. If an element in this
+	 * object and an element in the given object are associated with the same key, the element in
+	 * the given object replaces the element in this object.
 	 * 
-	 * @param  object
+	 * @param  object  the object containing the associations to copy
 	 * @see    java.util.HashMap#putAll(Map)
 	 */
 	public void setAll(VDFObject object) {
