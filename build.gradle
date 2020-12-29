@@ -1,9 +1,10 @@
 apply plugin: 'java'
 
+defaultTasks 'jar'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-defaultTasks 'jar'
 
 sourceSets {
     main.java.srcDirs 'src'
@@ -21,6 +22,11 @@ dependencies {
 
 test {
     useJUnitPlatform()
+
+    testLogging {
+        events 'passed', 'skipped', 'failed' , 'standardOut', 'standardError'
+        exceptionFormat 'full'
+    }
 }
 
 task source(type: Jar, dependsOn: classes) {
