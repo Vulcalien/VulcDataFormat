@@ -60,14 +60,12 @@ public final class TextIO {
 
 	public static void serialize(Writer out, Object element, boolean format) throws IOException {
 		if(!reuseIO) writer = new TextWriter();
-		writer.out = out;
 		writer.format = format;
 
-		writer.serialize(element);
+		writer.serialize(out, element);
 		if(format) out.append(endOfLine);
 
 		if(!reuseIO) writer = null;
-		else writer.out = null;
 	}
 
 	// interfaces

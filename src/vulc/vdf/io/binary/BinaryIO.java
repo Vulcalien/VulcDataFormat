@@ -54,12 +54,10 @@ public final class BinaryIO {
 
 	public static void serialize(DataOutputStream out, Object element) throws IOException {
 		if(!reuseIO) writer = new BinaryWriter();
-		writer.out = out;
 
-		writer.serialize(element);
+		writer.serialize(out, element);
 
 		if(!reuseIO) writer = null;
-		else writer.out = null;
 	}
 
 	// interfaces
