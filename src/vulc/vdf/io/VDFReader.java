@@ -2,9 +2,6 @@ package vulc.vdf.io;
 
 import java.io.IOException;
 
-import vulc.vdf.VDFList;
-import vulc.vdf.VDFObject;
-
 public abstract class VDFReader<T> {
 
 	public T in;
@@ -22,10 +19,6 @@ public abstract class VDFReader<T> {
 	}
 
 	protected abstract Object deserializeTopLevel(T in) throws IOException;
-
-	public abstract VDFObject deserializeObject(VDFObject obj) throws IOException;
-
-	public abstract VDFList deserializeList(VDFList list) throws IOException;
 
 	protected abstract <K> ElementDeserializer getArrayReader(Class<K> type, ArrayElementDeserializer<K> deserializer);
 

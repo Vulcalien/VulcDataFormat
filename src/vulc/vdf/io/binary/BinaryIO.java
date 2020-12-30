@@ -4,9 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import vulc.vdf.VDFList;
-import vulc.vdf.VDFObject;
-
 public final class BinaryIO {
 
 	private BinaryIO() {
@@ -30,8 +27,6 @@ public final class BinaryIO {
 		}
 	}
 
-	// deserialize
-
 	public static Object deserialize(DataInputStream in) throws IOException {
 		if(!reuseIO) reader = new BinaryReader();
 
@@ -41,40 +36,12 @@ public final class BinaryIO {
 		return element;
 	}
 
-	private static <T> void deserialize(DataInputStream in, Deserializer<T> deserializer) throws IOException {
-		if(!reuseIO) reader = new BinaryReader();
-		reader.in = in;
-
-		deserializer.deserialize(reader);
-
-		if(!reuseIO) reader = null;
-		else reader.in = null;
-	}
-
-	public static void deserialize(DataInputStream in, VDFObject obj) throws IOException {
-		deserialize(in, reader -> reader.deserializeObject(obj));
-	}
-
-	public static void deserialize(DataInputStream in, VDFList list) throws IOException {
-		deserialize(in, reader -> reader.deserializeList(list));
-	}
-
-	// serialize
-
 	public static void serialize(DataOutputStream out, Object element) throws IOException {
 		if(!reuseIO) writer = new BinaryWriter();
 
 		writer.serialize(out, element);
 
 		if(!reuseIO) writer = null;
-	}
-
-	// interfaces
-
-	private interface Deserializer<T> {
-
-		void deserialize(BinaryReader reader) throws IOException;
-
 	}
 
 }

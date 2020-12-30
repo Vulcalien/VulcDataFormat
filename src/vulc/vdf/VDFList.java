@@ -426,7 +426,7 @@ public class VDFList implements Iterable<Object> {
 	 * @throws  IOException   if an IO error occurs
 	 */
 	public VDFList deserialize(DataInputStream in) throws IOException {
-		BinaryIO.deserialize(in, this);
+		this.addAll((VDFList) BinaryIO.deserialize(in));
 		return this;
 	}
 
@@ -511,7 +511,7 @@ public class VDFList implements Iterable<Object> {
 	 * @throws  VDFParseException  if the file could not be parsed properly
 	 */
 	public VDFList parse(Reader in) throws IOException {
-		TextIO.deserialize(in, this);
+		this.addAll((VDFList) TextIO.deserialize(in));
 		return this;
 	}
 

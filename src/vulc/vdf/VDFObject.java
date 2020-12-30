@@ -330,7 +330,7 @@ public class VDFObject {
 	 * @throws  IOException   if an IO error occurs
 	 */
 	public VDFObject deserialize(DataInputStream in) throws IOException {
-		BinaryIO.deserialize(in, this);
+		this.setAll((VDFObject) BinaryIO.deserialize(in));
 		return this;
 	}
 
@@ -424,7 +424,7 @@ public class VDFObject {
 	 * @throws  VDFParseException  if the file could not be parsed properly
 	 */
 	public VDFObject parse(Reader in) throws IOException {
-		TextIO.deserialize(in, this);
+		this.setAll((VDFObject) TextIO.deserialize(in));
 		return this;
 	}
 

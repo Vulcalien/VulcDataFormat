@@ -85,7 +85,7 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		return deserializers[type].deserialize();
 	}
 
-	public VDFObject deserializeObject(VDFObject obj) throws IOException {
+	private VDFObject deserializeObject(VDFObject obj) throws IOException {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {
 			in.skipWhitespaces();
@@ -111,7 +111,7 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		return obj;
 	}
 
-	public VDFList deserializeList(VDFList list) throws IOException {
+	private VDFList deserializeList(VDFList list) throws IOException {
 		in.checkToken(OPEN_LIST);
 		while(true) {
 			in.skipWhitespaces();

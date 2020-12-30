@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import vulc.vdf.VDFList;
-import vulc.vdf.VDFObject;
-
 public final class TextIO {
 
 	private TextIO() {
@@ -36,8 +33,6 @@ public final class TextIO {
 		}
 	}
 
-	// deserialize
-
 	public static Object deserialize(Reader in) throws IOException {
 		if(!reuseIO) reader = new TextReader();
 
@@ -47,26 +42,6 @@ public final class TextIO {
 		return element;
 	}
 
-	private static <T> void deserialize(Reader in, Deserializer<T> deserializer) throws IOException {
-		if(!reuseIO) reader = new TextReader();
-		reader.in = new StringAnalyzer(in);
-
-		deserializer.deserialize(reader);
-
-		if(!reuseIO) reader = null;
-		else reader.in = null;
-	}
-
-	public static void deserialize(Reader in, VDFObject obj) throws IOException {
-		deserialize(in, reader -> reader.deserializeObject(obj));
-	}
-
-	public static void deserialize(Reader in, VDFList list) throws IOException {
-		deserialize(in, reader -> reader.deserializeList(list));
-	}
-
-	// serialize
-
 	public static void serialize(Writer out, Object element, boolean format) throws IOException {
 		if(!reuseIO) writer = new TextWriter();
 		writer.format = format;
@@ -74,14 +49,6 @@ public final class TextIO {
 		writer.serialize(out, element);
 
 		if(!reuseIO) writer = null;
-	}
-
-	// interfaces
-
-	private interface Deserializer<T> {
-
-		void deserialize(TextReader reader) throws IOException;
-
 	}
 
 }

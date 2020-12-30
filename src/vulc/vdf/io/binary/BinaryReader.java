@@ -43,7 +43,7 @@ class BinaryReader extends VDFReader<DataInputStream> {
 		return deserializers[code].deserialize();
 	}
 
-	public VDFObject deserializeObject(VDFObject obj) throws IOException {
+	private VDFObject deserializeObject(VDFObject obj) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {                       // read code, until end mark (-1) is found
 			String key = in.readUTF();                              // read key
@@ -53,7 +53,7 @@ class BinaryReader extends VDFReader<DataInputStream> {
 		return obj;
 	}
 
-	public VDFList deserializeList(VDFList list) throws IOException {
+	private VDFList deserializeList(VDFList list) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {                           // read code, until end mark (-1) is found
 			list.addElement(deserializers[code].deserialize());         // deserialize and add element to list
