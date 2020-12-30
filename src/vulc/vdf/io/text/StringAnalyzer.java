@@ -5,6 +5,8 @@ import static vulc.vdf.io.text.TextTokens.*;
 import java.io.IOException;
 import java.io.Reader;
 
+import vulc.vdf.io.VDFCodes;
+
 class StringAnalyzer {
 
 	private final Reader reader;
@@ -71,7 +73,6 @@ class StringAnalyzer {
 	private void checkCanRead() throws IOException {
 		if(pos >= buffer.length()) {
 			int c = reader.read();
-			if(c == -1) throw new VDFParseException("Cannot read more characters", line);
 			buffer.append((char) c);
 		}
 	}
@@ -96,9 +97,18 @@ class StringAnalyzer {
 					break read_loop;
 				}
 			}
+			if(c == EOF) throw new VDFParseException("Cannot read more characters", line);
 			result.append(c);
 		}
 		return result.toString();
+	}
+
+	protected byte readTopLevelType() throws IOException {
+		char next = read();
+		unread();
+		if(next == OPEN_OBJECT) return VDFCodes.OBJECT;
+		if(next == OPEN_LIST) return VDFCodes.LIST;
+		return readType();
 	}
 
 	protected byte readType() throws IOException {

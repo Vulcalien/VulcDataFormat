@@ -38,6 +38,15 @@ public final class TextIO {
 
 	// deserialize
 
+	public static Object deserialize(Reader in) throws IOException {
+		if(!reuseIO) reader = new TextReader();
+
+		Object element = reader.deserialize(new StringAnalyzer(in));
+
+		if(!reuseIO) reader = null;
+		return element;
+	}
+
 	private static <T> void deserialize(Reader in, Deserializer<T> deserializer) throws IOException {
 		if(!reuseIO) reader = new TextReader();
 		reader.in = new StringAnalyzer(in);

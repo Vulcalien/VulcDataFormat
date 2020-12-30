@@ -17,7 +17,8 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		    CLOSE_OBJECT, CLOSE_LIST,
 		    SEPARATOR,
 		    WHITESPACE, TAB,
-		    CR, LF
+		    CR, LF,
+		    EOF
 		};
 
 		add(() -> Boolean.valueOf(in.readUntil(endOfValue)), BOOLEAN);
@@ -77,7 +78,11 @@ class TextReader extends VDFReader<StringAnalyzer> {
 	}
 
 	protected Object deserializeTopLevel(StringAnalyzer in) throws IOException {
-		return null;
+		in.skipWhitespaces();
+		byte type = in.readTopLevelType();
+		in.skipWhitespaces();
+
+		return deserializers[type].deserialize();
 	}
 
 	public VDFObject deserializeObject(VDFObject obj) throws IOException {

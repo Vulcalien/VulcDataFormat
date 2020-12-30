@@ -26,4 +26,6 @@ final class TextTokens {
 	protected static final char CR = '\r';
 	protected static final char LF = '\n';
 
+	protected static final char EOF = (char) -1;
+
 }
