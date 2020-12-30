@@ -16,6 +16,7 @@ class StringAnalyzer {
 	private int line = 1;
 
 	private boolean avoidComments = true;
+	private boolean allowEOF = false;
 
 	protected StringAnalyzer(Reader reader) {
 		this.reader = reader;
@@ -72,8 +73,9 @@ class StringAnalyzer {
 
 	private void checkCanRead() throws IOException {
 		if(pos >= buffer.length()) {
-			int c = reader.read();
-			buffer.append((char) c);
+			char c = (char) reader.read();
+			if(!allowEOF && c == EOF) throw new VDFParseException("Cannot read more characters", line);
+			buffer.append(c);
 		}
 	}
 
@@ -86,6 +88,12 @@ class StringAnalyzer {
 	}
 
 	protected String readUntil(char... until) throws IOException {
+		for(char c : until) {
+			if(c == EOF) {
+				allowEOF = true;
+				break;
+			}
+		}
 		StringBuilder result = new StringBuilder();
 
 		read_loop:
@@ -97,9 +105,9 @@ class StringAnalyzer {
 					break read_loop;
 				}
 			}
-			if(c == EOF) throw new VDFParseException("Cannot read more characters", line);
 			result.append(c);
 		}
+		allowEOF = false;
 		return result.toString();
 	}
 
