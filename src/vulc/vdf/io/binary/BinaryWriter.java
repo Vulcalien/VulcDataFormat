@@ -43,7 +43,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 		for(String key : obj.keySet()) {
 			Object e = obj.getElement(key);
 
-			byte code = VDFCodes.get(e.getClass());
+			byte code = VDFCodes.get(e);
 
 			out.writeByte(code);						// write code
 			out.writeUTF(key);							// write key
@@ -55,7 +55,7 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 
 	private void serializeList(VDFList list) throws IOException {
 		for(Object e : list) {
-			byte code = VDFCodes.get(e.getClass());
+			byte code = VDFCodes.get(e);
 
 			out.writeByte(code);						// write code
 			serializers[code].serialize(e);				// serialize

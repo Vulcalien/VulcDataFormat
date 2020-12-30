@@ -68,7 +68,7 @@ class TextWriter extends VDFWriter<Writer> {
 				addIndentation();
 			}
 
-			byte code = VDFCodes.get(e.getClass());
+			byte code = VDFCodes.get(e);
 
 			out.append(TextCodes.TAGS[code]);
 			if(format) out.append(WHITESPACE);
@@ -106,7 +106,7 @@ class TextWriter extends VDFWriter<Writer> {
 				addIndentation();
 			}
 
-			byte code = VDFCodes.get(e.getClass());
+			byte code = VDFCodes.get(e);
 
 			out.append(TextCodes.TAGS[code]);
 			out.append(WHITESPACE);

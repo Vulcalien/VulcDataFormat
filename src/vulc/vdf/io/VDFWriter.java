@@ -12,7 +12,7 @@ public abstract class VDFWriter<T> {
 	}
 
 	public void serialize(Object element) throws IOException {
-		byte code = VDFCodes.get(element.getClass());
+		byte code = VDFCodes.get(element);
 		serializers[code].serialize(element);
 	}
 

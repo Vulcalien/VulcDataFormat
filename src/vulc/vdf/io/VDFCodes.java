@@ -78,8 +78,8 @@ public final class VDFCodes {
 	 * @return  the VDF type code
 	 * @throws  NullPointerException  if the specified class does not represent a VDF type
 	 */
-	public static byte get(Class<?> type) {
-		return CODES.get(type);
+	public static byte get(Object element) {
+		return CODES.get(element.getClass());
 	}
 
 }
