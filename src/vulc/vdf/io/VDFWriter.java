@@ -13,12 +13,11 @@ public abstract class VDFWriter<T> {
 
 	public void serialize(T out, Object element) throws IOException {
 		this.out = out;
-
-		byte code = VDFCodes.get(element);
-		serializers[code].serialize(element);
-
+		serializeTopLevel(out, element);
 		this.out = null;
 	}
+
+	protected abstract void serializeTopLevel(T out, Object element) throws IOException;
 
 	protected abstract <K> ElementSerializer getArrayWriter(Class<K> type, ArrayElementSerializer<K> serializer);
 

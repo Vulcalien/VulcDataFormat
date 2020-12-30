@@ -63,7 +63,6 @@ public final class TextIO {
 		writer.format = format;
 
 		writer.serialize(out, element);
-		if(format) out.append(endOfLine);
 
 		if(!reuseIO) writer = null;
 	}

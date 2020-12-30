@@ -49,6 +49,17 @@ class TextWriter extends VDFWriter<Writer> {
 		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList(array[i])), LIST_A);
 	}
 
+	protected void serializeTopLevel(Writer out, Object element) throws IOException {
+		byte code = VDFCodes.get(element);
+
+		if(code != OBJECT && code != LIST) {
+			out.append(TextCodes.TAGS[code]);
+			out.append(WHITESPACE);
+		}
+		serializers[code].serialize(element);
+		if(format) out.append(TextIO.endOfLine);
+	}
+
 	private void serializeObject(VDFObject obj) throws IOException {
 		out.append(OPEN_OBJECT);
 

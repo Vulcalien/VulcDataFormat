@@ -39,6 +39,13 @@ class BinaryWriter extends VDFWriter<DataOutputStream> {
 		add(getArrayWriter(VDFList[].class, (array, i) -> serializeList(array[i])), LIST_A);
 	}
 
+	protected void serializeTopLevel(DataOutputStream out, Object element) throws IOException {
+		byte code = VDFCodes.get(element);
+
+		out.writeByte(code);
+		serializers[code].serialize(element);
+	}
+
 	private void serializeObject(VDFObject obj) throws IOException {
 		for(String key : obj.keySet()) {
 			Object e = obj.getElement(key);
