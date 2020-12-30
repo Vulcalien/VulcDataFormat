@@ -76,6 +76,10 @@ class TextReader extends VDFReader<StringAnalyzer> {
 		    LIST_A);
 	}
 
+	protected Object deserializeTopLevel(StringAnalyzer in) throws IOException {
+		return null;
+	}
+
 	public VDFObject deserializeObject(VDFObject obj) throws IOException {
 		in.checkToken(OPEN_OBJECT);
 		while(true) {

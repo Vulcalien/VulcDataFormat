@@ -32,6 +32,15 @@ public final class BinaryIO {
 
 	// deserialize
 
+	public static Object deserialize(DataInputStream in) throws IOException {
+		if(!reuseIO) reader = new BinaryReader();
+
+		Object element = reader.deserialize(in);
+
+		if(!reuseIO) reader = null;
+		return element;
+	}
+
 	private static <T> void deserialize(DataInputStream in, Deserializer<T> deserializer) throws IOException {
 		if(!reuseIO) reader = new BinaryReader();
 		reader.in = in;

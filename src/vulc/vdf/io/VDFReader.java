@@ -14,6 +14,15 @@ public abstract class VDFReader<T> {
 		deserializers[code] = deserializer;
 	}
 
+	public Object deserialize(T in) throws IOException {
+		this.in = in;
+		Object element = deserializeTopLevel(in);
+		this.in = null;
+		return element;
+	}
+
+	protected abstract Object deserializeTopLevel(T in) throws IOException;
+
 	public abstract VDFObject deserializeObject(VDFObject obj) throws IOException;
 
 	public abstract VDFList deserializeList(VDFList list) throws IOException;

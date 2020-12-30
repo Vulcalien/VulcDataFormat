@@ -38,6 +38,11 @@ class BinaryReader extends VDFReader<DataInputStream> {
 		add(getArrayReader(VDFList[].class, (array, i) -> array[i] = deserializeList(new VDFList())), LIST_A);
 	}
 
+	protected Object deserializeTopLevel(DataInputStream in) throws IOException {
+		byte code = in.readByte();
+		return deserializers[code].deserialize();
+	}
+
 	public VDFObject deserializeObject(VDFObject obj) throws IOException {
 		byte code;
 		while((code = in.readByte()) != -1) {                       // read code, until end mark (-1) is found
