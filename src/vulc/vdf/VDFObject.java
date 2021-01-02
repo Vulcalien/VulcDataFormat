@@ -35,8 +35,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import vulc.vdf.io.binary.BinaryIO;
-import vulc.vdf.io.text.TextIO;
+import vulc.vdf.io.binary.BinaryVDF;
+import vulc.vdf.io.text.TextVDF;
 import vulc.vdf.io.text.VDFParseException;
 
 /**
@@ -330,7 +330,7 @@ public class VDFObject {
 	 * @throws  IOException   if an IO error occurs
 	 */
 	public VDFObject deserialize(DataInputStream in) throws IOException {
-		this.setAll((VDFObject) BinaryIO.deserialize(in));
+		this.setAll((VDFObject) BinaryVDF.deserialize(in));
 		return this;
 	}
 
@@ -381,7 +381,7 @@ public class VDFObject {
 	 * @throws  IOException  if an IO error occurs
 	 */
 	public void serialize(DataOutputStream out) throws IOException {
-		BinaryIO.serialize(out, this);
+		BinaryVDF.serialize(out, this);
 	}
 
 	/**
@@ -424,7 +424,7 @@ public class VDFObject {
 	 * @throws  VDFParseException  if the file could not be parsed properly
 	 */
 	public VDFObject parse(Reader in) throws IOException {
-		this.setAll((VDFObject) TextIO.deserialize(in));
+		this.setAll((VDFObject) TextVDF.deserialize(in));
 		return this;
 	}
 
@@ -456,7 +456,7 @@ public class VDFObject {
 	 * @throws  IOException  if an IO error occurs
 	 */
 	public void write(Writer out, boolean format) throws IOException {
-		TextIO.serialize(out, this, format);
+		TextVDF.serialize(out, this, format);
 	}
 
 	/**

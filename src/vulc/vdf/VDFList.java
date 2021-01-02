@@ -35,8 +35,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Objects;
 
-import vulc.vdf.io.binary.BinaryIO;
-import vulc.vdf.io.text.TextIO;
+import vulc.vdf.io.binary.BinaryVDF;
+import vulc.vdf.io.text.TextVDF;
 import vulc.vdf.io.text.VDFParseException;
 
 /**
@@ -426,7 +426,7 @@ public class VDFList implements Iterable<Object> {
 	 * @throws  IOException   if an IO error occurs
 	 */
 	public VDFList deserialize(DataInputStream in) throws IOException {
-		this.addAll((VDFList) BinaryIO.deserialize(in));
+		this.addAll((VDFList) BinaryVDF.deserialize(in));
 		return this;
 	}
 
@@ -471,7 +471,7 @@ public class VDFList implements Iterable<Object> {
 	 * @throws  IOException  if an IO error occurs
 	 */
 	public void serialize(DataOutputStream out) throws IOException {
-		BinaryIO.serialize(out, this);
+		BinaryVDF.serialize(out, this);
 	}
 
 	/**
@@ -511,7 +511,7 @@ public class VDFList implements Iterable<Object> {
 	 * @throws  VDFParseException  if the file could not be parsed properly
 	 */
 	public VDFList parse(Reader in) throws IOException {
-		this.addAll((VDFList) TextIO.deserialize(in));
+		this.addAll((VDFList) TextVDF.deserialize(in));
 		return this;
 	}
 
@@ -540,7 +540,7 @@ public class VDFList implements Iterable<Object> {
 	 * @throws  IOException  if an IO error occurs
 	 */
 	public void write(Writer out, boolean format) throws IOException {
-		TextIO.serialize(out, this, format);
+		TextVDF.serialize(out, this, format);
 	}
 
 	/**

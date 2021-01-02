@@ -57,7 +57,7 @@ class TextWriter extends VDFWriter<Writer> {
 			out.append(WHITESPACE);
 		}
 		serializers[code].serialize(element);
-		if(format) out.append(TextIO.endOfLine);
+		if(format) out.append(TextVDF.endOfLine);
 	}
 
 	private void serializeObject(VDFObject obj) throws IOException {
@@ -75,7 +75,7 @@ class TextWriter extends VDFWriter<Writer> {
 			}
 
 			if(format) {
-				out.append(TextIO.endOfLine);
+				out.append(TextVDF.endOfLine);
 				addIndentation();
 			}
 
@@ -94,7 +94,7 @@ class TextWriter extends VDFWriter<Writer> {
 		indentation--;
 
 		if(format && obj.size() != 0) {
-			out.append(TextIO.endOfLine);
+			out.append(TextVDF.endOfLine);
 			addIndentation();
 		}
 		out.append(CLOSE_OBJECT);
@@ -113,7 +113,7 @@ class TextWriter extends VDFWriter<Writer> {
 			}
 
 			if(format) {
-				out.append(TextIO.endOfLine);
+				out.append(TextVDF.endOfLine);
 				addIndentation();
 			}
 
@@ -127,7 +127,7 @@ class TextWriter extends VDFWriter<Writer> {
 		indentation--;
 
 		if(format && list.size() != 0) {
-			out.append(TextIO.endOfLine);
+			out.append(TextVDF.endOfLine);
 			addIndentation();
 		}
 		out.append(CLOSE_LIST);
@@ -143,7 +143,7 @@ class TextWriter extends VDFWriter<Writer> {
 				if(i != 0) out.append(SEPARATOR);
 
 				if(format) {
-					out.append(TextIO.endOfLine);
+					out.append(TextVDF.endOfLine);
 					addIndentation();
 				}
 
@@ -152,7 +152,7 @@ class TextWriter extends VDFWriter<Writer> {
 			indentation--;
 
 			if(format) {
-				out.append(TextIO.endOfLine);
+				out.append(TextVDF.endOfLine);
 				addIndentation();
 			}
 			out.append(CLOSE_ARRAY);
@@ -193,7 +193,7 @@ class TextWriter extends VDFWriter<Writer> {
 
 	private void addIndentation() throws IOException {
 		for(int i = 0; i < indentation; i++) {
-			out.append(TextIO.indentationChars);
+			out.append(TextVDF.indentationChars);
 		}
 	}
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public abstract class VDFReader<T> {
 
-	public T in;
+	protected T in;
 	protected final ElementDeserializer[] deserializers = new ElementDeserializer[VDFCodes.TYPES];
 
 	protected void add(ElementDeserializer deserializer, byte code) {
