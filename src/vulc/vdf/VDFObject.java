@@ -15,20 +15,14 @@
  ******************************************************************************/
 package vulc.vdf;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
@@ -328,6 +322,7 @@ public class VDFObject {
 	 * 
 	 * @throws  EOFException  if the stream reaches the end before an object can be read
 	 * @throws  IOException   if an IO error occurs
+	 * @see     vulc.vdf.io.binary.BinaryVDF#deserialize(DataInputStream)
 	 */
 	public VDFObject deserialize(DataInputStream in) throws IOException {
 		this.setAll((VDFObject) BinaryVDF.deserialize(in));
@@ -347,10 +342,11 @@ public class VDFObject {
 	 * @throws  EOFException  if the stream reaches the end before an object can be read
 	 * @throws  IOException   if an IO error occurs
 	 * 
-	 * @see     vulc.vdf.VDFObject#deserialize(DataInputStream)
+	 * @see     vulc.vdf.io.binary.BinaryVDF#deserialize(InputStream)
 	 */
 	public VDFObject deserialize(InputStream in) throws IOException {
-		return deserialize(new DataInputStream(in));
+		setAll((VDFObject) BinaryVDF.deserialize(in));
+		return this;
 	}
 
 	/**
@@ -366,12 +362,11 @@ public class VDFObject {
 	 * @throws  EOFException  if the stream reaches the end before an object can be read
 	 * @throws  IOException   if an IO error occurs
 	 * 
-	 * @see     vulc.vdf.VDFObject#deserialize(DataInputStream)
+	 * @see     vulc.vdf.io.binary.BinaryVDF#deserialize(File)
 	 */
 	public VDFObject deserialize(File file) throws IOException {
-		try(InputStream in = new BufferedInputStream(new FileInputStream(file))) {
-			return deserialize(in);
-		}
+		setAll((VDFObject) BinaryVDF.deserialize(file));
+		return this;
 	}
 
 	/**
@@ -379,6 +374,7 @@ public class VDFObject {
 	 * 
 	 * @param   out  a data output stream
 	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.io.binary.BinaryVDF#serialize(DataOutputStream, Object)
 	 */
 	public void serialize(DataOutputStream out) throws IOException {
 		BinaryVDF.serialize(out, this);
@@ -389,10 +385,10 @@ public class VDFObject {
 	 * 
 	 * @param   out  an output stream
 	 * @throws  IOException  if an IO error occurs
-	 * @see     vulc.vdf.VDFObject#serialize(DataOutputStream)
+	 * @see     vulc.vdf.io.binary.BinaryVDF#serialize(OutputStream, Object)
 	 */
 	public void serialize(OutputStream out) throws IOException {
-		serialize(new DataOutputStream(out));
+		BinaryVDF.serialize(out, this);
 	}
 
 	/**
@@ -400,12 +396,10 @@ public class VDFObject {
 	 * 
 	 * @param   file  the file to write this object to
 	 * @throws  IOException  if an IO error occurs
-	 * @see     vulc.vdf.VDFObject#serialize(DataOutputStream)
+	 * @see     vulc.vdf.io.binary.BinaryVDF#serialize(File, Object)
 	 */
 	public void serialize(File file) throws IOException {
-		try(OutputStream out = new BufferedOutputStream(new FileOutputStream(file))) {
-			serialize(out);
-		}
+		BinaryVDF.serialize(file, this);
 	}
 
 	// text IO
@@ -422,11 +416,14 @@ public class VDFObject {
 	 * 
 	 * @throws  IOException  if an IO error occurs
 	 * @throws  VDFParseException  if the file could not be parsed properly
+	 * @see     vulc.vdf.io.text.TextVDF#deserialize(Reader)
 	 */
 	public VDFObject parse(Reader in) throws IOException {
-		this.setAll((VDFObject) TextVDF.deserialize(in));
+		setAll((VDFObject) TextVDF.deserialize(in));
 		return this;
 	}
+
+	// TODO parse(File)
 
 	/**
 	 * Reads an object from a {@code String} and adds the elements, each associated with its key,
@@ -437,14 +434,11 @@ public class VDFObject {
 	 * 
 	 * @param   string  the text to parse
 	 * @return  this object
-	 * @see     vulc.vdf.VDFObject#parse(Reader)
+	 * @see     vulc.vdf.io.text.TextVDF#fromString(String)
 	 */
 	public VDFObject parse(String string) {
-		try(StringReader in = new StringReader(string)) {
-			return parse(in);
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+		setAll((VDFObject) TextVDF.fromString(string));
+		return this;
 	}
 
 	/**
@@ -459,6 +453,8 @@ public class VDFObject {
 		TextVDF.serialize(out, this, format);
 	}
 
+	// TODO write(File)
+
 	/**
 	 * Returns a string representation of this object.
 	 * The flag {@code format} states if the string should be formatted or not.
@@ -468,15 +464,10 @@ public class VDFObject {
 	 * @param   format  a flag stating if the output string should be formatted or not
 	 *                  ({@code true} = formatted, {@code false} = unformatted)
 	 * @return  a string representation of this object
-	 * @see     vulc.vdf.VDFObject#write(Writer, boolean)
+	 * @see     vulc.vdf.io.text.TextVDF#toString(Object, boolean)
 	 */
 	public String toString(boolean format) {
-		try(StringWriter out = new StringWriter()) {
-			write(out, format);
-			return out.toString();
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+		return TextVDF.toString(this, format);
 	}
 
 	/**
