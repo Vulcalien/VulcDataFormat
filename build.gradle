@@ -5,7 +5,7 @@ defaultTasks 'jar'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = '2.0.0-wip'
+version = '2.0.0'
 
 sourceSets {
     main.java.srcDirs 'src'
@@ -33,4 +33,7 @@ test {
 task source(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
+
+    from 'LICENSE'
+    from 'NOTICE'
 }
