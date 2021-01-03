@@ -502,7 +502,8 @@ public class VDFList implements Iterable<Object> {
 	 * @return  this list
 	 * 
 	 * @throws  IOException  if an IO error occurs
-	 * @throws  VDFParseException  if the file could not be parsed properly
+	 * @throws  VDFParseException  if the text could not be parsed properly
+	 * 
 	 * @see     vulc.vdf.io.text.TextVDF#deserialize(Reader)
 	 */
 	public VDFList parse(Reader in) throws IOException {
@@ -510,7 +511,22 @@ public class VDFList implements Iterable<Object> {
 		return this;
 	}
 
-	// TODO parse(File)
+	/**
+	 * Reads a list from a file and adds the elements to this list, without removing contained
+	 * elements.
+	 * 
+	 * @param   file  the file to read
+	 * @return  this list
+	 * 
+	 * @throws  IOException  if an IO error occurs
+	 * @throws  VDFParseException  if the text could not be parsed properly
+	 * 
+	 * @see     vulc.vdf.io.text.TextVDF#deserialize(File)
+	 */
+	public VDFList parse(File file) throws IOException {
+		addAll((VDFList) TextVDF.deserialize(file));
+		return this;
+	}
 
 	/**
 	 * Reads a list from a {@code String} and adds the elements to this list, without removing
@@ -528,16 +544,28 @@ public class VDFList implements Iterable<Object> {
 	/**
 	 * Writes this list to a {@code Writer}.
 	 * 
-	 * @param   out  a writer
+	 * @param   out     a writer
 	 * @param   format  a flag stating if the output should be formatted or not
 	 *                  ({@code true} = formatted, {@code false} = unformatted)
 	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.io.text.TextVDF#serialize(Writer, Object, boolean)
 	 */
 	public void write(Writer out, boolean format) throws IOException {
 		TextVDF.serialize(out, this, format);
 	}
 
-	// TODO write(File)
+	/**
+	 * Writes this list to a file.
+	 * 
+	 * @param   file    the file to write this list to
+	 * @param   format  a flag stating if the output should be formatted or not
+	 *                  ({@code true} = formatted, {@code false} = unformatted)
+	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.io.text.TextVDF#serialize(File, Object, boolean)
+	 */
+	public void write(File file, boolean format) throws IOException {
+		TextVDF.serialize(file, this, format);
+	}
 
 	/**
 	 * Returns a string representation of this list.

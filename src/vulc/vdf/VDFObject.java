@@ -415,7 +415,8 @@ public class VDFObject {
 	 * @return  this object
 	 * 
 	 * @throws  IOException  if an IO error occurs
-	 * @throws  VDFParseException  if the file could not be parsed properly
+	 * @throws  VDFParseException  if the text could not be parsed properly
+	 * 
 	 * @see     vulc.vdf.io.text.TextVDF#deserialize(Reader)
 	 */
 	public VDFObject parse(Reader in) throws IOException {
@@ -423,7 +424,22 @@ public class VDFObject {
 		return this;
 	}
 
-	// TODO parse(File)
+	/**
+	 * Reads an object from a file and adds the elements, each associated with its key, to this
+	 * object.
+	 * 
+	 * @param   file  the file to read
+	 * @return  this object
+	 * 
+	 * @throws  IOException  if an IO error occurs
+	 * @throws  VDFParseException  if the text could not be parsed properly
+	 * 
+	 * @see     vulc.vdf.io.text.TextVDF#deserialize(File)
+	 */
+	public VDFObject parse(File file) throws IOException {
+		setAll((VDFObject) TextVDF.deserialize(file));
+		return this;
+	}
 
 	/**
 	 * Reads an object from a {@code String} and adds the elements, each associated with its key,
@@ -444,16 +460,28 @@ public class VDFObject {
 	/**
 	 * Writes this object to a {@code Writer}.
 	 * 
-	 * @param   out  a writer
+	 * @param   out     a writer
 	 * @param   format  a flag stating if the output should be formatted or not
 	 *                  ({@code true} = formatted, {@code false} = unformatted)
 	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.io.text.TextVDF#serialize(Writer, Object, boolean)
 	 */
 	public void write(Writer out, boolean format) throws IOException {
 		TextVDF.serialize(out, this, format);
 	}
 
-	// TODO write(File)
+	/**
+	 * Writes this object to a file.
+	 * 
+	 * @param   file    the file to write this object to
+	 * @param   format  a flag stating if the output should be formatted or not
+	 *                  ({@code true} = formatted, {@code false} = unformatted)
+	 * @throws  IOException  if an IO error occurs
+	 * @see     vulc.vdf.io.text.TextVDF#serialize(File, Object, boolean)
+	 */
+	public void write(File file, boolean format) throws IOException {
+		TextVDF.serialize(file, this, format);
+	}
 
 	/**
 	 * Returns a string representation of this object.
