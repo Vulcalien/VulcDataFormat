@@ -72,14 +72,31 @@ public final class VDFCodes {
 	}
 
 	/**
-	 * Returns the VDF type code.
+	 * Returns the VDF type code associated with the type of the given element.
+	 * 
+	 * @param   element  the element whose class represents the VDF type to return
+	 * @return  the VDF type code
+	 * 
+	 * @throws  NullPointerException      if the argument is null
+	 * @throws  IllegalArgumentException  if the type of the given value does not represent a VDF type
+	 */
+	public static byte get(Object element) {
+		return getByType(element.getClass());
+	}
+
+	/**
+	 * Returns the VDF type code associated with the given type.
 	 * 
 	 * @param   type  the class representing a VDF type
 	 * @return  the VDF type code
-	 * @throws  NullPointerException  if the specified class does not represent a VDF type
+	 * 
+	 * @throws  IllegalArgumentException  if the specified type is not associated with a VDF type
 	 */
-	public static byte get(Object element) {
-		return CODES.get(element.getClass());
+	public static byte getByType(Class<?> type) {
+		Byte code = CODES.get(type);
+
+		if(code == null) throw new IllegalArgumentException("Type " + type + " is not supported");
+		return code;
 	}
 
 }
